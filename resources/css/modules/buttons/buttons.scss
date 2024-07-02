@@ -1,0 +1,36 @@
+.btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    padding: 10px 32px;
+    background: var(--main-6);
+    color: var(--white);
+    border-radius: 12px;
+    font-weight: bold;
+    line-height: 20px;
+    font-size: 16px;
+    &:hover {
+        background: var(--main-10);
+    }
+    &-black {
+        background: var(--dark);
+        &:hover {
+            background: var(--dark-hover);
+        }
+    }
+    &-white {
+        background: var(--bg);
+        &:hover {
+            background: var(--white-hover);
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    .btn {
+        border-radius: 8px;
+        line-height: 16px;
+        padding: 12px 36px;
+    }
+}

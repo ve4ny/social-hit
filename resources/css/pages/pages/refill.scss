@@ -1,0 +1,71 @@
+.refill {
+    padding: 48px 0;
+    &__title {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    &-form {
+        &__item {
+            margin-bottom: 24px;
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+        &__bonus {
+            background: #EEEFF7 url(../../static/images/general/bonus-bg.svg) 0 0 no-repeat;
+            background-size: auto 100%;
+            line-height: 19px;
+            padding: 16px 20px 17px 84px;
+            font-weight: bold;
+            color: var(--main-6);
+            border-radius: 100px;
+        }
+        &__btn {
+            width: 100%;
+            padding: 14px;
+        }
+        &__promocode {
+            &-input {
+                width: 184px;
+                margin-right: 16px;
+            }
+            &-btn {
+                padding: 12px 34px;
+            }
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    .refill {
+        padding: 40px 0;
+        &__title {
+            margin-bottom: 24px;
+        }
+        &-form {
+            &__item {
+                margin-bottom: 16px;
+                &:first-child {
+                    margin-bottom: 24px;
+                }
+            }
+            &__bonus {
+                font-size: 14px;
+                line-height: 16px;
+                padding: 10px 32px 10px 82px;
+            }
+            &__promocode {
+                &-input {
+                    margin-right: 8px;
+                }
+                &-btn {
+                    font-size: 16px;
+                    height: 100%;
+                }
+            }
+            &__btn {
+                height: 48px;
+            }
+        }
+    }
+}

@@ -1,0 +1,96 @@
+.faq {
+    padding-top: 100px;
+    padding-bottom: 160px;
+    &__title {
+        line-height: 140%;
+        margin-bottom: 32px;
+    }
+    &__btn {
+        padding: 14px 28px;
+        background: var(--dark);
+    }
+    &-list {
+        &__item {
+            margin-bottom: 8px;
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+    &-item {
+        border-radius: 16px;
+        background: var(--white);
+        &__open {
+            padding: 16px 24px;
+            align-items: center;
+            font-weight: bold;
+            fill: var(--main-8);
+            &-txt {
+                flex-grow: 1;
+                padding-right: 24px;
+            }
+            &-icon {
+                width: 24px;
+                height: 24px;
+            }
+            .icon-minus-15 {
+                display: none;
+            }
+            &[aria-expanded="true"] {
+                .icon-minus-15 {
+                    display: block;
+                }
+                .icon-plus-15 {
+                    display: none;
+                }
+            }
+        }
+        &__body {
+            &-inner {
+                padding: 0 24px 32px;
+            }
+        }
+        &__txt {
+            position: relative;
+            padding-top: 24px;
+            &::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 1px;
+                background: var(--stroke);
+            }
+        }
+    }
+}
+
+@media (max-width: 991px) {
+    .faq {
+        padding-bottom: 96px;
+        &__btn {
+            margin-bottom: 24px;
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    .faq {
+        padding-top: 64px;
+        &__title {
+            font-size: 32px;
+            line-height: 140%;
+            margin-bottom: 12px;
+        }
+        &__btn {
+            padding: 12px 36px;
+        }
+        &-item {
+            &__open {
+                font-size: 14px;
+                line-height: 20px;
+            }
+        }
+    }
+}
