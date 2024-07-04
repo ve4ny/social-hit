@@ -4,14 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AuthRequest;
 use App\Http\Requests\RegistrationRequest;
+use App\Http\Requests\RemindRequest;
+use App\Http\Requests\ResetPasswordRequest;
 use App\Models\EmailConfirmation;
+use App\Models\EmailRemind;
 use App\Models\User;
 use App\Services\UserService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Contracts\View\View;
 
 class AuthController extends Controller
 {
@@ -74,15 +79,15 @@ class AuthController extends Controller
             $validatedData['email'] = str_replace(' ', '', $validatedData['email']);
 
             if (User::where('email', $validatedData['email'])->first() == null) {
-                return response()->json(['message' => 'Пользователь с таким email не найден'], 404);
+                return response()->json(['errors' => ['email' => ['Пользователь с таким email не найден']]], 404);
             } else if (User::where('email', $validatedData['email'])->first()->email_verified_at == null) {
-                return response()->json(['message' => 'Email не подтвержден. Перейдите по ссылке из письма, отправленного на email, который вы указали при регистрации. '], 404);
+                return response()->json(['errors' => ['email' => ['Email не подтвержден. Перейдите по ссылке из письма, отправленного на email, который вы указали при регистрации. ']]], 404);
             }
 
             if (Auth::attempt($validatedData, $request->remember)) {
                 return response()->json(['message' => 'Authentication success'], 200);
             } else {
-                return response()->json(['message' => 'Неверный пароль'], 404);
+                return response()->json(['errors'  => ['password' => ['Неверный пароль']]], 404);
             }
         } catch (ValidationException $e) {
             $errors = $e->errors();
@@ -99,5 +104,44 @@ class AuthController extends Controller
     {
         Auth::logout();
         return redirect('/');
+    }
+
+    public function remind(RemindRequest $request, UserService $userService)
+    {
+        try {
+            $validatedData = trim($request->email);
+            $user = $userService->remind($validatedData);
+            return response()->json(['message' => 'На адрес ' . $request->email . ' отправлено письмо с подтверждением.
+            Пожалуйста, перейдите по ссылке из письма, чтобы сбросить пароль'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e], 400);
+        }
+    }
+
+
+    public function recovery(string $token): View
+    {
+        $emailRemind = EmailRemind::where('token', $token)->first();
+//        if (!$emailRemind) {
+//            return response()->json(['message' => 'Неверный токен'], 404);
+//        }
+        $user = $emailRemind->user;
+        $email = $user->email;
+        $emailRemind->delete();
+        return view('password-reset', compact('email'));
+    }
+
+    public function reset(ResetPasswordRequest $request, UserService $userService)
+    {
+        if(!$request->email) {
+            return redirect('/');
+        }
+        $user = $userService->changePassword($request->email, $request->password);
+        try {
+            Auth::login($user);
+            return response()->json(['message' => 'Успешная смена пароля']);
+        } catch (Exception $e) {
+            return redirect('/', ['message' => 'Смена пароля закончилась с ошибкой. Пожалуйста, попробуйте ещё раз']);
+        }
     }
 }

@@ -2,7 +2,7 @@
     <div class="container">
         <div class="footer__content d-flex">
             <div class="footer__logo">
-                <div class="footer-logo"><img src="images/general/logo.svg" width="104" height="48" alt="img"/>
+                <div class="footer-logo"><img src="/images/general/logo.svg" width="104" height="48" alt="img"/>
                 </div>
             </div>
             <div class="footer__menu">
@@ -24,7 +24,7 @@
 </div>
 @include('modals')
 @vite('resources/js/app.js')
-<script src="js/libs.js"></script>
-<script src="js/main.js"></script>
+<script src="/js/libs.js"></script>
+<script src="/js/main.js"></script>
 </body>
 </html>

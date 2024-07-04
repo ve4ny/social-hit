@@ -18,8 +18,7 @@ function formSubmit() {
         .then((res) => {
             window.location.reload();
         }).catch((error) => {
-        if (error.response && error.response.status === 422) {
-            console.error('Bad Request:', error.response.data.message);
+        if (error.response) {
             errorMessages.value = error.response.data.errors;
         }
         buttonText.value = 'Войти';
@@ -35,7 +34,7 @@ function formSubmit() {
             </svg></a>
             <div class="modal-content__head">
                 <div class="modal-head">
-                    <div class="modal-head__logo"> <img src="@images/general/logo.svg" width="104" height="48" alt="img"/>
+                    <div class="modal-head__logo"> <img src="../../../../public/images/general/logo.svg" width="104" height="48" alt="img"/>
                     </div>
                     <div class="modal-head__info">
                         <div class="modal-head__title title">Авторизация </div>
@@ -43,7 +42,7 @@ function formSubmit() {
                 </div>
             </div>
             <div class="modal-content__body">
-                <form class="modal-form form" action="/">
+                <form class="modal-form form" action="/public">
                     <div class="modal-form__fields">
                         <div class="modal-form__item">
                             <div class="form-item">
@@ -98,5 +97,17 @@ function formSubmit() {
 </template>
 
 <style scoped>
+.error {
+    font-size: 12px;
+    font-weight: normal;
+    color: #FF0000;
+    margin-top:6px
+}
 
+.success {
+    font-size: 12px;
+    font-weight: normal;
+    color: #00aa00;
+    margin-top:6px
+}
 </style>

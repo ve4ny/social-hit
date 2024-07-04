@@ -38,7 +38,7 @@ function submitForm() {
         </svg></a>
         <div class="modal-content__head">
             <div class="modal-head">
-                <div class="modal-head__logo"> <img src="@images/general/logo.svg" width="104" height="48" alt="img"/>
+                <div class="modal-head__logo"> <img src="../../../../public/images/general/logo.svg" width="104" height="48" alt="img"/>
                 </div>
                 <div class="modal-head__info">
                     <div class="modal-head__title title">Регистрация</div>
@@ -46,7 +46,7 @@ function submitForm() {
             </div>
         </div>
         <div class="modal-content__body">
-            <form class="modal-form form" action="/">
+            <form class="modal-form form" action="/public">
                 <div class="modal-form__fields">
                     <div class="modal-form__item">
                         <div class="form-item">

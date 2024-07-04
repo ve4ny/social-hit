@@ -1,49 +1,16 @@
 <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-    <Authentication></Authentication>
+    <authentication></authentication>
     </div>
 </div>
 <div class="modal fade" id="regModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <Registration></Registration>
+        <registration></registration>
     </div>
 </div>
 <div class="modal fade" id="resetModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content"><a class="modal-close icon" href="#" data-bs-dismiss="modal">
-                <svg class="svg-sprite-icon icon-x-close">
-                    <use xlink:href="images/svg/symbol/sprite.svg#x-close"></use>
-                </svg></a>
-            <div class="modal-content__head">
-                <div class="modal-head">
-                    <div class="modal-head__logo"> <img src="images/general/logo.svg" width="104" height="48" alt="img"/>
-                    </div>
-                    <div class="modal-head__info">
-                        <div class="modal-head__title title">Сброс пароля</div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-content__body">
-                <form class="modal-form form" action="/">
-                    <div class="modal-form__fields">
-                        <div class="modal-form__item">
-                            <div class="form-item">
-                                <div class="form-item__label">Почта:</div>
-                                <div class="form-item__field">
-                                    <input class="form-input" type="email" placeholder="Введите почту">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-form__actions">
-                        <div class="modal-form__item modal-form__item--mb-2">
-                            <button class="modal-form__btn btn" type="submit">Сбросить пароль</button>
-                        </div>
-                        <div class="modal-form__item"><a class="modal-form__bottom-link" href="#loginModal" data-bs-toggle="modal">Войти в систему</a></div>
-                    </div>
-                </form>
-            </div>
-        </div>
+        <remind-password></remind-password>
     </div>
 </div>
 <div class="modal fade" id="fastModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

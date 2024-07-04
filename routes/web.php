@@ -13,12 +13,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('register', [\App\Http\Controllers\AuthController::class, 'register']);
+Route::post('/register', [\App\Http\Controllers\AuthController::class, 'register']);
 Route::get('/verify-email/{token}', [\App\Http\Controllers\AuthController::class, 'verifyEmail']);
 
+Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login']);
+Route::get('/logout', [\App\Http\Controllers\AuthController::class, 'logout']);
 
-Route::post('login', [\App\Http\Controllers\AuthController::class, 'login']);
-Route::get('logout', [\App\Http\Controllers\AuthController::class, 'logout']);
+Route::post('/remind-password', [\App\Http\Controllers\AuthController::class, 'remind']);
+Route::get('/password-recovery/{token}', [\App\Http\Controllers\AuthController::class, 'recovery']);
+Route::post('/password-reset', [\App\Http\Controllers\AuthController::class, 'reset']);
 
 Route::get('/', function () {
     return view('index');

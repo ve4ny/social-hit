@@ -1,7 +1,9 @@
 import './bootstrap';
 import { createApp } from 'vue';
-import Authentication from "./Components/Authentication.vue";
-import Registration from "./Components/Registration.vue";
+import Authentication from "./Components/Auth/Authentication.vue";
+import Registration from "./Components/Auth/Registration.vue";
+import RemindPassword from "./Components/Auth/RemindPassword.vue";
+import PasswordReset from "./Components/Auth/PasswordReset.vue";
 
 
 const app = createApp({
@@ -16,7 +18,9 @@ const app = createApp({
     },
     components: {
         'Authentication': Authentication,
-        'Registration': Registration
+        'Registration': Registration,
+        'RemindPassword': RemindPassword,
+        'PasswordReset': PasswordReset
     },
     created() {
         // Установка isLoading на false после загрузки компонента
