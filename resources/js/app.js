@@ -1,6 +1,7 @@
 import './bootstrap';
 import { createApp } from 'vue';
 import Authentication from "./Components/Auth/Authentication.vue";
+import AuthenticationMin from "./Components/Auth/AuthenticationMin.vue";
 import Registration from "./Components/Auth/Registration.vue";
 import RemindPassword from "./Components/Auth/RemindPassword.vue";
 import PasswordReset from "./Components/Auth/PasswordReset.vue";
@@ -18,6 +19,7 @@ const app = createApp({
     },
     components: {
         'Authentication': Authentication,
+        'AuthenticationMin': AuthenticationMin,
         'Registration': Registration,
         'RemindPassword': RemindPassword,
         'PasswordReset': PasswordReset

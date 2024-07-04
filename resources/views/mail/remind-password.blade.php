@@ -24,7 +24,7 @@
                            style="border-spacing:0;">
                         <tr>
                             <td style="border-radius: 10px;" bgcolor="#4e5ba6">
-                                <a href="http://localhost/password-recovery/{{$remindToken}}" target="_blank"
+                                <a href="https://hulafoplos.beget.app/password-recovery/{{$remindToken}}" target="_blank"
                                    style="font-size: 16px; font-weight: bold;text-decoration:none;color:#ffffff;background-color: #4e5ba6;border:1px solid #4e5ba6;border-radius: 5px;padding: 10px 25px;display: inline-block;">
                                     Установить новый пароль</a>
                             </td>
