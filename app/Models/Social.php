@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -18,8 +19,16 @@ class Social extends Model
       'name',
     ];
 
-    public function attachments(): HasMany
+    public function categories(): HasMany
     {
-        return $this->hasMany(Attachment::class, 'attachmentable_id');
+        return $this->hasMany(Category::class);
+    }
+
+    protected function image(): Attribute
+    {
+        $image = $this->attachment->first();
+        return Attribute::make(
+            get: fn ($value) => 'storage/' . $image->path . $image->name . '.' . $image->extension,
+        );
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\MainController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,16 +15,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/register', [\App\Http\Controllers\AuthController::class, 'register']);
-Route::get('/verify-email/{token}', [\App\Http\Controllers\AuthController::class, 'verifyEmail']);
+Route::post('/register', [AuthController::class, 'register']);
+Route::get('/verify-email/{token}', [AuthController::class, 'verifyEmail']);
 
-Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login']);
-Route::get('/logout', [\App\Http\Controllers\AuthController::class, 'logout']);
+Route::post('/login', [AuthController::class, 'login']);
+Route::get('/logout', [AuthController::class, 'logout']);
 
-Route::post('/remind-password', [\App\Http\Controllers\AuthController::class, 'remind']);
-Route::get('/password-recovery/{token}', [\App\Http\Controllers\AuthController::class, 'recovery']);
-Route::post('/password-reset', [\App\Http\Controllers\AuthController::class, 'reset']);
+Route::post('/remind-password', [AuthController::class, 'remind']);
+Route::get('/password-recovery/{token}', [AuthController::class, 'recovery']);
+Route::post('/password-reset', [AuthController::class, 'reset']);
 
-Route::get('/', function () {
-    return view('index');
-});
+Route::get('/', [MainController::class, 'index']);
