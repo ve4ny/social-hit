@@ -28,6 +28,11 @@ class PlatformProvider extends OrchidServiceProvider
     public function registerMainMenu(): array
     {
         return [
+            Menu::make('Социальные сети')
+            ->icon('modules')
+            ->route('platform.socials')
+            ->title('Cервисы'),
+
             Menu::make('Example screen')
                 ->icon('monitor')
                 ->route('platform.example')
@@ -79,16 +84,16 @@ class PlatformProvider extends OrchidServiceProvider
                 ->target('_blank')
                 ->badge(fn () => Dashboard::version(), Color::DARK()),
 
-            Menu::make(__('Users'))
+            Menu::make(__('Пользователи'))
                 ->icon('user')
                 ->route('platform.systems.users')
                 ->permission('platform.systems.users')
-                ->title(__('Access rights')),
+                ->title(__('Права доступа')),
 
-            Menu::make(__('Roles'))
-                ->icon('lock')
-                ->route('platform.systems.roles')
-                ->permission('platform.systems.roles'),
+//            Menu::make(__('Roles'))
+//                ->icon('lock')
+//                ->route('platform.systems.roles')
+//                ->permission('platform.systems.roles'),
         ];
     }
 

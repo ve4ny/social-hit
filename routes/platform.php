@@ -12,6 +12,7 @@ use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\PlatformScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
+use App\Orchid\Screens\Socials\SocialsListScreen;
 use App\Orchid\Screens\User\UserEditScreen;
 use App\Orchid\Screens\User\UserListScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
@@ -32,6 +33,32 @@ use Tabuna\Breadcrumbs\Trail;
 // Main
 Route::screen('/main', PlatformScreen::class)
     ->name('platform.main');
+
+// Platform > Socials
+
+Route::screen('socials', SocialsListScreen::class)
+    ->name('platform.socials')
+    ->breadcrumbs(fn (Trail $trail) => $trail
+        ->parent('platform.index')
+        ->push(__('Соцальные сети'), route('platform.socials'))
+    );
+
+// Platform > Socials > Create
+
+Route::screen('socials/create', \App\Orchid\Screens\Socials\CreateSocialScreen::class)
+    ->name('platform.socials.create')
+    ->breadcrumbs(fn (Trail $trail) => $trail
+        ->parent('platform.socials')
+        ->push(__('Новая социальная сеть'), route('platform.socials.create'))
+    );
+
+// Platform > Socials > Social
+
+Route::screen('socials/{social}', \App\Orchid\Screens\Socials\EditSocialScreen::class)
+    ->name('platform.socials.edit')
+    ->breadcrumbs(fn(Trail $trail, $social) => $trail
+    ->parent('platform.socials')
+    ->push(__('Редактирование социальной сети'), route('platform.socials.edit', $social)));
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
