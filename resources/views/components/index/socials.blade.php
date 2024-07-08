@@ -24,11 +24,21 @@
                                         <div class="social-link__list-item">
                                             <a class="social-link__type d-flex" href="#">
                                                 <span class="social-link__type-icon icon">
+                                                    @if($category->image)
+                                                        <img class="svg-sprite-icon icon-users-plus-2" src="{{asset($category->image)}}" alt="Иконка категории услуг">
+                                                        @else
                                                   <svg class="svg-sprite-icon icon-users-plus-2">
                                                     <use xlink:href="images/svg/symbol/sprite.svg#users-plus-2"></use>
                                                   </svg>
+                                                        @endif
                                                 </span>
-                                                <span class="social-link__type-txt">{{ $category->jap_name }}</span>
+                                                <span class="social-link__type-txt">
+                                                    @if($category->rus_name)
+                                                    {{ $category->rus_name }}
+                                                        @else
+                                                    {{ $category->jap_name }}
+                                                        @endif
+                                                </span>
                                             </a>
                                         </div>
                                             @endforeach

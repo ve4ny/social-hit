@@ -60,6 +60,38 @@ Route::screen('socials/{social}', \App\Orchid\Screens\Socials\EditSocialScreen::
     ->parent('platform.socials')
     ->push(__('Редактирование социальной сети'), route('platform.socials.edit', $social)));
 
+// Platform > Socials > Categories
+
+Route::screen('socials/{social}/categories', \App\Orchid\Screens\Categories\CategoriesListScreen::class)
+    ->name('platform.socials.categories')
+    ->breadcrumbs(fn(Trail $trail, $social) => $trail
+        ->parent('platform.socials', $social)
+        ->push($social->name, route('platform.socials.categories', $social)));
+
+//Platform > Socials > Category
+
+Route::screen('socials/{social}/{category}', \App\Orchid\Screens\Categories\EditCategoryScreen::class)
+    ->name('platform.socials.category')
+    ->breadcrumbs(fn(Trail $trail, $social, $category) => $trail
+        ->parent('platform.socials.categories', $social)
+        ->push($category->jap_name, route('platform.socials.category', ['social' => $social, 'category' => $category])));
+
+// Platform > Socials > Categories > Services
+
+Route::screen('socials/{social}/{category}/services', \App\Orchid\Screens\Services\ServicesListScreen::class)
+    ->name('platform.socials.categories.services')
+    ->breadcrumbs(fn(Trail $trail, $social, $category) => $trail
+        ->parent('platform.socials.categories', $social)
+        ->push($category->jap_name, route('platform.socials.category', ['social' => $social, 'category' => $category])));
+
+// Platform > Socials > Categories > Service
+
+Route::screen('socials/{social}/{category}/{service}', \App\Orchid\Screens\Services\EditServiceScreen::class)
+    ->name('platform.socials.categories.service')
+    ->breadcrumbs(fn(Trail $trail, $social, $category, $service) => $trail
+        ->parent('platform.socials.categories.services', $social, $category)
+        ->push(__('Услуга'), route('platform.socials.category', ['social' => $social, 'category' => $category, 'service' => $service])));
+
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
     ->name('platform.profile')

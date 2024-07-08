@@ -12,6 +12,7 @@ use Orchid\Screen\TD;
 class SocialsListScreen extends Screen
 {
     protected Collection $socials;
+
     /**
      * Fetch data to be displayed on the screen.
      *
@@ -45,7 +46,7 @@ class SocialsListScreen extends Screen
         return [
             Link::make('Добавить')
                 ->icon('plus')
-            ->route('platform.socials.create')
+                ->route('platform.socials.create')
         ];
     }
 
@@ -60,9 +61,13 @@ class SocialsListScreen extends Screen
             Layout::table('socials', [
                 TD::make('id'),
                 TD::make('name'),
-                TD::make('Редактировать')->render(fn (Social $social) =>
-                    Link::make('Редактировать')
-                        ->icon('pencil')
+                TD::make('Список категорий')->render(fn(Social $social) =>
+                Link::make('Категории')
+                    ->icon('list')
+                    ->route('platform.socials.categories', $social->id)),
+                TD::make('Редактировать')->render(fn(Social $social) =>
+                Link::make('Редактировать')
+                    ->icon('pencil')
                     ->route('platform.socials.edit', $social->id))
             ])
         ];

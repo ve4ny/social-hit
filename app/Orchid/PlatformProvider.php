@@ -28,7 +28,7 @@ class PlatformProvider extends OrchidServiceProvider
     public function registerMainMenu(): array
     {
         return [
-            Menu::make('Социальные сети')
+            Menu::make('Социальные сети/Категории/Услуги')
             ->icon('modules')
             ->route('platform.socials')
             ->title('Cервисы'),
