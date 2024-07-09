@@ -5,10 +5,13 @@ namespace App\Services;
 use App\Jobs\SendEmailConfirmationJob;
 use App\Jobs\SendEmailPasswordRemindJob;
 use App\Models\User;
+use App\Models\UserDetails;
 use Exception;
+use Illuminate\Support\Str;
 
 class UserService
 {
+
     /**
      * @param array $userData
      * @return User
@@ -23,11 +26,25 @@ class UserService
         ]);
 
         if($user) {
+            $this->CreateUserDetails($user);
             SendEmailConfirmationJob::dispatch($user);
             return $user;
         } else {
             throw new Exception('Не удалось завершить регистрацию. Попробуйте позже.');
         }
+    }
+
+    /**
+     * @param User $user
+     * @return void
+     */
+    private function CreateUserDetails(User $user): void
+    {
+        $ref_code = $this->generateUniqueReferralCode();
+        UserDetails::create([
+            'user_id' => $user->id,
+            'referral_code' => $ref_code
+        ]);
     }
 
     /**
@@ -58,6 +75,17 @@ class UserService
         $user->password = bcrypt(trim($password));
         $user->save();
         return $user;
+    }
+
+    /**
+     * @return string
+     */
+    public function generateUniqueReferralCode(): string
+    {
+        do {
+            $referralCode = Str::random(8);
+        } while (UserDetails::where('referral_code', $referralCode)->exists());
+        return $referralCode;
     }
 
 }

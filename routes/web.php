@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\ProfileController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,4 +28,10 @@ Route::post('/remind-password', [AuthController::class, 'remind']);
 Route::get('/password-recovery/{token}', [AuthController::class, 'recovery']);
 Route::post('/password-reset', [AuthController::class, 'reset']);
 
-Route::get('/', [MainController::class, 'index']);
+Route::get('/', [MainController::class, 'index'])->name('index');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'index']);
+    Route::post('/profile/save', [ProfileController::class, 'save']);
+
+});

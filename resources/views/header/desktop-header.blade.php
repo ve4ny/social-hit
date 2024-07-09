@@ -563,15 +563,18 @@
             <div class="header-profile"><a class="header-profile__btn d-flex" href="#" data-bs-toggle="dropdown"><span
                         class="header-profile__btn-img">
                       <picture>
-                        <source srcset="/images/content/avatar.webp" type="image/webp"/><img
-                              src="/images/content/avatar.png" width="40" height="40" alt="img"/>
+                          @if($user->details->image)
+                              <img src="{{ asset($user->details->image) }}" style="object-fit: cover" width="40" height="40" alt="img"/>
+                              @else
+                              <img src="{{asset('/images/general/avatar.jpg')}}" width="40" height="40" alt="img"/>
+                              @endif
                       </picture></span><span class="header-profile__btn-icon icon">
                       <svg class="svg-sprite-icon icon-down-2">
                         <use xlink:href="/images/svg/symbol/sprite.svg#down-2"></use>
                       </svg></span></a>
                 <div class="header-profile__dropdown dropdown-menu dropdown-menu-end">
                     <div class="header-profile__menu">
-                        <div class="header-profile__menu-item"><a class="header-profile__link d-flex" href="#"> <span
+                        <div class="header-profile__menu-item"><a class="header-profile__link d-flex" href="/profile"> <span
                                     class="header-profile__link-icon icon">
                             <svg class="svg-sprite-icon icon-user-2">
                               <use xlink:href="/images/svg/symbol/sprite.svg#user-2"></use>

@@ -5,6 +5,7 @@ import AuthenticationMin from "./Components/Auth/AuthenticationMin.vue";
 import Registration from "./Components/Auth/Registration.vue";
 import RemindPassword from "./Components/Auth/RemindPassword.vue";
 import PasswordReset from "./Components/Auth/PasswordReset.vue";
+import Profile from "./Components/Profile.vue";
 
 
 const app = createApp({
@@ -22,7 +23,8 @@ const app = createApp({
         'AuthenticationMin': AuthenticationMin,
         'Registration': Registration,
         'RemindPassword': RemindPassword,
-        'PasswordReset': PasswordReset
+        'PasswordReset': PasswordReset,
+        'Profile': Profile
     },
     created() {
         // Установка isLoading на false после загрузки компонента
