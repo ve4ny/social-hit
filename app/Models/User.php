@@ -68,4 +68,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(UserDetails::class, 'user_id');
     }
+
+    public function email_changes(): HasOne
+    {
+        return $this->hasOne(EmailChange::class, 'user_id');
+    }
 }

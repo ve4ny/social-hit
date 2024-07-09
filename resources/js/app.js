@@ -6,6 +6,7 @@ import Registration from "./Components/Auth/Registration.vue";
 import RemindPassword from "./Components/Auth/RemindPassword.vue";
 import PasswordReset from "./Components/Auth/PasswordReset.vue";
 import Profile from "./Components/Profile.vue";
+import Safety from "./Components/Safety.vue";
 
 
 const app = createApp({
@@ -24,7 +25,8 @@ const app = createApp({
         'Registration': Registration,
         'RemindPassword': RemindPassword,
         'PasswordReset': PasswordReset,
-        'Profile': Profile
+        'Profile': Profile,
+        'Safety': Safety
     },
     created() {
         // Установка isLoading на false после загрузки компонента

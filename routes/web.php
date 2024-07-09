@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SafetyController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
@@ -33,5 +34,9 @@ Route::get('/', [MainController::class, 'index'])->name('index');
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'index']);
     Route::post('/profile/save', [ProfileController::class, 'save']);
+
+    Route::get('/safety', [SafetyController::class, 'index']);
+    Route::post('/safety/change-email', [SafetyController::class, 'changeEmail']);
+    Route::get('/safety/verify-email-change/{token}', [SafetyController::class, 'proceedEmailChange']);
 
 });
