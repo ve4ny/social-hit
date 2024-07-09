@@ -64,8 +64,8 @@ class ServicesListScreen extends Screen
 
         return [
             Layout::table('services', [
-                TD::make('id'),
-                TD::make('name', 'Название')->width('30%'),
+                TD::make('name', 'Название в JAP')->width('35%'),
+                TD::make('rus_name', 'Русское название')->width('35%'),
                 TD::make('jap_rate', 'Стоимость в JAP')->render(fn($service) =>
                     $service->jap_rate / 100 . '$'
                 ),

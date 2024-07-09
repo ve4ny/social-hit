@@ -69,6 +69,7 @@ class EditServiceScreen extends Screen
                 Layout::rows([
                     Input::make('service.id')->hidden(),
                     Input::make('service.name')->title('Название')->disabled(),
+                    Input::make('service.rus_name')->title('Название'),
                     Group::make([
                         Input::make('service.rate')->title('Стоимость для покупателя'),
                         Input::make('service.jap_rate')->title('Стоимость в JAP'),
@@ -89,6 +90,7 @@ class EditServiceScreen extends Screen
     {
         $newPrice = str_replace(['.',',','$'], '', $request->service['rate']);
         $service->rate = $newPrice;
+        $service->rus_name =$request->service['rus_name'];
         $service->show = $request->service['show'];
         $service->save();
 
