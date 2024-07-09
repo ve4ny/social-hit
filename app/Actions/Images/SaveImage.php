@@ -21,47 +21,26 @@ class SaveImage
         if (!Storage::exists($path)) {
             Storage::makeDirectory($path, 0755, true);
         }
-        $filenameWithExtension = $photo->getClientOriginalName();
-        $filename = pathinfo($filenameWithExtension, PATHINFO_FILENAME);
-        $extension = $photo->getClientOriginalExtension();
-        $filenameToStore = $filename . '_' . time() . '.' . $extension;
 
-//        $storedPhoto = Storage::put($path, $photo);
+        $img = Image::make($photo->getPathname());
 
-//        $filenameWithExtension = $photo->getClientOriginalName();
-//        $filename = pathinfo($filenameWithExtension, PATHINFO_FILENAME);
-//        $extension = $photo->getClientOriginalExtension();
-//        $filenameToStore = $filename . '_' . time() . '.' . $extension;
-//        $thumbnailToStore = $filename . '_small_' . time() . '.' . $extension;
-//
-        $storedPhoto = Storage::putFileAs(
-            $path,
-            $photo,
-            $filenameToStore,
-            [
-                'visibility' => 'public',
-                'directory_visibility' => 'public'
-            ]
-        );
-//
-//        $storedThumbnail = Storage::putFileAs(
-//            $path . '/thumbnails',
-//            $photo,
-//            $thumbnailToStore,
-//            [
-//                'visibility' => 'public',
-//                'directory_visibility' => 'public'
-//            ]
-//        );
-//
-//        $thumbnail = Image::make($photo)
-//            ->resize(200, 150, function ($constraint) {
-//                $constraint->aspectRatio();
-//            });
-//        $thumbnail->save(str_replace('public/', 'storage/', $storedThumbnail));
+        if($img->height() > $img->width()) {
+            $height = 300;
+            $width = null;
+        } else {
+            $height = null;
+            $width = 300;
+        }
 
-        return ['photo' => 'storage/' . $storedPhoto,
-//            'thumbnail' => str_replace('public/', 'storage/', $storedThumbnail)
-        ];
+        $img->resize($width, $height, function ($constraint) {
+            $constraint->aspectRatio();
+            $constraint->upsize();
+        });
+
+        $filename = 'avatar.' . $photo->getClientOriginalExtension();
+        $path = 'storage/user_' . Auth::id() . '/profile-photo/'. $filename;
+        $img->save($path, 75);
+
+        return ['photo' => $path];
     }
 }

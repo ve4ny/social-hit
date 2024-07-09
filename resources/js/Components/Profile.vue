@@ -70,7 +70,7 @@ const onFileChange = (event) => {
         <div class="account-user__top d-flex">
             <div class="account-user__avatar">
                 <picture>
-                    <img v-if="form.user.details.image" :src="avatarUrl" style="width:80px; height:80px; object-fit: cover" alt="img">
+                    <img v-if="form.user.details.image || avatarUrl" :src="avatarUrl" style="width:80px; height:80px; object-fit: cover" alt="img">
                     <img v-else src="/public/images/general/avatar.jpg" width="80" height="80" alt="img">
                 </picture>
             </div>
