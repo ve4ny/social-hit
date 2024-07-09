@@ -37,6 +37,12 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/safety', [SafetyController::class, 'index']);
     Route::post('/safety/change-email', [SafetyController::class, 'changeEmail']);
+    Route::post('/safety/change-password', [SafetyController::class, 'changePassword']);
     Route::get('/safety/verify-email-change/{token}', [SafetyController::class, 'proceedEmailChange']);
 
+    Route::get('/referral', [\App\Http\Controllers\ReferralController::class, 'index']);
+
+    Route::get('/orders', [\App\Http\Controllers\OrdersController::class, 'index']);
+
+    Route::get('/transactions', [\App\Http\Controllers\TransactionsController::class, 'index']);
 });

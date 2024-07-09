@@ -9,8 +9,11 @@ const props = defineProps({
 const EMAIL_SUCCESS_TEXT = 'На новый email отправлено письмо с подтверждением. ' +
     'Пройдите по ссылке в письме, чтобы подтвердить смену email.';
 
+const PASSWORD_SUCCESS_TEXT = 'Пароль успешно изменён';
+
 const email = ref(props.user.email);
 const emailMessageShow = ref(false);
+const passwordMessageShow = ref(false);
 const password = ref('********');
 const errors = ref({});
 
@@ -23,8 +26,27 @@ const changeEmail = async () => {
             emailMessageShow.value = true;
         }
     } catch (error) {
-        if(error.response.data.email) {
-            errors.value.email = error.response.data.email;
+        if(error.response.data.errors.email) {
+            errors.value.email = error.response.data.errors.email;
+        }
+    }
+}
+
+const changePassword = async () => {
+    if(password.value === '' || password.value === '********') {
+        errors.value.password = 'Введите новый пароль';
+        return;
+    }
+    try {
+        const response = await axios.post('/safety/change-password',
+            {password: password.value}
+        );
+        if (response.status === 200) {
+            passwordMessageShow.value = true;
+        }
+    } catch (error) {
+        if(error.response.data.errors.password) {
+            errors.value.password = error.response.data.errors.password;
         }
     }
 }
@@ -47,17 +69,21 @@ onMounted(()=>{
                         <div class="form-item__label">Почта:</div>
                         <input v-model="email" @click="()=>{errors.email = ''}" class="form-input" type="email">
                         <div class="form-item__link"><a @click="()=>changeEmail()" href="#">Сменить почту</a></div>
-                        <p v-if="errors.email" class="error">
-                            {{ errors.email }}
-                        </p>
+                        <template v-if="errors.email" class="error">
+                            <p v-for="err in errors.email" class="error">{{ err }}</p>
+                        </template>
                         <p v-if="emailMessageShow" class="success">{{ EMAIL_SUCCESS_TEXT }}</p>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="form-item">
                         <div class="form-item__label">Пароль:</div>
-                        <input v-model="password" class="form-input" type="password">
-                        <div class="form-item__link"> <a href="#">Сменить пароль</a></div>
+                        <input v-model="password" @click="()=>{errors.password = ''}" class="form-input" type="password">
+                        <div class="form-item__link"> <a @click="()=>changePassword()" href="#">Сменить пароль</a></div>
+                        <template v-if="errors.password" >
+                            <p v-for="err in errors.password" class="error">{{ err }}</p>
+                        </template>
+                        <p v-if="passwordMessageShow" class="success">{{ PASSWORD_SUCCESS_TEXT }}</p>
                     </div>
                 </div>
             </div>

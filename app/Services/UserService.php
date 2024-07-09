@@ -83,7 +83,7 @@ class UserService
     public function generateUniqueReferralCode(): string
     {
         do {
-            $referralCode = Str::random(8);
+            $referralCode = Str::random(32);
         } while (UserDetails::where('referral_code', $referralCode)->exists());
         return $referralCode;
     }
