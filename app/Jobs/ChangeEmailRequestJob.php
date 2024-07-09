@@ -2,12 +2,10 @@
 
 namespace App\Jobs;
 
-use App\Mail\RegistrationCodeEmail;
+use App\Mail\EmailChangeEmail;
 use App\Models\EmailChange;
-use App\Models\EmailConfirmation;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -51,6 +49,6 @@ class ChangeEmailRequestJob implements ShouldQueue
         );
 
         // Send email with registration code
-        Mail::to($this->user->email)->send(new RegistrationCodeEmail($changeCode));
+        Mail::to($this->email)->send(new EmailChangeEmail($changeCode));
     }
 }

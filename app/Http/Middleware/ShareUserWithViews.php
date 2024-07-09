@@ -19,8 +19,12 @@ class ShareUserWithViews
      */
     public function handle(Request $request, Closure $next): mixed
     {
-        $user = Auth::user();
-        view()->share('user', $user->load('details'));
+        if(auth()->check()){
+            $user = Auth::user()->load('details');
+            view()->share('user', $user);
+        } else {
+            view()->share('user', null);
+        }
         return $next($request);
     }
 }

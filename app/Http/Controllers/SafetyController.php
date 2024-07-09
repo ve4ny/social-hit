@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Jobs\ChangeEmailRequestJob;
 use App\Models\EmailChange;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -27,6 +28,13 @@ class SafetyController extends Controller
      */
     public function changeEmail(Request $request): JsonResponse
     {
+        $email = $request->email;
+        $userExists = User::where('email', $email)->exists();
+        $emailChangeExists = EmailChange::where('new_email', $email)->exists();
+        if ($userExists || $emailChangeExists) {
+            return response()->json(['email' => 'Email уже существует в базе данных'], 409);
+        }
+
         if (!auth()->check()) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }

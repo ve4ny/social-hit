@@ -23,8 +23,8 @@ const changeEmail = async () => {
             emailMessageShow.value = true;
         }
     } catch (error) {
-        if(error.response.data.errors) {
-            errors.value = error.response.data.errors;
+        if(error.response.data.email) {
+            errors.value.email = error.response.data.email;
         }
     }
 }
@@ -45,8 +45,11 @@ onMounted(()=>{
                 <div class="col-lg-6">
                     <div class="form-item">
                         <div class="form-item__label">Почта:</div>
-                        <input v-model="email" class="form-input" type="email">
+                        <input v-model="email" @click="()=>{errors.email = ''}" class="form-input" type="email">
                         <div class="form-item__link"><a @click="()=>changeEmail()" href="#">Сменить почту</a></div>
+                        <p v-if="errors.email" class="error">
+                            {{ errors.email }}
+                        </p>
                         <p v-if="emailMessageShow" class="success">{{ EMAIL_SUCCESS_TEXT }}</p>
                     </div>
                 </div>
@@ -63,6 +66,13 @@ onMounted(()=>{
 </template>
 
 <style scoped>
+.error {
+    font-size: 12px;
+    font-weight: normal;
+    color: #FF0000;
+    margin-top:6px
+}
+
 .success {
     font-size: 12px;
     font-weight: normal;
