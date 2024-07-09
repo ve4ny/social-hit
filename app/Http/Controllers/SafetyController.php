@@ -46,7 +46,7 @@ class SafetyController extends Controller
      * @param int $token
      * @return RedirectResponse
      */
-    public function proceedEmailChange(int $token): RedirectResponse
+    public function proceedEmailChange(string $token): RedirectResponse
     {
         $change = EmailChange::where('token', $token)->with('user')->first();
         if (!$change) {
