@@ -33,6 +33,11 @@ class PlatformProvider extends OrchidServiceProvider
             ->route('platform.socials')
             ->title('Cервисы'),
 
+            Menu::make('FAQ')
+            ->icon('question')
+            ->route('platform.faq')
+            ->title('FAQ'),
+
             Menu::make('Example screen')
                 ->icon('monitor')
                 ->route('platform.example')

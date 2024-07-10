@@ -31,6 +31,10 @@ Route::post('/password-reset', [AuthController::class, 'reset']);
 
 Route::get('/', [MainController::class, 'index'])->name('index');
 
+//Route::get('/help-center', [MainController::class, 'help'])->name('help');
+Route::get('/help-center/{socialName?}', [MainController::class, 'help'])->name('help-social');
+Route::get('/contacts', [MainController::class, 'contacts'])->name('contacts');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'index']);
     Route::post('/profile/save', [ProfileController::class, 'save']);

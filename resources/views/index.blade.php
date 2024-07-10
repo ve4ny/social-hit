@@ -26,14 +26,16 @@
                                 может иметь решающее значение.
                             </div>
                         </div>
-                        @guest()
+
                             <div class="intro-info__links">
                                 <div class="intro__links d-flex">
-                                    <div class="intro__links-item"><a class="intro__btn btn" href="#regModal" data-bs-toggle="modal">Регистрация</a></div>
-                                    <div class="intro__link-item"><a class="intro__link" href="#loginModal" data-bs-toggle="modal">Войти</a></div>
+                                    @guest()
+                                        <div class="intro__links-item"><a class="intro__btn btn" href="#regModal" data-bs-toggle="modal">Регистрация</a></div>
+                                        <div class="intro__link-item"><a class="intro__link" href="#loginModal" data-bs-toggle="modal">Войти</a></div>
+                                    @endguest
                                 </div>
                             </div>
-                        @endguest
+
                     </div>
                     <div class="intro-stats">
                         <div class="intro__stats d-flex">
@@ -56,7 +58,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="intro-rating">
+                    <div class="intro-rating" @auth() style="margin-top: 90px" @endauth>
                         <div class="intro__rating d-flex">
                             <div class="intro__rating-value title">4.8 / 5</div>
                             <div class="intro__rating-icon icon">

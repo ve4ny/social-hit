@@ -2,7 +2,8 @@
     <div class="header__menu">
         <nav class="nav">
             <ul class="menu flex">
-                <li class="menu__item"><a class="menu__link has-child" href="#"> <span
+                <li class="menu__item">
+                    <a class="menu__link has-child" href="#"> <span
                             class="menu__link-txt">Услуги</span><span class="menu__link-icon icon">
                           <svg class="svg-sprite-icon icon-down-2">
                             <use xlink:href="/images/svg/symbol/sprite.svg#down-2"></use>
@@ -116,8 +117,8 @@
                         </div>
                     </div>
                 </li>
-                <li class="menu__item"><a class="menu__link" href="#">Центр помощи</a></li>
-                <li class="menu__item"><a class="menu__link" href="#">Контакты</a></li>
+                <li class="menu__item"><a class="menu__link" href="/help-center">Центр помощи</a></li>
+                <li class="menu__item"><a class="menu__link" href="/contacts">Контакты</a></li>
             </ul>
         </nav>
     </div>
@@ -128,7 +129,7 @@
                 <div class="header-balance__title">Баланс</div>
                 <div class="header-balance">
                     <div class="header-balance__value">10.24 ₽</div>
-                    <a class="header-balance__btn btn" href="#">Пополнить</a>
+                    <a class="header-balance__btn btn" href="/refill">Пополнить</a>
                 </div>
             </div>
         </div>

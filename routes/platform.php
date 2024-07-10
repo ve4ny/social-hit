@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Models\Social;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
 use App\Orchid\Screens\Examples\ExampleChartsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
@@ -91,6 +92,42 @@ Route::screen('socials/{social}/{category}/{service}', \App\Orchid\Screens\Servi
     ->breadcrumbs(fn(Trail $trail, $social, $category, $service) => $trail
         ->parent('platform.socials.categories.services', $social, $category)
         ->push(__('Услуга'), route('platform.socials.category', ['social' => $social, 'category' => $category, 'service' => $service])));
+
+// Platform > FAQ
+
+Route::screen('faq', \App\Orchid\Screens\Faq\FaqListScreen::class)
+    ->name('platform.faq')
+    ->breadcrumbs(fn (Trail $trail) => $trail
+        ->parent('platform.index')
+        ->push(__('Категории FAQ'), route('platform.faq'))
+    );
+
+//Platform > FAQ > Questions
+
+Route::screen('faq/questions/{social}', \App\Orchid\Screens\Faq\FaqQuestionsListScreen::class)
+    ->name('platform.faq.questions')
+    ->breadcrumbs(fn (Trail $trail, $social) => $trail
+        ->parent('platform.faq', $social)
+        ->push(__('Список вопросов'), route('platform.faq.questions', $social))
+    );
+
+//Platform > FAQ > New Question
+
+Route::screen('faq/questions/{social?}/new-question', \App\Orchid\Screens\Faq\FaqQuestionEditScreen::class)
+    ->name('platform.faq.new-question')
+    ->breadcrumbs(fn (Trail $trail, $social) => $trail
+        ->parent('platform.faq.questions', $social)
+        ->push(__('Новый вопрос'), route('platform.faq.new-question', $social))
+    );
+
+//Platform > FAQ > Question
+
+Route::screen('faq/questions/{social?}/{questionId?}', \App\Orchid\Screens\Faq\FaqQuestionEditScreen::class)
+    ->name('platform.faq.question')
+    ->breadcrumbs(fn (Trail $trail, $social) => $trail
+        ->parent('platform.faq.questions', $social)
+        ->push(__('Редактирование вопроса'), route('platform.faq.new-question', $social))
+    );
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)

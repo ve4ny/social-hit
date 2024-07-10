@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Faq;
 use App\Models\Social;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,5 +16,20 @@ class MainController extends Controller
     public function index(): View
     {
         return view('index');
+    }
+
+    public function help(string $socialName = null): View
+    {
+        $socialId = null;
+        if($socialName) {
+            $socialId = Social::where('name', $socialName)->pluck('id')->first();
+        }
+        $faqs = Faq::where('social_id', $socialId)->get();
+        return view('pages.help', compact('socialName', 'faqs'));
+    }
+
+    public function contacts(): View
+    {
+        return view('pages.contacts');
     }
 }
