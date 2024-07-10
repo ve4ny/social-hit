@@ -24,7 +24,9 @@
 </div>
 @include('modals')
 @vite('resources/js/app.js')
-<script src="/js/libs.js"></script>
-<script src="/js/main.js"></script>
+
+
 </body>
+<script src="{{ asset('js/main.js') }}"></script>
+<script src="{{ asset('js/libs.js') }}"></script>
 </html>

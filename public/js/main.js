@@ -45,18 +45,18 @@ mobileMenu()
 
 function addCollapse() {
     const rightColumns = document.querySelectorAll('.account-table__right');
-  
+
     if (window.innerWidth < 1200) {
       rightColumns.forEach(column => column.classList.add('collapse'));
     } else {
       rightColumns.forEach(column => column.classList.remove('collapse'));
     }
 }
-  
+
 window.addEventListener('load', addCollapse);
-  
+
 window.addEventListener('resize', addCollapse);
-  
+
 
 function changeRefill() {
   const main = document.querySelector('.form-refill')

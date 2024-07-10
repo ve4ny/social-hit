@@ -5,6 +5,7 @@
     <title>Главная страница</title>
     <meta meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     @vite('resources/css/styles.scss')
+    @vite('resources/js/files/main.js')
     <link rel="stylesheet" type="text/css" href="/css/styles.min.css">
 </head>
 <body id="app">

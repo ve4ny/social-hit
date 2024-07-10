@@ -14,10 +14,6 @@ class MainController extends Controller
      */
     public function index(): View
     {
-        $socials = Social::with('attachment')
-            ->with('categories', function ($query) {
-                $query->where('main_show', 1)->with('attachment');
-            })->get();
-        return view('index', compact('socials'));
+        return view('index');
     }
 }

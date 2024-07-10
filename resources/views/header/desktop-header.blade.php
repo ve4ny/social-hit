@@ -17,526 +17,99 @@
                             <div class="menu__dropdown-row d-flex">
                                 <div class="menu__dropdown-col">
                                     <div class="dropdown-menu__list">
-                                        <div class="dropdown-menu__list-item"><a class="dropdown-menu__link d-flex"
-                                                                                 href="#hidden1"
-                                                                                 data-bs-toggle="collapse"><span
-                                                    class="dropdown-menu__link-icon">
-                                      <picture>
-                                        <source srcset="/images/general/inst.webp" type="image/webp"/><img
-                                              src="/images/general/inst.png" width="28" height="28" alt="img"/>
-                                      </picture></span><span class="dropdown-menu__link-txt">Instagram</span><span
-                                                    class="dropdown-menu__link-arrow icon">
-                                      <svg class="svg-sprite-icon icon-right-225">
-                                        <use xlink:href="/images/svg/symbol/sprite.svg#right-225"></use>
-                                      </svg></span></a>
-                                            <div class="dropdown-menu__more collapse" id="hidden1"
+                                        @foreach($socials->slice(0, 6) as $key => $social)
+                                        <div class="dropdown-menu__list-item">
+                                            <a class="dropdown-menu__link d-flex"
+                                               href="#hidden{{ $key }}" data-bs-toggle="collapse">
+                                                <span class="dropdown-menu__link-icon">
+                                                    <picture>
+                                                        <source srcset="{{ asset($social->image) }}" type="image/webp"/>
+                                                            <img src="{{ asset($social->image) }}" width="28" height="28" alt="img"/>
+                                                    </picture>
+                                                </span>
+                                                <span class="dropdown-menu__link-txt">{{ $social->name }}</span>
+                                                <span class="dropdown-menu__link-arrow icon">
+                                                    <svg class="svg-sprite-icon icon-right-225">
+                                                        <use xlink:href="/images/svg/symbol/sprite.svg#right-225"></use>
+                                                    </svg>
+                                                </span>
+                                            </a>
+                                            <div class="dropdown-menu__more collapse" id="hidden{{ $key }}"
                                                  data-bs-parent="#dropdownMenu">
                                                 <div class="social-link__list">
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-users-plus-2">
-                                              <use xlink:href="/images/svg/symbol/sprite.svg#users-plus-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Подписчики</span></a></div>
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-thumbs-up-2">
-                                              <use xlink:href="/images/svg/symbol/sprite.svg#thumbs-up-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Лайки</span></a></div>
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-eye-2">
-                                              <use xlink:href="/images/svg/symbol/sprite.svg#eye-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Просмотры</span></a></div>
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-message-text-circle-2">
-                                              <use
-                                                  xlink:href="/images/svg/symbol/sprite.svg#message-text-circle-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Комменты </span></a></div>
+                                                    @foreach($social->categories as $category)
+                                                        <div class="social-link__list-item">
+                                                            <a class="social-link__type d-flex" href="#">
+                                                                <span class="social-link__type-icon icon">
+                                                                    @if($category->image)
+                                                                        <img class="svg-sprite-icon icon-users-plus-2" src="{{asset($category->image)}}" alt="Иконка категории услуг">
+                                                                    @else
+                                                                    <svg class="svg-sprite-icon icon-users-plus-2">
+                                                                        <use xlink:href="/images/svg/symbol/sprite.svg#users-plus-2"></use>
+                                                                    </svg>
+                                                                        @endif
+                                                                </span>
+                                                                <span class="social-link__type-txt">
+                                                                    @if($category->rus_name)
+                                                                        {{ $category->rus_name }}
+                                                                    @else
+                                                                        {{ $category->jap_name }}
+                                                                    @endif
+                                                                </span>
+                                                            </a>
+                                                        </div>
+                                                    @endforeach
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="dropdown-menu__list-item"><a class="dropdown-menu__link d-flex"
-                                                                                 href="#hidden2"
-                                                                                 data-bs-toggle="collapse"><span
-                                                    class="dropdown-menu__link-icon">
-                                      <picture>
-                                        <source srcset="/images/general/fb.webp" type="image/webp"/><img
-                                              src="/images/general/fb.png" width="28" height="28" alt="img"/>
-                                      </picture></span><span class="dropdown-menu__link-txt">Facebook</span><span
-                                                    class="dropdown-menu__link-arrow icon">
-                                      <svg class="svg-sprite-icon icon-right-225">
-                                        <use xlink:href="/images/svg/symbol/sprite.svg#right-225"></use>
-                                      </svg></span></a>
-                                            <div class="dropdown-menu__more collapse" id="hidden2"
-                                                 data-bs-parent="#dropdownMenu">
-                                                <div class="social-link__list">
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-users-plus-2">
-                                              <use xlink:href="/images/svg/symbol/sprite.svg#users-plus-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Подписчики</span></a></div>
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-thumbs-up-2">
-                                              <use xlink:href="/images/svg/symbol/sprite.svg#thumbs-up-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Лайки</span></a></div>
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-eye-2">
-                                              <use xlink:href="/images/svg/symbol/sprite.svg#eye-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Просмотры</span></a></div>
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-message-text-circle-2">
-                                              <use
-                                                  xlink:href="/images/svg/symbol/sprite.svg#message-text-circle-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Комменты </span></a></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="dropdown-menu__list-item"><a class="dropdown-menu__link d-flex"
-                                                                                 href="#hidden3"
-                                                                                 data-bs-toggle="collapse"><span
-                                                    class="dropdown-menu__link-icon">
-                                      <picture>
-                                        <source srcset="/images/general/tg.webp" type="image/webp"/><img
-                                              src="/images/general/tg.png" width="28" height="28" alt="img"/>
-                                      </picture></span><span class="dropdown-menu__link-txt">Telegram</span><span
-                                                    class="dropdown-menu__link-arrow icon">
-                                      <svg class="svg-sprite-icon icon-right-225">
-                                        <use xlink:href="/images/svg/symbol/sprite.svg#right-225"></use>
-                                      </svg></span></a>
-                                            <div class="dropdown-menu__more collapse" id="hidden3"
-                                                 data-bs-parent="#dropdownMenu">
-                                                <div class="social-link__list">
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-users-plus-2">
-                                              <use xlink:href="/images/svg/symbol/sprite.svg#users-plus-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Подписчики</span></a></div>
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-thumbs-up-2">
-                                              <use xlink:href="/images/svg/symbol/sprite.svg#thumbs-up-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Лайки</span></a></div>
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-eye-2">
-                                              <use xlink:href="/images/svg/symbol/sprite.svg#eye-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Просмотры</span></a></div>
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-message-text-circle-2">
-                                              <use
-                                                  xlink:href="/images/svg/symbol/sprite.svg#message-text-circle-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Комменты </span></a></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="dropdown-menu__list-item"><a class="dropdown-menu__link d-flex"
-                                                                                 href="#hidden4"
-                                                                                 data-bs-toggle="collapse"><span
-                                                    class="dropdown-menu__link-icon">
-                                      <picture>
-                                        <source srcset="/images/general/twitch.webp" type="image/webp"/><img
-                                              src="/images/general/twitch.png" width="28" height="28" alt="img"/>
-                                      </picture></span><span class="dropdown-menu__link-txt">Twitch</span><span
-                                                    class="dropdown-menu__link-arrow icon">
-                                      <svg class="svg-sprite-icon icon-right-225">
-                                        <use xlink:href="/images/svg/symbol/sprite.svg#right-225"></use>
-                                      </svg></span></a>
-                                            <div class="dropdown-menu__more collapse" id="hidden4"
-                                                 data-bs-parent="#dropdownMenu">
-                                                <div class="social-link__list">
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-users-plus-2">
-                                              <use xlink:href="/images/svg/symbol/sprite.svg#users-plus-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Подписчики</span></a></div>
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-thumbs-up-2">
-                                              <use xlink:href="/images/svg/symbol/sprite.svg#thumbs-up-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Лайки</span></a></div>
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-eye-2">
-                                              <use xlink:href="/images/svg/symbol/sprite.svg#eye-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Просмотры</span></a></div>
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-message-text-circle-2">
-                                              <use
-                                                  xlink:href="/images/svg/symbol/sprite.svg#message-text-circle-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Комменты </span></a></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="dropdown-menu__list-item"><a class="dropdown-menu__link d-flex"
-                                                                                 href="#hidden5"
-                                                                                 data-bs-toggle="collapse"><span
-                                                    class="dropdown-menu__link-icon">
-                                      <picture>
-                                        <source srcset="/images/general/yt.webp" type="image/webp"/><img
-                                              src="/images/general/yt.png" width="28" height="28" alt="img"/>
-                                      </picture></span><span class="dropdown-menu__link-txt">Youtube</span><span
-                                                    class="dropdown-menu__link-arrow icon">
-                                      <svg class="svg-sprite-icon icon-right-225">
-                                        <use xlink:href="/images/svg/symbol/sprite.svg#right-225"></use>
-                                      </svg></span></a>
-                                            <div class="dropdown-menu__more collapse" id="hidden5"
-                                                 data-bs-parent="#dropdownMenu">
-                                                <div class="social-link__list">
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-users-plus-2">
-                                              <use xlink:href="/images/svg/symbol/sprite.svg#users-plus-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Подписчики</span></a></div>
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-thumbs-up-2">
-                                              <use xlink:href="/images/svg/symbol/sprite.svg#thumbs-up-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Лайки</span></a></div>
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-eye-2">
-                                              <use xlink:href="/images/svg/symbol/sprite.svg#eye-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Просмотры</span></a></div>
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-message-text-circle-2">
-                                              <use
-                                                  xlink:href="/images/svg/symbol/sprite.svg#message-text-circle-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Комменты </span></a></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="dropdown-menu__list-item"><a class="dropdown-menu__link d-flex"
-                                                                                 href="#hidden6"
-                                                                                 data-bs-toggle="collapse"><span
-                                                    class="dropdown-menu__link-icon">
-                                      <picture>
-                                        <source srcset="/images/general/tiktok.webp" type="image/webp"/><img
-                                              src="/images/general/tiktok.png" width="28" height="28" alt="img"/>
-                                      </picture></span><span class="dropdown-menu__link-txt">TikTok</span><span
-                                                    class="dropdown-menu__link-arrow icon">
-                                      <svg class="svg-sprite-icon icon-right-225">
-                                        <use xlink:href="/images/svg/symbol/sprite.svg#right-225"></use>
-                                      </svg></span></a>
-                                            <div class="dropdown-menu__more collapse" id="hidden6"
-                                                 data-bs-parent="#dropdownMenu">
-                                                <div class="social-link__list">
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-users-plus-2">
-                                              <use xlink:href="/images/svg/symbol/sprite.svg#users-plus-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Подписчики</span></a></div>
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-thumbs-up-2">
-                                              <use xlink:href="/images/svg/symbol/sprite.svg#thumbs-up-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Лайки</span></a></div>
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-eye-2">
-                                              <use xlink:href="/images/svg/symbol/sprite.svg#eye-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Просмотры</span></a></div>
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-message-text-circle-2">
-                                              <use
-                                                  xlink:href="/images/svg/symbol/sprite.svg#message-text-circle-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Комменты </span></a></div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        @endforeach
                                     </div>
                                 </div>
                                 <div class="menu__dropdown-col">
                                     <div class="dropdown-menu__list">
-                                        <div class="dropdown-menu__list-item"><a class="dropdown-menu__link d-flex"
-                                                                                 href="#hidden7"
-                                                                                 data-bs-toggle="collapse"><span
-                                                    class="dropdown-menu__link-icon">
+                                        @foreach($socials->slice(6) as $key => $social)
+                                            <div class="dropdown-menu__list-item">
+                                                <a class="dropdown-menu__link d-flex"
+                                                   href="#hidden1{{ $key }}"
+                                                   data-bs-toggle="collapse"><span
+                                                        class="dropdown-menu__link-icon">
                                       <picture>
-                                        <source srcset="/images/general/in.webp" type="image/webp"/><img
-                                              src="/images/general/in.png" width="28" height="28" alt="img"/>
-                                      </picture></span><span class="dropdown-menu__link-txt">Linkedin</span><span
-                                                    class="dropdown-menu__link-arrow icon">
+                                        <source srcset="{{ asset($social->image) }}" type="image/webp"/><img
+                                              src="{{ asset($social->image) }}" width="28" height="28" alt="img"/>
+                                      </picture></span><span class="dropdown-menu__link-txt">{{ $social->name }}</span><span
+                                                        class="dropdown-menu__link-arrow icon">
                                       <svg class="svg-sprite-icon icon-right-225">
                                         <use xlink:href="/images/svg/symbol/sprite.svg#right-225"></use>
                                       </svg></span></a>
-                                            <div class="dropdown-menu__more collapse" id="hidden7"
-                                                 data-bs-parent="#dropdownMenu">
-                                                <div class="social-link__list">
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-users-plus-2">
-                                              <use xlink:href="/images/svg/symbol/sprite.svg#users-plus-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Подписчики</span></a></div>
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-thumbs-up-2">
-                                              <use xlink:href="/images/svg/symbol/sprite.svg#thumbs-up-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Лайки</span></a></div>
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-eye-2">
-                                              <use xlink:href="/images/svg/symbol/sprite.svg#eye-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Просмотры</span></a></div>
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-message-text-circle-2">
-                                              <use
-                                                  xlink:href="/images/svg/symbol/sprite.svg#message-text-circle-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Комменты </span></a></div>
+                                                <div class="dropdown-menu__more collapse" id="hidden1{{ $key }}"
+                                                     data-bs-parent="#dropdownMenu">
+                                                    <div class="social-link__list">
+                                                        @foreach($social->categories as $category)
+                                                            <div class="social-link__list-item">
+                                                                <a class="social-link__type d-flex" href="#">
+                                                                <span class="social-link__type-icon icon">
+                                                                    @if($category->image)
+                                                                        <img class="svg-sprite-icon icon-users-plus-2" src="{{asset($category->image)}}" alt="Иконка категории услуг">
+                                                                    @else
+                                                                        <svg class="svg-sprite-icon icon-users-plus-2">
+                                                                        <use xlink:href="/images/svg/symbol/sprite.svg#users-plus-2"></use>
+                                                                    </svg>
+                                                                    @endif
+                                                                </span>
+                                                                    <span class="social-link__type-txt">
+                                                                    @if($category->rus_name)
+                                                                            {{ $category->rus_name }}
+                                                                        @else
+                                                                            {{ $category->jap_name }}
+                                                                        @endif
+                                                                </span>
+                                                                </a>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="dropdown-menu__list-item"><a class="dropdown-menu__link d-flex"
-                                                                                 href="#hidden8"
-                                                                                 data-bs-toggle="collapse"><span
-                                                    class="dropdown-menu__link-icon">
-                                      <picture>
-                                        <source srcset="/images/general/snap.webp" type="image/webp"/><img
-                                              src="/images/general/snap.png" width="28" height="28" alt="img"/>
-                                      </picture></span><span class="dropdown-menu__link-txt">Snapchat</span><span
-                                                    class="dropdown-menu__link-arrow icon">
-                                      <svg class="svg-sprite-icon icon-right-225">
-                                        <use xlink:href="/images/svg/symbol/sprite.svg#right-225"></use>
-                                      </svg></span></a>
-                                            <div class="dropdown-menu__more collapse" id="hidden8"
-                                                 data-bs-parent="#dropdownMenu">
-                                                <div class="social-link__list">
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-users-plus-2">
-                                              <use xlink:href="/images/svg/symbol/sprite.svg#users-plus-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Подписчики</span></a></div>
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-thumbs-up-2">
-                                              <use xlink:href="/images/svg/symbol/sprite.svg#thumbs-up-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Лайки</span></a></div>
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-eye-2">
-                                              <use xlink:href="/images/svg/symbol/sprite.svg#eye-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Просмотры</span></a></div>
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-message-text-circle-2">
-                                              <use
-                                                  xlink:href="/images/svg/symbol/sprite.svg#message-text-circle-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Комменты </span></a></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="dropdown-menu__list-item"><a class="dropdown-menu__link d-flex"
-                                                                                 href="#hidden9"
-                                                                                 data-bs-toggle="collapse"><span
-                                                    class="dropdown-menu__link-icon">
-                                      <picture>
-                                        <source srcset="/images/general/apps.webp" type="image/webp"/><img
-                                              src="/images/general/apps.png" width="28" height="28" alt="img"/>
-                                      </picture></span><span class="dropdown-menu__link-txt">Apps</span><span
-                                                    class="dropdown-menu__link-arrow icon">
-                                      <svg class="svg-sprite-icon icon-right-225">
-                                        <use xlink:href="/images/svg/symbol/sprite.svg#right-225"></use>
-                                      </svg></span></a>
-                                            <div class="dropdown-menu__more collapse" id="hidden9"
-                                                 data-bs-parent="#dropdownMenu">
-                                                <div class="social-link__list">
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-users-plus-2">
-                                              <use xlink:href="/images/svg/symbol/sprite.svg#users-plus-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Подписчики</span></a></div>
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-thumbs-up-2">
-                                              <use xlink:href="/images/svg/symbol/sprite.svg#thumbs-up-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Лайки</span></a></div>
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-eye-2">
-                                              <use xlink:href="/images/svg/symbol/sprite.svg#eye-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Просмотры</span></a></div>
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-message-text-circle-2">
-                                              <use
-                                                  xlink:href="/images/svg/symbol/sprite.svg#message-text-circle-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Комменты </span></a></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="dropdown-menu__list-item"><a class="dropdown-menu__link d-flex"
-                                                                                 href="#hidden10"
-                                                                                 data-bs-toggle="collapse"><span
-                                                    class="dropdown-menu__link-icon">
-                                      <picture>
-                                        <source srcset="/images/general/shazam.webp" type="image/webp"/><img
-                                              src="/images/general/shazam.png" width="28" height="28" alt="img"/>
-                                      </picture></span><span class="dropdown-menu__link-txt">Shazam</span><span
-                                                    class="dropdown-menu__link-arrow icon">
-                                      <svg class="svg-sprite-icon icon-right-225">
-                                        <use xlink:href="/images/svg/symbol/sprite.svg#right-225"></use>
-                                      </svg></span></a>
-                                            <div class="dropdown-menu__more collapse" id="hidden10"
-                                                 data-bs-parent="#dropdownMenu">
-                                                <div class="social-link__list">
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-users-plus-2">
-                                              <use xlink:href="/images/svg/symbol/sprite.svg#users-plus-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Подписчики</span></a></div>
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-thumbs-up-2">
-                                              <use xlink:href="/images/svg/symbol/sprite.svg#thumbs-up-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Лайки</span></a></div>
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-eye-2">
-                                              <use xlink:href="/images/svg/symbol/sprite.svg#eye-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Просмотры</span></a></div>
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-message-text-circle-2">
-                                              <use
-                                                  xlink:href="/images/svg/symbol/sprite.svg#message-text-circle-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Комменты </span></a></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="dropdown-menu__list-item"><a class="dropdown-menu__link d-flex"
-                                                                                 href="#hidden11"
-                                                                                 data-bs-toggle="collapse"><span
-                                                    class="dropdown-menu__link-icon">
-                                      <picture>
-                                        <source srcset="/images/general/sc.webp" type="image/webp"/><img
-                                              src="/images/general/sc.png" width="28" height="28" alt="img"/>
-                                      </picture></span><span class="dropdown-menu__link-txt">Soundcloud</span><span
-                                                    class="dropdown-menu__link-arrow icon">
-                                      <svg class="svg-sprite-icon icon-right-225">
-                                        <use xlink:href="/images/svg/symbol/sprite.svg#right-225"></use>
-                                      </svg></span></a>
-                                            <div class="dropdown-menu__more collapse" id="hidden11"
-                                                 data-bs-parent="#dropdownMenu">
-                                                <div class="social-link__list">
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-users-plus-2">
-                                              <use xlink:href="/images/svg/symbol/sprite.svg#users-plus-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Подписчики</span></a></div>
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-thumbs-up-2">
-                                              <use xlink:href="/images/svg/symbol/sprite.svg#thumbs-up-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Лайки</span></a></div>
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-eye-2">
-                                              <use xlink:href="/images/svg/symbol/sprite.svg#eye-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Просмотры</span></a></div>
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-message-text-circle-2">
-                                              <use
-                                                  xlink:href="/images/svg/symbol/sprite.svg#message-text-circle-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Комменты </span></a></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="dropdown-menu__list-item"><a class="dropdown-menu__link d-flex"
-                                                                                 href="#hidden12"
-                                                                                 data-bs-toggle="collapse"><span
-                                                    class="dropdown-menu__link-icon">
-                                      <picture>
-                                        <source srcset="/images/general/spot.webp" type="image/webp"/><img
-                                              src="/images/general/spot.png" width="28" height="28" alt="img"/>
-                                      </picture></span><span class="dropdown-menu__link-txt">Spotify</span><span
-                                                    class="dropdown-menu__link-arrow icon">
-                                      <svg class="svg-sprite-icon icon-right-225">
-                                        <use xlink:href="/images/svg/symbol/sprite.svg#right-225"></use>
-                                      </svg></span></a>
-                                            <div class="dropdown-menu__more collapse" id="hidden12"
-                                                 data-bs-parent="#dropdownMenu">
-                                                <div class="social-link__list">
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-users-plus-2">
-                                              <use xlink:href="/images/svg/symbol/sprite.svg#users-plus-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Подписчики</span></a></div>
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-thumbs-up-2">
-                                              <use xlink:href="/images/svg/symbol/sprite.svg#thumbs-up-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Лайки</span></a></div>
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-eye-2">
-                                              <use xlink:href="/images/svg/symbol/sprite.svg#eye-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Просмотры</span></a></div>
-                                                    <div class="social-link__list-item"><a
-                                                            class="social-link__type d-flex" href="#"> <span
-                                                                class="social-link__type-icon icon">
-                                            <svg class="svg-sprite-icon icon-message-text-circle-2">
-                                              <use
-                                                  xlink:href="/images/svg/symbol/sprite.svg#message-text-circle-2"></use>
-                                            </svg></span><span class="social-link__type-txt">Комменты </span></a></div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>
