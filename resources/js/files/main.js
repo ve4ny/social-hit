@@ -30,90 +30,92 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     dropdownMenu()
-});
-
-function mobileMenu() {
-    const btn = document.querySelector('.open-menu')
-    const content = document.querySelector('.header__group')
-
-    btn.addEventListener('click', (e) => {
-        e.preventDefault()
-        btn.classList.toggle('active')
-        content.classList.toggle('visible')
-    })
-}
-
-mobileMenu()
 
 
-function addCollapse() {
-    const rightColumns = document.querySelectorAll('.account-table__right');
+    function mobileMenu() {
+        const btn = document.querySelector('.open-menu')
+        const content = document.querySelector('.header__group')
 
-    if (window.innerWidth < 1200) {
-        rightColumns.forEach(column => column.classList.add('collapse'));
-    } else {
-        rightColumns.forEach(column => column.classList.remove('collapse'));
-    }
-}
-
-window.addEventListener('load', addCollapse);
-
-window.addEventListener('resize', addCollapse);
-
-
-function changeRefill() {
-    const main = document.querySelector('.form-refill')
-    if (!main) return
-    const outputTxt = main.querySelector('.form-refill__btn-txt')
-    const outputImg = main.querySelector('.form-refill__btn-icon img')
-    const inputs = main.querySelectorAll('.form-refill__label input')
-
-    inputs.forEach(input => {
-        input.addEventListener('change', () => {
-            outputTxt.textContent = input.dataset.txt
-            outputImg.setAttribute('src', `static/images/general/${input.dataset.img}.svg`)
+        btn.addEventListener('click', (e) => {
+            e.preventDefault()
+            btn.classList.toggle('active')
+            content.classList.toggle('visible')
         })
-    })
-}
+    }
 
-changeRefill()
+    mobileMenu()
 
 
-function orderQty() {
-    const qtyElements = document.querySelectorAll('.form-qty');
-    if (!qtyElements.length) return
+    function addCollapse() {
+        const rightColumns = document.querySelectorAll('.account-table__right');
 
-    qtyElements.forEach(qtyElement => {
-        const input = qtyElement.querySelector('.form-qty__input');
-        const minusBtn = qtyElement.querySelector('.form-qty__minus');
-        const plusBtn = qtyElement.querySelector('.form-qty__plus');
+        if (window.innerWidth < 1200) {
+            rightColumns.forEach(column => column.classList.add('collapse'));
+        } else {
+            rightColumns.forEach(column => column.classList.remove('collapse'));
+        }
+    }
 
-        function decreaseQty() {
-            let value = parseInt(input.value);
-            if (value > 1) {
-                value--;
-                input.value = value;
-                if (value === 1) {
-                    minusBtn.setAttribute('disabled', '');
+    window.addEventListener('load', addCollapse);
+
+    window.addEventListener('resize', addCollapse);
+
+
+    function changeRefill() {
+        const main = document.querySelector('.form-refill')
+        if (!main) return
+        const outputTxt = main.querySelector('.form-refill__btn-txt')
+        const outputImg = main.querySelector('.form-refill__btn-icon img')
+        const inputs = main.querySelectorAll('.form-refill__label input')
+
+        inputs.forEach(input => {
+            input.addEventListener('change', () => {
+                outputTxt.textContent = input.dataset.txt
+                outputImg.setAttribute('src', `static/images/general/${input.dataset.img}.svg`)
+            })
+        })
+    }
+
+    changeRefill()
+
+
+    function orderQty() {
+        const qtyElements = document.querySelectorAll('.form-qty');
+        if (!qtyElements.length) return
+
+        qtyElements.forEach(qtyElement => {
+            const input = qtyElement.querySelector('.form-qty__input');
+            const minusBtn = qtyElement.querySelector('.form-qty__minus');
+            const plusBtn = qtyElement.querySelector('.form-qty__plus');
+
+            function decreaseQty() {
+                let value = parseInt(input.value);
+                if (value > 1) {
+                    value--;
+                    input.value = value;
+                    if (value === 1) {
+                        minusBtn.setAttribute('disabled', '');
+                    }
                 }
             }
-        }
 
-        function increaseQty() {
-            let value = parseInt(input.value);
-            value++;
-            input.value = value;
-            minusBtn.removeAttribute('disabled');
-        }
+            function increaseQty() {
+                let value = parseInt(input.value);
+                value++;
+                input.value = value;
+                minusBtn.removeAttribute('disabled');
+            }
 
-        minusBtn.addEventListener('click', decreaseQty);
+            minusBtn.addEventListener('click', decreaseQty);
 
-        plusBtn.addEventListener('click', increaseQty);
+            plusBtn.addEventListener('click', increaseQty);
 
-        input.addEventListener('input', function () {
-            this.value = this.value.replace(/\D/g, '');
+            input.addEventListener('input', function () {
+                this.value = this.value.replace(/\D/g, '');
+            });
         });
-    });
-}
+    }
 
-orderQty()
+    orderQty()
+
+});

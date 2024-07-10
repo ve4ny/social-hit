@@ -6,23 +6,29 @@ use App\Models\Social;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class ShareServicesWithViews
 {
+    private int $minutes = 120;
+
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse) $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
     public function handle(Request $request, Closure $next)
     {
-        $socials = Social::with('attachment')
-            ->with('categories', function ($query) {
+        $socials = Cache::remember('socials', $this->minutes * 60, function () {
+            return Social::with(['attachment', 'categories' => function ($query) {
                 $query->where('main_show', 1)->with('attachment');
-            })->get();
-            view()->share('socials', $socials);
+            }])->get();
+        });
+
+        view()->share('socials', $socials);
+
         return $next($request);
     }
 }
