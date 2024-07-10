@@ -24,7 +24,7 @@ class MainController extends Controller
         if($socialName) {
             $socialId = Social::where('name', $socialName)->pluck('id')->first();
         }
-        $faqs = Faq::where('social_id', $socialId)->get();
+        $faqs = Faq::where('social_id', $socialId)->where('publish', true)->get();
         return view('pages.help', compact('socialName', 'faqs'));
     }
 
