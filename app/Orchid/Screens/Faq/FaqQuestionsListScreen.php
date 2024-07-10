@@ -65,8 +65,8 @@ class FaqQuestionsListScreen extends Screen
                 TD::make('id'),
                 TD::make('question'),
                 TD::make('answer'),
-                TD::make('publish', 'Отображение')->render(fn($service) =>
-                $service->show ? 'Да' : '-'
+                TD::make('publish', 'Отображение')->render(fn(Faq $faq) =>
+                $faq->publish ? 'Да' : '-'
                 ),
                 TD::make(__('Редактировать'))->render(fn(Faq $faq) =>
                     Link::make('Редактировать')->icon('pencil')->route('platform.faq.question', [$this->socialId, $faq->id])
