@@ -74,27 +74,7 @@
         </div>
     </div>
     @include('components.index.socials')
-    <div class="brands">
-        <div class="container">
-            <div class="brands-list row">
-                <div class="brands-list__item col-auto">
-                    <div class="brands-img"><img src="images/general/brands-1.svg" alt="img"></div>
-                </div>
-                <div class="brands-list__item col-auto">
-                    <div class="brands-img"><img src="images/general/brands-2.svg" alt="img"></div>
-                </div>
-                <div class="brands-list__item col-auto">
-                    <div class="brands-img"><img src="images/general/brands-3.svg" alt="img"></div>
-                </div>
-                <div class="brands-list__item col-auto">
-                    <div class="brands-img"><img src="images/general/brands-4.svg" alt="img"></div>
-                </div>
-                <div class="brands-list__item col-auto">
-                    <div class="brands-img"><img src="images/general/brands-5.svg" alt="img"></div>
-                </div>
-            </div>
-        </div>
-    </div>
+    @include('components.index.brands')
     @guest()
         <authentication-min></authentication-min>
     @endguest

@@ -49,7 +49,9 @@ class FaqQuestionsListScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            Link::make('Новый вопрос')->icon('plus')->route('platform.faq.new-question', $this->socialId)
+            Link::make('Новый вопрос')
+                ->icon('plus')
+                ->route('platform.faq.new-question', $this->socialId)
         ];
     }
 

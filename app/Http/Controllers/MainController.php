@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Brand;
 use App\Models\Faq;
 use App\Models\Social;
 use Illuminate\Http\RedirectResponse;
@@ -16,7 +17,8 @@ class MainController extends Controller
     public function index(): View
     {
         $faqs = Faq::where('social_id', null)->where('publish', true)->get();
-        return view('index', compact('faqs'));
+        $brands = Brand::with('attachment')->get();
+        return view('index', compact('faqs', 'brands'));
     }
 
     public function help(string $socialName = null): View

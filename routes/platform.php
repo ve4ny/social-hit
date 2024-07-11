@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Models\Social;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
 use App\Orchid\Screens\Examples\ExampleChartsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
@@ -102,7 +101,7 @@ Route::screen('faq', \App\Orchid\Screens\Faq\FaqListScreen::class)
         ->push(__('Категории FAQ'), route('platform.faq'))
     );
 
-//Platform > FAQ > Questions
+// Platform > FAQ > Questions
 
 Route::screen('faq/questions/{social}', \App\Orchid\Screens\Faq\FaqQuestionsListScreen::class)
     ->name('platform.faq.questions')
@@ -111,7 +110,7 @@ Route::screen('faq/questions/{social}', \App\Orchid\Screens\Faq\FaqQuestionsList
         ->push(__('Список вопросов'), route('platform.faq.questions', $social))
     );
 
-//Platform > FAQ > New Question
+// Platform > FAQ > New Question
 
 Route::screen('faq/questions/{social?}/new-question', \App\Orchid\Screens\Faq\FaqQuestionEditScreen::class)
     ->name('platform.faq.new-question')
@@ -120,13 +119,40 @@ Route::screen('faq/questions/{social?}/new-question', \App\Orchid\Screens\Faq\Fa
         ->push(__('Новый вопрос'), route('platform.faq.new-question', $social))
     );
 
-//Platform > FAQ > Question
+// Platform > FAQ > Question
 
 Route::screen('faq/questions/{social?}/{questionId?}', \App\Orchid\Screens\Faq\FaqQuestionEditScreen::class)
     ->name('platform.faq.question')
     ->breadcrumbs(fn (Trail $trail, $social) => $trail
         ->parent('platform.faq.questions', $social)
         ->push(__('Редактирование вопроса'), route('platform.faq.new-question', $social))
+    );
+
+// Platform > Brands
+
+Route::screen('brands', \App\Orchid\Screens\Index\Brands\BrandsListScreen::class)
+    ->name('platform.brands')
+    ->breadcrumbs(fn (Trail $trail) => $trail
+        ->parent('platform.index')
+        ->push(__('Cписок логотипов брендов на главной'), route('platform.brands'))
+    );
+
+// Platform > Brands > Create
+
+Route::screen('brands/create', \App\Orchid\Screens\Index\Brands\BrandCreateScreen::class)
+    ->name('platform.brands.create')
+    ->breadcrumbs(fn(Trail $trail) => $trail
+        ->parent('platform.brands')
+        ->push(__('Добавление нового логотипа'), route('platform.brands.create'))
+    );
+
+// Platform > Brands > Brand
+
+Route::screen('brands/{brand}', \App\Orchid\Screens\Index\Brands\BrandEditScreen::class)
+    ->name('platform.brands.brand')
+    ->breadcrumbs(fn(Trail $trail, $brand) => $trail
+        ->parent('platform.brands')
+        ->push(($brand), route('platform.brands.brand', $brand))
     );
 
 // Platform > Profile

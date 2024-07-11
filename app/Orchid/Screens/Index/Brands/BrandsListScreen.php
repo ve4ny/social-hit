@@ -1,19 +1,18 @@
 <?php
 
-namespace App\Orchid\Screens\Socials;
+namespace App\Orchid\Screens\Index\Brands;
 
+use App\Models\Brand;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
-use App\Models\Social;
 use Orchid\Screen\Actions\Link;
-use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Screen;
 use Orchid\Screen\TD;
+use Orchid\Support\Facades\Layout;
 
-class SocialsListScreen extends Screen
+class BrandsListScreen extends Screen
 {
-    protected Collection $socials;
-
+    public Collection $brands;
     /**
      * Fetch data to be displayed on the screen.
      *
@@ -21,9 +20,9 @@ class SocialsListScreen extends Screen
      */
     public function query(): iterable
     {
-        $socials = Social::with('attachment')->get();
+        $brands = Brand::with('attachment')->get();
         return [
-            'socials' => $socials,
+            'brands' => $brands
         ];
     }
 
@@ -34,7 +33,7 @@ class SocialsListScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Список социальных сетей';
+        return 'Логотипы брендов на главной странице';
     }
 
     /**
@@ -45,9 +44,9 @@ class SocialsListScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            Link::make('Добавить')
+            Link::make('Новый логотип')
                 ->icon('plus')
-                ->route('platform.socials.create')
+                ->route('platform.brands.create')
         ];
     }
 
@@ -59,17 +58,11 @@ class SocialsListScreen extends Screen
     public function layout(): iterable
     {
         return [
-            Layout::table('socials', [
+            Layout::table('brands', [
                 TD::make('id'),
                 TD::make('name'),
-                TD::make('Список категорий')->render(fn(Social $social) =>
-                Link::make('Категории')
-                    ->icon('list')
-                    ->route('platform.socials.categories', $social->id)),
-                TD::make('Редактировать')->render(fn(Social $social) =>
-                Link::make('Редактировать')
-                    ->icon('pencil')
-                    ->route('platform.socials.edit', $social->id))
+                TD::make(__('Редактировать'))->render(fn(Brand $brand) =>
+                    Link::make(__('Редактировать'))->icon('pencil')->route('platform.brands.brand', mb_strtolower($brand->name)))
             ])
         ];
     }
