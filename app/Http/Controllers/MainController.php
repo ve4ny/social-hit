@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Block;
 use App\Models\Brand;
 use App\Models\Faq;
 use App\Models\Social;
@@ -18,7 +19,12 @@ class MainController extends Controller
     {
         $faqs = Faq::where('social_id', null)->where('publish', true)->get();
         $brands = Brand::with('attachment')->get();
-        return view('index', compact('faqs', 'brands'));
+        $blocksUnsort = Block::all();
+        $blocks = [];
+        foreach($blocksUnsort as $block) {
+            $blocks[$block->ident] = $block;
+        }
+        return view('index', compact('faqs', 'brands', 'blocks'));
     }
 
     public function help(string $socialName = null): View

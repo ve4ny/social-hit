@@ -155,6 +155,33 @@ Route::screen('brands/{brand}', \App\Orchid\Screens\Index\Brands\BrandEditScreen
         ->push(($brand), route('platform.brands.brand', $brand))
     );
 
+// Platform > Blocks
+
+Route::screen('blocks', \App\Orchid\Screens\Index\Blocks\IndexBlocksListScreen::class)
+    ->name('platform.blocks')
+    ->breadcrumbs(fn (Trail $trail) => $trail
+        ->parent('platform.index')
+        ->push(__('Cписок блоков'), route('platform.blocks'))
+    );
+
+// Platform > Blocks > Create
+
+Route::screen('blocks/create', \App\Orchid\Screens\Index\Blocks\IndexBlocksCreateScreen::class)
+    ->name('platform.blocks.create')
+    ->breadcrumbs(fn(Trail $trail) => $trail
+        ->parent('platform.blocks')
+        ->push(__('Добавление нового блока'), route('platform.blocks.create'))
+    );
+
+// Platform > Blocks > Block
+
+Route::screen('blocks/{block}', \App\Orchid\Screens\Index\Blocks\IndexBlocksEditScreen::class)
+    ->name('platform.blocks.block')
+    ->breadcrumbs(fn(Trail $trail, $block) => $trail
+        ->parent('platform.blocks')
+        ->push(__('Редактирование блока'), route('platform.blocks.block', $block))
+    );
+
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
     ->name('platform.profile')
