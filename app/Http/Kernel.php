@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\SharePagesWithViews;
 use App\Http\Middleware\ShareServicesWithViews;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -38,7 +39,8 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\ShareUserWithViews::class,
-            ShareServicesWithViews::class
+            ShareServicesWithViews::class,
+            SharePagesWithViews::class
         ],
 
         'api' => [

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AdditionalPage;
 use App\Models\Block;
 use App\Models\Brand;
 use App\Models\Faq;
+use App\Models\Page;
 use App\Models\Social;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -40,5 +42,18 @@ class MainController extends Controller
     public function contacts(): View
     {
         return view('pages.contacts');
+    }
+
+    /**
+     * @param string $slug
+     * @return \Illuminate\Contracts\View\View|RedirectResponse
+     */
+    public function otherPages(string $slug): View|RedirectResponse
+    {
+        $page = AdditionalPage::where('slug', $slug)->first();
+        if (!$page) {
+            return redirect()->route('404');
+        }
+        return view('pages.other-pages', compact('page'));
     }
 }

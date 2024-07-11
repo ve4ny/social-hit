@@ -50,3 +50,11 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/transactions', [\App\Http\Controllers\TransactionsController::class, 'index']);
 });
+
+// 404
+Route::get('/404', function () {
+    return view('errors.404');
+})->name('404');
+
+// Other pages
+Route::get('/{slug}', [MainController::class, 'otherPages'])->name('page');

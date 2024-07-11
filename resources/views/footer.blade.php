@@ -2,16 +2,18 @@
     <div class="container">
         <div class="footer__content d-flex">
             <div class="footer__logo">
-                <div class="footer-logo"><img src="/images/general/logo.svg" width="104" height="48" alt="img"/>
+                <div class="footer-logo"><img src="{{ asset('/images/general/logo.svg') }}" width="104" height="48" alt="img"/>
                 </div>
             </div>
+            @if(count($pages) > 0)
             <div class="footer__menu">
                 <ul class="footer-menu d-flex">
-                    <li class="footer-menu__item"> <a class="footer-menu__link" href="#">Публичная оферта</a></li>
-                    <li class="footer-menu__item"> <a class="footer-menu__link" href="#">Политика приватности</a></li>
-                    <li class="footer-menu__item"> <a class="footer-menu__link" href="#">Политика возврата</a></li>
+                    @foreach($pages as $page)
+                        <li class="footer-menu__item"> <a class="footer-menu__link" href="/{{$page->slug}}">{{$page->title}}</a></li>
+                    @endforeach
                 </ul>
             </div>
+            @endif
             <div class="footer__contacts">
                 <ul class="footer-contacts d-flex">
                     <li class="footer-contacts__item"> <a class="footer-contacts__link" href="tel:+380661900018">+ 38 (066) 19-000-18</a></li>

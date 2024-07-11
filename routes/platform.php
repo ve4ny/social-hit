@@ -182,6 +182,33 @@ Route::screen('blocks/{block}', \App\Orchid\Screens\Index\Blocks\IndexBlocksEdit
         ->push(__('Редактирование блока'), route('platform.blocks.block', $block))
     );
 
+// Platform > Other Pages
+
+Route::screen('pages', \App\Orchid\Screens\OtherPages\PagesListScreen::class)
+    ->name('platform.pages')
+    ->breadcrumbs(fn (Trail $trail) => $trail
+        ->parent('platform.index')
+        ->push(__('Список страниц'), route('platform.pages'))
+    );
+
+// Platform > Other Pages > Create
+
+Route::screen('pages/create', \App\Orchid\Screens\OtherPages\PagesCreateScreen::class)
+    ->name('platform.pages.create')
+    ->breadcrumbs(fn (Trail $trail) => $trail
+        ->parent('platform.pages')
+        ->push(__('Новая страница'), route('platform.pages.create'))
+    );
+
+// Platform > Other Pages > Page
+
+Route::screen('pages/{page}', \App\Orchid\Screens\OtherPages\PagesEditScreen::class)
+    ->name('platform.pages.edit')
+    ->breadcrumbs(fn (Trail $trail, $page) => $trail
+        ->parent('platform.pages')
+        ->push(__('редактирование страницы'), route('platform.pages.create', $page))
+    );
+
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
     ->name('platform.profile')
