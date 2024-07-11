@@ -15,7 +15,8 @@ class MainController extends Controller
      */
     public function index(): View
     {
-        return view('index');
+        $faqs = Faq::where('social_id', null)->where('publish', true)->get();
+        return view('index', compact('faqs'));
     }
 
     public function help(string $socialName = null): View
