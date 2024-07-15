@@ -17,7 +17,7 @@ class SharePagesWithViews
      */
     public function handle(Request $request, Closure $next)
     {
-        $pages = AdditionalPage::all();
+        $pages = AdditionalPage::pluck('slug', 'title');
         view()->share('pages', $pages);
         return $next($request);
     }

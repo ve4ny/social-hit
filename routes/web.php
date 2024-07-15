@@ -46,7 +46,10 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/referral', [\App\Http\Controllers\ReferralController::class, 'index']);
 
-    Route::get('/orders', [\App\Http\Controllers\OrdersController::class, 'index']);
+    Route::get('/orders', [\App\Http\Controllers\OrderController::class, 'ordersHistory']);
+    Route::get('/order', [\App\Http\Controllers\OrderController::class, 'order'])->name('order');
+    Route::get('/order/{categoryId}', [\App\Http\Controllers\OrderController::class, 'makeRedirect']);
+    Route::get('/order/services/{categoryId}', [\App\Http\Controllers\OrderController::class, 'getServices']);
 
     Route::get('/transactions', [\App\Http\Controllers\TransactionsController::class, 'index']);
 });

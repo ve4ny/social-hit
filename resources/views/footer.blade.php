@@ -8,8 +8,8 @@
             @if(count($pages) > 0)
             <div class="footer__menu">
                 <ul class="footer-menu d-flex">
-                    @foreach($pages as $page)
-                        <li class="footer-menu__item"> <a class="footer-menu__link" href="/{{$page->slug}}">{{$page->title}}</a></li>
+                    @foreach($pages as $title => $slug)
+                        <li class="footer-menu__item"> <a class="footer-menu__link" href="/{{$slug}}">{{$title}}</a></li>
                     @endforeach
                 </ul>
             </div>

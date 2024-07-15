@@ -21,11 +21,9 @@ class ShareServicesWithViews
      */
     public function handle(Request $request, Closure $next)
     {
-        $socials = Cache::remember('socials', $this->minutes * 60, function () {
-            return Social::with(['attachment', 'categories' => function ($query) {
+        $socials = Social::with(['attachment', 'categories' => function ($query) {
                 $query->where('main_show', 1)->with('attachment');
             }])->get();
-        });
 
         view()->share('socials', $socials);
 

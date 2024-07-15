@@ -7,6 +7,7 @@ import RemindPassword from "./Components/Auth/RemindPassword.vue";
 import PasswordReset from "./Components/Auth/PasswordReset.vue";
 import Profile from "./Components/Profile.vue";
 import Safety from "./Components/Safety.vue";
+import Order from "./Components/Order.vue";
 
 
 const app = createApp({
@@ -26,7 +27,8 @@ const app = createApp({
         'RemindPassword': RemindPassword,
         'PasswordReset': PasswordReset,
         'Profile': Profile,
-        'Safety': Safety
+        'Safety': Safety,
+        'OrderPage': Order
     },
     created() {
         // Установка isLoading на false после загрузки компонента

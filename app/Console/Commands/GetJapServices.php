@@ -35,8 +35,7 @@ class GetJapServices extends Command
         $socials = Social::pluck('id','name')->toArray();
         $services = $api->services();
         foreach ($services as $service) {
-            foreach ($socials as $social) {
-                foreach ($socials as $socialName => $socialId) {
+            foreach ($socials as $socialName => $socialId) {
                     if (Str::contains($service->category, $socialName)) {
                         $existingCategory = Category::where('jap_name', $service->category)
                             ->where('social_id', $socialId)
@@ -69,9 +68,6 @@ class GetJapServices extends Command
 
                         $newService->save();
                     }
-
-
-                }
             }
             echo('.');
         }

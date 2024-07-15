@@ -62,6 +62,8 @@ class CategoriesListScreen extends Screen
                 TD::make('id'),
                 TD::make('jap_name', 'Название')->width('30%'),
                 TD::make('rus_name', 'Русское название')->width('30%'),
+                TD::make('show', 'Включено')->width('10%')->render(fn($category) =>
+                $category->show ? '<span style="color: green">Да</span>' : '<span style="color: red">Нет</span>'),
                 TD::make('main_show', 'Показывать на главной')->width('10%')->render(fn($category) =>
                 $category->main_show ? '<span style="color: green">Да</span>' : '<span style="color: red">Нет</span>'),
                 TD::make('Список услуг')->render(fn($category) =>
