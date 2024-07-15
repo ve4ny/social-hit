@@ -3,7 +3,7 @@
     <div class="order">
         <div class="container">
             <div class="row">
-                <order-page :menu="{{ $menu }}" :category="{{ $category }}"></order-page>
+                <order-page :menu="{{ $menu }}" :category="{{ $category }}" :initial-similar="{{ $similar }}"></order-page>
             </div>
         </div>
     </div>

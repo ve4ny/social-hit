@@ -4,7 +4,8 @@ import { ref, watch } from 'vue';
 const props = defineProps({
     services: Array,
     category: Object,
-    social: Object
+    social: Object,
+    similar: Array
 });
 
 const selectedService = ref({});
@@ -21,6 +22,11 @@ watch(() => props.services, (newVal) => {
         selectedService.value = {};
     }
 }, { immediate: true });
+
+function getExampleCount(max) {
+    if(max < 1000) return max;
+    else return 1000;
+}
 
 function replaceZeros(quantity) {
     if (quantity >= 1000000) {
@@ -50,7 +56,7 @@ function replaceZeros(quantity) {
                 <div class="form-item">
                     <div class="form-item__label">Выберите пакет:</div>
                     <select class="form-select">
-                        <option v-for="(service, key) in services" :key="service.id" @click="()=> selectedService = service" :selected="key === 0 ? true : false">{{ service.rus_name ? service.rus_name : service.name }}</option>
+                        <option v-for="(service, key) in services" :key="service.id" @click="()=> selectedService = service" :selected="key === 0">{{ service.rus_name ? service.rus_name : service.name }}</option>
                     </select>
                 </div>
             </div>
@@ -59,7 +65,7 @@ function replaceZeros(quantity) {
                     <div class="order-form__price-txt-left">Цена за 1:</div>
                     <div class="order-form__price-value">{{ selectedService && selectedService.rate ? selectedService.rate / 100 : 0 }} $ </div>
                     <div v-if="selectedService && selectedService.max > 1" class="order-form__price-txt-right">(Цена за 1 действие
-                        {{ selectedService ? selectedService.rate / 100 : 0}} $. ({{ selectedService && selectedService.max ? replaceZeros(selectedService.max) : 1 }} шт. = {{ selectedService ? selectedService.rate / 100 * selectedService.max : 0}}$ ))</div>
+                        {{ selectedService ? selectedService.rate / 100 : 0}} $. ({{ selectedService && selectedService.max ? getExampleCount(selectedService.max) : 1 }} шт. = {{ selectedService ? selectedService.rate / 100 * getExampleCount(selectedService.max) : 0}}$ ))</div>
                 </div>
             </div>
             <div class="order-form__item order-form__item--mb-2">
@@ -157,17 +163,17 @@ function replaceZeros(quantity) {
                     <div class="order-more__item order-more__title d-flex">
                         <div class="order-more__title-img icon">
                             <picture>
-                                <source srcset="@images/general/yt.webp" type="image/webp"><img src="@images/general/yt.png" width="28" height="28" alt="img">
+                                <source :srcset="social.picture" type="image/webp"><img :src="social.picture" width="28" height="28" alt="img">
                             </picture>
                         </div>
-                        <div class="order-more__title-txt title">Другое в Youtube</div>
+                        <div class="order-more__title-txt title">Другое в {{ social.name }}</div>
                     </div>
                 </div>
-                <div class="order-more__list-item">
+                <div v-for="sim in similar " class="order-more__list-item">
                     <div class="order-more__item d-flex">
                         <div class="order-more__item-img icon">
                             <picture>
-                                <source srcset="@images/general/yt.webp" type="image/webp"><img src="@images/general/yt.png" width="32" height="32" alt="img">
+                                <source :srcset="social.picture" type="image/webp"><img :src="social.picture" width="32" height="32" alt="img">
                             </picture>
                         </div>
                         <div class="order-more__item-name d-flex">
@@ -176,81 +182,9 @@ function replaceZeros(quantity) {
                                     <use xlink:href="@images/svg/symbol/sprite.svg#users-plus-2"></use>
                                 </svg>
                             </div>
-                            <div class="order-more__item-name__txt">Подписчики</div>
+                            <div class="order-more__item-name__txt">{{ sim.rus_name ? sim.rus_name : sim.jap_name }}</div>
                         </div>
-                        <div class="order-more__item-price">250 шт. = 500₽ </div><a class="order-more__item-btn btn" href="#">Купить</a>
-                    </div>
-                </div>
-                <div class="order-more__list-item">
-                    <div class="order-more__item d-flex">
-                        <div class="order-more__item-img icon">
-                            <picture>
-                                <source srcset="@images/general/yt.webp" type="image/webp"><img src="@images/general/yt.png" width="32" height="32" alt="img">
-                            </picture>
-                        </div>
-                        <div class="order-more__item-name d-flex">
-                            <div class="order-more__item-name__icon icon">
-                                <svg class="svg-sprite-icon icon-users-plus-2">
-                                    <use xlink:href="@images/svg/symbol/sprite.svg#users-plus-2"></use>
-                                </svg>
-                            </div>
-                            <div class="order-more__item-name__txt">Лайки</div>
-                        </div>
-                        <div class="order-more__item-price">250 шт. = 500₽ </div><a class="order-more__item-btn btn" href="#">Купить</a>
-                    </div>
-                </div>
-                <div class="order-more__list-item">
-                    <div class="order-more__item d-flex">
-                        <div class="order-more__item-img icon">
-                            <picture>
-                                <source srcset="@images/general/yt.webp" type="image/webp"><img src="@images/general/yt.png" width="32" height="32" alt="img">
-                            </picture>
-                        </div>
-                        <div class="order-more__item-name d-flex">
-                            <div class="order-more__item-name__icon icon">
-                                <svg class="svg-sprite-icon icon-thumbs-down-2">
-                                    <use xlink:href="@images/svg/symbol/sprite.svg#thumbs-down-2"></use>
-                                </svg>
-                            </div>
-                            <div class="order-more__item-name__txt">Дизлайки</div>
-                        </div>
-                        <div class="order-more__item-price">250 шт. = 500₽ </div><a class="order-more__item-btn btn" href="#">Купить</a>
-                    </div>
-                </div>
-                <div class="order-more__list-item">
-                    <div class="order-more__item d-flex">
-                        <div class="order-more__item-img icon">
-                            <picture>
-                                <source srcset="@images/general/yt.webp" type="image/webp"><img src="@images/general/yt.png" width="32" height="32" alt="img">
-                            </picture>
-                        </div>
-                        <div class="order-more__item-name d-flex">
-                            <div class="order-more__item-name__icon icon">
-                                <svg class="svg-sprite-icon icon-share-2">
-                                    <use xlink:href="@images/svg/symbol/sprite.svg#share-2"></use>
-                                </svg>
-                            </div>
-                            <div class="order-more__item-name__txt">Поделится</div>
-                        </div>
-                        <div class="order-more__item-price">250 шт. = 500₽ </div><a class="order-more__item-btn btn" href="#">Купить</a>
-                    </div>
-                </div>
-                <div class="order-more__list-item">
-                    <div class="order-more__item d-flex">
-                        <div class="order-more__item-img icon">
-                            <picture>
-                                <source srcset="@images/general/yt.webp" type="image/webp"><img src="@images/general/yt.png" width="32" height="32" alt="img">
-                            </picture>
-                        </div>
-                        <div class="order-more__item-name d-flex">
-                            <div class="order-more__item-name__icon icon">
-                                <svg class="svg-sprite-icon icon-message-text-circle-2">
-                                    <use xlink:href="@images/svg/symbol/sprite.svg#message-text-circle-2"></use>
-                                </svg>
-                            </div>
-                            <div class="order-more__item-name__txt">Комментарии</div>
-                        </div>
-                        <div class="order-more__item-price">250 шт. = 500₽ </div><a class="order-more__item-btn btn" href="#">Купить</a>
+                        <div class="order-more__item-price">250 шт. = {{sim.price/100 * 250 }}$ </div><a class="order-more__item-btn btn" href="#">Купить</a>
                     </div>
                 </div>
             </div>

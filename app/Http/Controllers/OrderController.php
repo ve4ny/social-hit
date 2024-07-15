@@ -25,18 +25,21 @@ class OrderController extends Controller
             }
         }
         $category = Category::find($request->categoryId);
-        return view('pages.order', compact('menu', 'category'));
+        $similar = $this->getSimilar($category);
+        return view('pages.order', compact('menu', 'category', 'similar'));
     }
 
     public function makeRedirect(int $categoryId)
     {
-        return redirect()->route('order', ['categoryId' => $categoryId]);
+        return redirect()->route('order', compact('categoryId'));
     }
 
     public function getServices(int $categoryId)
     {
         $services = Service::where('category_id', $categoryId)->get();
-        return response()->json(['services' => $services]);
+        $category = Category::find($categoryId);
+        $similar = $this->getSimilar($category);
+        return response()->json(['services' => $services, 'similar' => $similar]);
     }
     /**
      * @return View
@@ -44,5 +47,14 @@ class OrderController extends Controller
     public function ordersHistory(): View
     {
         return view('pages.orders');
+    }
+
+    protected function getSimilar($category)
+    {
+        $unsortedSimilar = $category->similar();
+        foreach ($unsortedSimilar as $s) {
+            $s->price = $s->services->min('rate');
+        }
+        return $unsortedSimilar->sortBy('price')->take(5);
     }
 }

@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Orchid\Attachment\Attachable;
 use Orchid\Filters\Filterable;
@@ -22,9 +24,19 @@ class Category extends Model
         'show'
     ];
 
+    public function social(): BelongsTo
+    {
+        return $this->belongsTo(Social::class, 'social_id');
+    }
+
     public function services(): HasMany
     {
         return $this->hasMany(Service::class, 'category_id');
+    }
+
+    public function similar(): Collection
+    {
+        return Category::where('social_id', $this->social->id)->where('show', true)->with('services')->get();
     }
 
     protected function image(): Attribute

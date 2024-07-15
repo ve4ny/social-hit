@@ -6,12 +6,14 @@ import {ref, onMounted} from 'vue';
 
 const props = defineProps({
     menu: Array,
-    category: Object
+    category: Object,
+    initialSimilar: Array
 })
 
 const chosenSocial = ref({});
 const chosenCat = ref({});
 const services = ref([]);
+const similar = ref(props.initialSimilar);
 
 function selectedCategory (args){
     chosenCat.value = args.category;
@@ -19,7 +21,10 @@ function selectedCategory (args){
         menuItem.categories.some(category => category.id === args.category.id)
     );
     axios.get('/order/services/' + args.category.id)
-        .then((res) => services.value = res.data.services)
+        .then((res) => {
+            services.value = res.data.services;
+            similar.value = res.data.similar;
+        })
         .catch((err) => console.log(err))
 }
 
@@ -31,7 +36,7 @@ onMounted(() => {
 
 <template>
     <OrderMenu :menu="menu" @selected-category="args => selectedCategory(args)"></OrderMenu>
-    <OrderSection :services="services" :category="chosenCat" :social="chosenSocial"></OrderSection>
+    <OrderSection :services="services" :category="chosenCat" :social="chosenSocial" :similar="similar"></OrderSection>
 </template>
 
 <style scoped>
