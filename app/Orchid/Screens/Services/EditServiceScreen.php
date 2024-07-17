@@ -28,8 +28,8 @@ class EditServiceScreen extends Screen
      */
     public function query(Social $social, Category $category, Service $service): iterable
     {
-        $service->rate = $service->rate / 100 . '$';
-        $service->jap_rate = $service->jap_rate / 100 . '$';
+        $service->rate = $service->rate. '$';
+        $service->jap_rate = $service->jap_rate . '$';
         return [
             'social' => $social,
             'category' => $category,
@@ -89,7 +89,7 @@ class EditServiceScreen extends Screen
     public function save(Social $social, Category $category, Service $service, Request $request)
     {
         $newPrice = str_replace(['$'], '', $request->service['rate']);
-        $service->rate = $newPrice * 100;
+        $service->rate = + $newPrice;
         $service->rus_name =$request->service['rus_name'];
         $service->show = $request->service['show'];
         $service->save();

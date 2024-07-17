@@ -14,7 +14,7 @@ class Service extends Model
     protected $fillable = [
       'service_id',
       'name',
-        'rus_name',
+      'rus_name',
       'type',
       'jap_rate',
       'rate',
@@ -26,4 +26,35 @@ class Service extends Model
       'category_id',
       'show'
     ];
+    public function getJapRateAttribute($value)
+    {
+        return $value / 10000;
+    }
+
+    // Установка цены в тысячных долях цента
+    public function setJapRateAttribute($value)
+    {
+        $numericValue = floatval(str_replace(['$'], '', $value));
+        if (is_numeric($numericValue)) {
+            $this->attributes['jap_rate'] = $numericValue * 10000;
+        } else {
+            $this->attributes['jap_rate'] = 0; // Или обработка как-то иначе
+        }
+    }
+
+    public function getRateAttribute($value)
+    {
+        return $value / 10000;
+    }
+
+    // Установка цены в тысячных долях цента
+    public function setRateAttribute($value)
+    {
+        $numericValue = floatval(str_replace(['$'], '', $value));
+        if (is_numeric($numericValue)) {
+            $this->attributes['rate'] = $numericValue * 10000;
+        } else {
+            $this->attributes['rate'] = 0; // Или обработка как-то иначе
+        }
+    }
 }

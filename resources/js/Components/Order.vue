@@ -5,6 +5,7 @@ import OrderSection from "./Components/OrderSection.vue";
 import {ref, onMounted} from 'vue';
 
 const props = defineProps({
+    user: Object,
     menu: Array,
     category: Object,
     initialSimilar: Array
@@ -36,7 +37,7 @@ onMounted(() => {
 
 <template>
     <OrderMenu :menu="menu" @selected-category="args => selectedCategory(args)"></OrderMenu>
-    <OrderSection :services="services" :category="chosenCat" :social="chosenSocial" :similar="similar"></OrderSection>
+    <OrderSection :user="user" :services="services" :category="chosenCat" :social="chosenSocial" :similar="similar"></OrderSection>
 </template>
 
 <style scoped>

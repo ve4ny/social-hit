@@ -8,6 +8,7 @@ import PasswordReset from "./Components/Auth/PasswordReset.vue";
 import Profile from "./Components/Profile.vue";
 import Safety from "./Components/Safety.vue";
 import Order from "./Components/Order.vue";
+import OrdersTable from "./Components/Components/Orders/OrdersTable.vue"
 
 
 const app = createApp({
@@ -28,7 +29,8 @@ const app = createApp({
         'PasswordReset': PasswordReset,
         'Profile': Profile,
         'Safety': Safety,
-        'OrderPage': Order
+        'OrderPage': Order,
+        'OrdersTable': OrdersTable
     },
     created() {
         // Установка isLoading на false после загрузки компонента

@@ -1,7 +1,9 @@
 <script setup>
 import { ref, watch } from 'vue';
+import OrderModals from "./OrderModals.vue";
 
 const props = defineProps({
+    user: Object,
     services: Array,
     category: Object,
     social: Object,
@@ -12,12 +14,17 @@ const selectedService = ref({});
 
 const order = ref({
     service: {},
-    quantity: selectedService.max ? selectedService.max : 1
+    link: '',
+    promocode: '',
+    discount: 0,
+    quantity: 1
 })
 
 watch(() => props.services, (newVal) => {
     if (Array.isArray(newVal) && newVal.length > 0) {
         selectedService.value = newVal[0];
+        order.value.service = newVal[0];
+        order.value.quantity = newVal[0]['min'] ? newVal[0]['min'] : 1;
     } else {
         selectedService.value = {};
     }
@@ -38,6 +45,30 @@ function replaceZeros(quantity) {
     }
 }
 
+function roundToTwo(num) {
+    return parseFloat(num.toFixed(2));
+}
+
+const checkMax = () => {
+    if (order.value.quantity > selectedService.value.max) {
+        order.value.quantity = selectedService.value.max;
+    } else if(order.value.quantity < selectedService.value.min) {
+        order.value.quantity = selectedService.value.min;
+    }
+};
+
+const checkPromo = () => {
+    let promo = String.trim(order.value.promocode);
+    axios.post('/order/promo/check', {promo: promo})
+        .then((res) => order.value.discount = res.data.discount)
+        .catch((err) => console.log(err))
+}
+
+const validateInput = () => {
+    order.value.quantity = order.value.quantity.toString().replace(/[^0-9]/g, '');
+};
+
+
 </script>
 
 <template>
@@ -56,16 +87,25 @@ function replaceZeros(quantity) {
                 <div class="form-item">
                     <div class="form-item__label">Выберите пакет:</div>
                     <select class="form-select">
-                        <option v-for="(service, key) in services" :key="service.id" @click="()=> selectedService = service" :selected="key === 0">{{ service.rus_name ? service.rus_name : service.name }}</option>
+                        <option v-for="(service, key) in services"
+                                :key="service.id"
+                                :selected="key === 0"
+                                @click="()=> selectedService = service">
+                            {{ service.rus_name ? service.rus_name : service.name }}
+                        </option>
                     </select>
                 </div>
             </div>
             <div class="order-form__item">
                 <div class="order-form__price d-flex">
                     <div class="order-form__price-txt-left">Цена за 1:</div>
-                    <div class="order-form__price-value">{{ selectedService && selectedService.rate ? selectedService.rate / 100 : 0 }} $ </div>
-                    <div v-if="selectedService && selectedService.max > 1" class="order-form__price-txt-right">(Цена за 1 действие
-                        {{ selectedService ? selectedService.rate / 100 : 0}} $. ({{ selectedService && selectedService.max ? getExampleCount(selectedService.max) : 1 }} шт. = {{ selectedService ? selectedService.rate / 100 * getExampleCount(selectedService.max) : 0}}$ ))</div>
+                    <div class="order-form__price-value">{{ selectedService && selectedService.rate ? selectedService.rate : 0 }} $ </div>
+                    <div v-if="selectedService && selectedService.max > 1"
+                         class="order-form__price-txt-right">
+                        (Цена за 1 действие {{ selectedService ? selectedService.rate : 0}} $.
+                        ({{ selectedService && selectedService.max ? getExampleCount(selectedService.max) : 1 }} шт.
+                        = {{ selectedService ? selectedService.rate * getExampleCount(selectedService.max) : 0}}$ ))
+                    </div>
                 </div>
             </div>
             <div class="order-form__item order-form__item--mb-2">
@@ -74,7 +114,9 @@ function replaceZeros(quantity) {
                         <div class="form-item">
                             <div class="form-item__label d-flex">
                                 <div class="form-item__label-name">Количество:</div>
-                                <div class="form-item__label-hint">{{ selectedService ? selectedService.min : 1}} min - {{ selectedService && selectedService.max ? replaceZeros(selectedService.max) : 1}} max</div>
+                                <div class="form-item__label-hint">
+                                    {{ selectedService && selectedService.min ? replaceZeros(selectedService.min) : 1}} min -
+                                    {{ selectedService && selectedService.max ? replaceZeros(selectedService.max) : 1}} max</div>
                             </div>
                             <div class="form-item__field">
                                 <div class="form-qty d-flex border">
@@ -83,7 +125,7 @@ function replaceZeros(quantity) {
                                             <use xlink:href="@images/svg/symbol/sprite.svg#minus-circle-2"></use>
                                         </svg>
                                     </button>
-                                    <input v-model="order.quantity" class="form-qty__input" >
+                                    <input v-model.number="order.quantity" class="form-qty__input" @input="validateInput" @focusout="checkMax">
                                     <button class="form-qty__btn form-qty__plus icon" type="button">
                                         <svg class="svg-sprite-icon icon-plus-circle-2">
                                             <use xlink:href="@images/svg/symbol/sprite.svg#plus-circle-2"></use>
@@ -97,7 +139,7 @@ function replaceZeros(quantity) {
                         <div class="form-item">
                             <div class="form-item__label">Ссылка:</div>
                             <div class="form-item__field">
-                                <input class="form-input" type="text" placeholder="https://youtu.be/dQw4w9WgXcQ">
+                                <input v-model="order.link" class="form-input" type="text" placeholder="https://youtu.be/dQw4w9WgXcQ">
                             </div>
                         </div>
                     </div>
@@ -108,10 +150,10 @@ function replaceZeros(quantity) {
                     <div class="form-item__label">Промокод:</div>
                     <div class="refill-form__promocode d-flex">
                         <div class="refill-form__promocode-input">
-                            <input class="form-input" type="text" placeholder="fVskrF">
+                            <input v-model="order.promocode" class="form-input" type="text" placeholder="fVskrF" >
                         </div>
                         <div class="refill-form__promocode-button">
-                            <button class="refill-form__promocode-btn btn btn-black" type="button">Применить</button>
+                            <button class="refill-form__promocode-btn btn btn-black" type="button" @click="checkPromo">Применить</button>
                         </div>
                     </div>
                 </div>
@@ -120,10 +162,16 @@ function replaceZeros(quantity) {
                 <div class="order-form__bottom">
                     <div class="order-form__bottom-group row">
                         <div class="order-form__bottom-left">
-                            <div class="order-form__total">Всего: <span>{{ order.quantity * selectedService.rate / 100 }} $ </span></div>
+                            <div class="order-form__total">Всего: <span>
+                                {{ roundToTwo(order.quantity * selectedService.rate - selectedService.rate * order.discount ) }} $ </span></div>
                         </div>
                         <div class="order-form__bottom-right">
-                            <button class="order-form__btn btn" type="button" data-bs-toggle="modal" data-bs-target="#fastModal">Заказать</button>
+                            <button class="order-form__btn btn"
+                                    type="button"
+                                    data-bs-toggle="modal"
+                                    :data-bs-target="!user ? '#unregMakeOrderModal' : '#makeOrderModal'">
+                                Заказать
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -184,11 +232,13 @@ function replaceZeros(quantity) {
                             </div>
                             <div class="order-more__item-name__txt">{{ sim.rus_name ? sim.rus_name : sim.jap_name }}</div>
                         </div>
-                        <div class="order-more__item-price">250 шт. = {{sim.price/100 * 250 }}$ </div><a class="order-more__item-btn btn" href="#">Купить</a>
+                        <div class="order-more__item-price">250 шт. = {{roundToTwo(sim.price * 250) }}$ </div>
+                        <a class="order-more__item-btn btn" :href="'/order?categoryId='+ sim.id">Купить</a>
                     </div>
                 </div>
             </div>
         </div>
+        <OrderModals :order="order"></OrderModals>
     </div>
 </template>
 

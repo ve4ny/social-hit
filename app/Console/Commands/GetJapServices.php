@@ -58,7 +58,7 @@ class GetJapServices extends Command
                         $newService->service_id = $service->service;
                         $newService->name = $service->name;
                         $newService->type = $service->type;
-                        $newService->jap_rate = $service->rate * 100;
+                        $newService->jap_rate = $service->rate;
                         $newService->rate = 0;
                         $newService->min = $service->min;
                         $newService->max = $service->max;

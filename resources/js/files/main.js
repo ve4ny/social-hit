@@ -118,4 +118,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     orderQty()
 
+    document.getElementById('perPageSelect').addEventListener('change', function () {
+        const selectedValue = this.value;
+        window.location.href = `/orders?perPage=${selectedValue}`;
+    });
+
 });

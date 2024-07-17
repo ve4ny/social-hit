@@ -19,45 +19,65 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Index
+
+Route::get('/', [MainController::class, 'index'])->name('index');
+
+// Registration, Login, Password Reminder
+
 Route::post('/register', [AuthController::class, 'register']);
 Route::get('/verify-email/{token}', [AuthController::class, 'verifyEmail']);
-
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/logout', [AuthController::class, 'logout']);
-
 Route::post('/remind-password', [AuthController::class, 'remind']);
 Route::get('/password-recovery/{token}', [AuthController::class, 'recovery']);
 Route::post('/password-reset', [AuthController::class, 'reset']);
 
-Route::get('/', [MainController::class, 'index'])->name('index');
+// Services
 
-//Route::get('/help-center', [MainController::class, 'help'])->name('help');
+Route::get('/order', [\App\Http\Controllers\OrderController::class, 'order'])->name('order');
+Route::get('/order/{categoryId}', [\App\Http\Controllers\OrderController::class, 'makeRedirect']);
+Route::get('/order/services/{categoryId}', [\App\Http\Controllers\OrderController::class, 'getServices']);
+
+// Help-center
+
 Route::get('/help-center/{socialName?}', [MainController::class, 'help'])->name('help-social');
 Route::get('/contacts', [MainController::class, 'contacts'])->name('contacts');
 
 Route::middleware('auth')->group(function () {
+
+    // Profile
+
     Route::get('/profile', [ProfileController::class, 'index']);
     Route::post('/profile/save', [ProfileController::class, 'save']);
+
+    // Safety
 
     Route::get('/safety', [SafetyController::class, 'index']);
     Route::post('/safety/change-email', [SafetyController::class, 'changeEmail']);
     Route::post('/safety/change-password', [SafetyController::class, 'changePassword']);
     Route::get('/safety/verify-email-change/{token}', [SafetyController::class, 'proceedEmailChange']);
 
+    // Referral
+
     Route::get('/referral', [\App\Http\Controllers\ReferralController::class, 'index']);
 
+    // Orders List
+
     Route::get('/orders', [\App\Http\Controllers\OrderController::class, 'ordersHistory']);
-    Route::get('/order', [\App\Http\Controllers\OrderController::class, 'order'])->name('order');
-    Route::get('/order/{categoryId}', [\App\Http\Controllers\OrderController::class, 'makeRedirect']);
-    Route::get('/order/services/{categoryId}', [\App\Http\Controllers\OrderController::class, 'getServices']);
+    Route::post('order/make-order', [\App\Http\Controllers\OrderController::class, 'makeOrder']);
+
+    // Transactions List
 
     Route::get('/transactions', [\App\Http\Controllers\TransactionsController::class, 'index']);
 });
 
 // 404
+
 Route::get('/404', function () {
     return view('errors.404');
 })->name('404');
 
 // Other pages
+
 Route::get('/{slug}', [MainController::class, 'otherPages'])->name('page');
