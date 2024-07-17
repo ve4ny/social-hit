@@ -32,7 +32,7 @@
                                             <option value="30" {{ $orders->perPage() == 30 ? 'selected' : '' }}>30
                                             </option>
                                         </select>
-                                        <div class="account-pagination__displaying-txt">1-10 из 3245</div>
+                                        <div class="account-pagination__displaying-txt">{{ $orders->firstItem() }}-{{ $orders->lastItem() }} из {{$orders->total()}}</div>
                                     </div>
                                 </div>
                                 @if($orders->total() > $orders->perPage())
