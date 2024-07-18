@@ -10,6 +10,8 @@ use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\PlatformScreen;
+use App\Orchid\Screens\Promo\PromoEditScreen;
+use App\Orchid\Screens\Promo\PromoListScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
 use App\Orchid\Screens\Socials\SocialsListScreen;
@@ -91,6 +93,31 @@ Route::screen('socials/{social}/{category}/{service}', \App\Orchid\Screens\Servi
     ->breadcrumbs(fn(Trail $trail, $social, $category, $service) => $trail
         ->parent('platform.socials.categories.services', $social, $category)
         ->push(__('Услуга'), route('platform.socials.category', ['social' => $social, 'category' => $category, 'service' => $service])));
+
+//Platform > Promos
+
+Route::screen('promos', PromoListScreen::class)
+    ->name('platform.promos')
+    ->breadcrumbs(fn (Trail $trail) => $trail
+        ->parent('platform.index')
+        ->push(__('Промокоды'), route('platform.promos'))
+    );
+
+// Platform > Promos > Edit
+Route::screen('promos/{promo}/edit', PromoEditScreen::class)
+    ->name('platform.promo.edit')
+    ->breadcrumbs(fn (Trail $trail, $promo) => $trail
+        ->parent('platform.promos')
+        ->push(__('Редактировать промокод'), route('platform.promo.edit', $promo))
+    );
+
+// Platform > Promos > New
+Route::screen('promos/new', PromoEditScreen::class)
+    ->name('platform.promo.new')
+    ->breadcrumbs(fn (Trail $trail) => $trail
+        ->parent('platform.promos')
+        ->push(__('Новый промокод'), route('platform.promo.new'))
+    );
 
 // Platform > FAQ
 

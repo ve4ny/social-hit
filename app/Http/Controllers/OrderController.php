@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\OrderRequest;
 use App\Models\Category;
 use App\Models\Order;
+use App\Models\Promo;
 use App\Models\Service;
 use App\Models\Social;
 use App\Services\JapApi;
@@ -28,9 +29,11 @@ class OrderController extends Controller
                 $cat->picture = $cat->image;
             }
         }
-        $category = Category::find($request->categoryId);
-        $similar = $this->getSimilar($category);
-        return view('pages.order', compact('menu', 'category', 'similar'));
+        $category = Category::find($request->category);
+        $social = Social::with('attachment')->where('id', $category->social_id)->first();
+        $social->picture = $social->image;
+        $similar = $category->similar();
+        return view('pages.order', compact('menu', 'social', 'category', 'similar'));
     }
 
     public function makeRedirect(int $categoryId)
@@ -40,10 +43,22 @@ class OrderController extends Controller
 
     public function getServices(int $categoryId)
     {
-        $services = Service::where('category_id', $categoryId)->get();
+        $services = Service::with('advantage')->where('category_id', $categoryId)->get();
+        foreach($services as $service) {
+            $service->rate = round($service->rate, 2);
+        }
         $category = Category::find($categoryId);
-        $similar = $this->getSimilar($category);
+        $similar = $category->similar();
         return response()->json(['services' => $services, 'similar' => $similar]);
+    }
+
+    public function checkPromo(Request $request)
+    {
+        $code = Promo::where('code', $request->code)->first();
+        if($code) {
+            return response()->json(['discount' => (100 - $code->coefficient) / 100 ]);
+        }
+        return response()->json(['promo' => 'Такого промокода не существует'], 400);
     }
 
     /**
@@ -53,17 +68,17 @@ class OrderController extends Controller
     public function makeOrder(OrderRequest $request): JsonResponse
     {
         $user = auth()->user();
-        $service = $request->order['service'];
+        $service = $request->service;
         $order = new Order();
         $order->fill([
             'jap_id' => 0,
             'user_id' => $user->id,
             'service_id' => $service['id'],
-            'quantity' => $request->order['quantity'],
-            'sum' => $service['rate'] * $request->order['quantity'] - ($service['rate'] * $request->order['quantity'] * $request->order['discount']),
-            'link' => $request->order['link'],
+            'quantity' => $request->quantity,
+            'sum' => $service['rate'] * $request->quantity - ($service['rate'] * $request->quantity * $request->discount),
+            'link' => $request->link,
             'start_count' => null,
-            'remains' => $request->order['quantity'],
+            'remains' => $request->quantity,
             'status' => 'Pending',
             'pay_status' => 'unpaid'
         ]);
@@ -92,14 +107,5 @@ class OrderController extends Controller
 //            }
         }
         return view('pages.orders', compact('orders'));
-    }
-
-    protected function getSimilar($category)
-    {
-        $unsortedSimilar = $category->similar();
-        foreach ($unsortedSimilar as $s) {
-            $s->price = $s->services->min('rate');
-        }
-        return $unsortedSimilar->sortBy('price')->take(5);
     }
 }

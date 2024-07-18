@@ -1,21 +1,32 @@
 <script setup>
 
-import {onMounted} from 'vue';
-
 const props = defineProps({
     order: Object
 })
+
+const emit = defineEmits(['error']);
 
 function roundToTwo(num) {
     return parseFloat(num.toFixed(2));
 }
 
-function makeOrder() {
-    console.log(props.order);
-    axios.post('/order/make-order', {
-        'order': props.order
-    }).then((res) => window.location.href = '/orders')
-        .catch((err) => console.log(err))
+async function makeOrder() {
+        try {
+            const response = await axios.post('/order/make-order', props.order)
+            window.location.href = '/orders'
+        } catch (err) {
+            if (err.response && err.response.status === 422) {
+                emit('error', {error: err.response.data.errors})
+                let modalElement = document.getElementById('makeOrderModal');
+                // Создаем экземпляр модального окна
+                let myModal = bootstrap.Modal.getInstance(modalElement);
+                // Закрываем модальное окно
+                myModal.hide();
+            } else {
+                // Handle other errors
+                console.error(err)
+            }
+        }
 }
 
 </script>

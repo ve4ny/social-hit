@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Orchid\Attachment\Attachable;
 use Orchid\Filters\Filterable;
 use Orchid\Screen\AsSource;
@@ -34,9 +35,22 @@ class Category extends Model
         return $this->hasMany(Service::class, 'category_id');
     }
 
+    public function promo(): MorphMany
+    {
+        return $this->morphMany(Promo::class, 'promotable');
+    }
+
     public function similar(): Collection
     {
-        return Category::where('social_id', $this->social->id)->where('show', true)->with('services')->get();
+        $unsortedSimilar = Category::where('social_id', $this->social->id)
+            ->whereNot('id',  $this->id)
+            ->where('show', true)
+            ->with('services')
+            ->get();
+        foreach ($unsortedSimilar as $s) {
+            $s->price = $s->services->min('rate');
+        }
+        return $unsortedSimilar->sortBy('price')->take(5);
     }
 
     protected function image(): Attribute

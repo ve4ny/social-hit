@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Screens\Services;
 
+use App\Models\Advantage;
 use App\Models\Category;
 use App\Models\Service;
 use App\Models\Social;
@@ -28,7 +29,11 @@ class EditServiceScreen extends Screen
      */
     public function query(Social $social, Category $category, Service $service): iterable
     {
-        $service->rate = $service->rate. '$';
+        $service->load('advantage');
+        if($service->advantage) {
+            $service->hasAdvantage = true;
+        } else $service->hasAdvantage = false;
+        $service->rate = $service->rate. '₽';
         $service->jap_rate = $service->jap_rate . '$';
         return [
             'social' => $social,
@@ -71,15 +76,21 @@ class EditServiceScreen extends Screen
                     Input::make('service.name')->title('Название')->disabled(),
                     Input::make('service.rus_name')->title('Название'),
                     Group::make([
-                        Input::make('service.rate')->title('Стоимость для покупателя'),
-                        Input::make('service.jap_rate')->title('Стоимость в JAP'),
+                        Input::make('service.rate')->title('Стоимость для покупателя (₽)'),
+                        Input::make('service.jap_rate')->title('Стоимость в JAP ($)'),
                     ]),
 
                     Switcher::make('service.show')->title('Включить')->sendTrueOrFalse(),
 
                     Group::make([
+                        Input::make('service.advantage.start')->title('Время начала'),
+                        Input::make('service.advantage.quality')->title('Качество'),
+                        Input::make('service.advantage.speed')->title('Скорость'),
+                    ])->autoWidth(),
+
+                    Group::make([
                         Button::make('Cохранить')->type(Color::SUCCESS())->method('save'),
-                        Button::make('Удалить категорию')->type(Color::DANGER())->method('delete'),
+                        Button::make('Удалить услугу')->type(Color::DANGER())->method('delete'),
                     ])->autoWidth()->alignStart()
                 ])
             ])
@@ -88,11 +99,32 @@ class EditServiceScreen extends Screen
 
     public function save(Social $social, Category $category, Service $service, Request $request)
     {
-        $newPrice = str_replace(['$'], '', $request->service['rate']);
+        $newPrice = str_replace(['$', '₽'], '', $request->service['rate']);
         $service->rate = + $newPrice;
         $service->rus_name =$request->service['rus_name'];
         $service->show = $request->service['show'];
         $service->save();
+
+        if($request->service['advantage']['start']
+            && $request->service['advantage']['quality']
+            && $request->service['advantage']['speed']) {
+            $advantageData = $request->input('service.advantage');
+
+            if ($service->advantage) {
+                $service->advantage->update([
+                    'start' => $advantageData['start'],
+                    'quality' => $advantageData['quality'],
+                    'speed' => $advantageData['speed'],
+                ]);
+            } else {
+                $advantage = new Advantage([
+                    'start' => $advantageData['start'],
+                    'quality' => $advantageData['quality'],
+                    'speed' => $advantageData['speed'],
+                ]);
+                $service->advantage()->save($advantage);
+            }
+        }
 
         Alert::info('Изменения успешно сохранены.');
         return redirect()->route('platform.socials.categories.services', [$social->id, $category->id] );

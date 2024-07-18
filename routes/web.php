@@ -38,6 +38,7 @@ Route::post('/password-reset', [AuthController::class, 'reset']);
 Route::get('/order', [\App\Http\Controllers\OrderController::class, 'order'])->name('order');
 Route::get('/order/{categoryId}', [\App\Http\Controllers\OrderController::class, 'makeRedirect']);
 Route::get('/order/services/{categoryId}', [\App\Http\Controllers\OrderController::class, 'getServices']);
+Route::post('/order/promo/check', [\App\Http\Controllers\OrderController::class, 'checkPromo']);
 
 // Help-center
 

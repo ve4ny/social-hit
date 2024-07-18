@@ -33,6 +33,10 @@ class PlatformProvider extends OrchidServiceProvider
             ->route('platform.socials')
             ->title('Cервисы'),
 
+            Menu::make('Промокоды')
+            ->icon('modules')
+            ->route('platform.promos'),
+
             Menu::make('Инфо блоки на главной')
                 ->icon('options-vertical')
                 ->route('platform.blocks')

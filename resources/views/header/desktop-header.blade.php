@@ -40,7 +40,7 @@
                                                 <div class="social-link__list">
                                                     @foreach($social->categories as $category)
                                                         <div class="social-link__list-item">
-                                                            <a class="social-link__type d-flex" href="/order?categoryId={{$category->id}}">
+                                                            <a class="social-link__type d-flex" href="/order?category={{$category->id}}">
                                                                 <span class="social-link__type-icon icon">
                                                                     @if($category->image)
                                                                         <img class="svg-sprite-icon icon-users-plus-2" src="{{asset($category->image)}}" alt="Иконка категории услуг">

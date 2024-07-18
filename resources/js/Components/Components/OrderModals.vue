@@ -6,6 +6,8 @@ const props = defineProps({
     order: Object
 })
 
+const emit = defineEmits(['error']);
+
 </script>
 
 <template>
@@ -49,7 +51,7 @@ const props = defineProps({
         </div>
     </div>
     </div>
-    <NewOrderModal :order="order"></NewOrderModal>
+    <NewOrderModal :order="order" @error="args => emit('error', {error: args})"></NewOrderModal>
 </template>
 
 <style scoped>

@@ -28,9 +28,9 @@ class OrderRequest extends FormRequest
     public function rules()
     {
         return [
-            'order.service' => ['required', new ValidService()],
-            'order.quantity' => ['required'],
-            'order.link' => 'required'
+            'service' => ['required', new ValidService()],
+            'quantity' => ['required'],
+            'link' => 'required'
         ];
     }
 
@@ -40,11 +40,11 @@ class OrderRequest extends FormRequest
             $data = $validator->getData();
 
             // Retrieve the validated service model instance
-            $service = $data['order']['service'] ?? null;
+            $service = $data['service'] ?? null;
 
             if ($service instanceof Service) {
                 $validator->addRules([
-                    'order.quantity' => ['required', new ValidOrderQuantity($service)]
+                    'quantity' => ['required', new ValidOrderQuantity($service)]
                 ]);
             }
         });
@@ -52,7 +52,7 @@ class OrderRequest extends FormRequest
 
     public function messages() {
         return [
-          'order.link.required' => 'Укажите ссылку на пост/страницу в соцсети'
+          'link.required' => 'Укажите ссылку на пост/страницу в соцсети'
         ];
     }
 }

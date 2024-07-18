@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Service;
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Command\Command as CommandAlias;
 
 class setTestPrices extends Command
 {
@@ -26,15 +27,15 @@ class setTestPrices extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         $services = Service::all();
         foreach ($services as $service) {
             $rate = $service->jap_rate;
-            $service->rate = $rate + ($rate * 0.3);
+            $service->rate = $rate * 90 + ($rate * 90 * 0.3);
             $service->save();
             echo('.');
         }
-        return Command::SUCCESS;
+        return CommandAlias::SUCCESS;
     }
 }

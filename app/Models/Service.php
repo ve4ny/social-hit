@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Orchid\Filters\Filterable;
 use Orchid\Screen\AsSource;
 
@@ -26,6 +29,17 @@ class Service extends Model
       'category_id',
       'show'
     ];
+
+    public function advantage(): HasOne
+    {
+        return $this->hasOne(Advantage::class, 'service_id');
+    }
+
+    public function promo(): MorphMany
+    {
+        return $this->morphMany(Promo::class, 'promotable');
+    }
+
     public function getJapRateAttribute($value)
     {
         return $value / 10000;

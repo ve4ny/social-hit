@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Orchid\Platform\Models\User as Authenticatable;
 
 class User extends Authenticatable
@@ -72,5 +73,10 @@ class User extends Authenticatable
     public function email_changes(): HasOne
     {
         return $this->hasOne(EmailChange::class, 'user_id');
+    }
+
+    public function promo(): MorphMany
+    {
+        return $this->morphMany(Promo::class, 'promotable');
     }
 }

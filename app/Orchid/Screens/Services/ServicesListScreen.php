@@ -70,7 +70,7 @@ class ServicesListScreen extends Screen
                     $service->jap_rate  . '$'
                 ),
                 TD::make('rate', 'Стоимость')->render(fn($service) =>
-                    $service->rate  . '$'
+                    $service->rate  . '₽'
                 ),
                 TD::make('show', 'Включение')->render(fn($service) =>
                     $service->show ? 'Да' : '-'
