@@ -70,6 +70,11 @@ class User extends Authenticatable
         return $this->hasOne(UserDetails::class, 'user_id');
     }
 
+    public function balance(): HasOne
+    {
+        return $this->hasOne(Balance::class);
+    }
+
     public function email_changes(): HasOne
     {
         return $this->hasOne(EmailChange::class, 'user_id');

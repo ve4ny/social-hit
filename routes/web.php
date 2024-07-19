@@ -72,6 +72,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders', [\App\Http\Controllers\OrderController::class, 'ordersHistory']);
     Route::post('/orders/check', [\App\Http\Controllers\OrderController::class, 'ordersCheck']);
 
+    // Refill
+
+    Route::get('/refill', [\App\Http\Controllers\FinancialController::class, 'showRefill']);
+
     // Transactions List
 
     Route::get('/transactions', [\App\Http\Controllers\TransactionsController::class, 'index']);

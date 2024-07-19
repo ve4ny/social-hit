@@ -128,7 +128,7 @@
             <div class="header-balance-wrapper">
                 <div class="header-balance__title">Баланс</div>
                 <div class="header-balance">
-                    <div class="header-balance__value">10.24 ₽</div>
+                    <div class="header-balance__value">{{ $user->balance ? $user->balance->amount : 0 }} ₽</div>
                     <a class="header-balance__btn btn" href="/refill">Пополнить</a>
                 </div>
             </div>

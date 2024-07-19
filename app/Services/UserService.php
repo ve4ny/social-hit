@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Jobs\SendEmailConfirmationJob;
 use App\Jobs\SendEmailPasswordRemindJob;
+use App\Models\Balance;
 use App\Models\User;
 use App\Models\UserDetails;
 use Exception;
@@ -26,7 +27,8 @@ class UserService
         ]);
 
         if($user) {
-            $this->CreateUserDetails($user);
+            $this->createUserDetails($user);
+            $this->createBalance($user);
             SendEmailConfirmationJob::dispatch($user);
             return $user;
         } else {
@@ -38,13 +40,17 @@ class UserService
      * @param User $user
      * @return void
      */
-    private function CreateUserDetails(User $user): void
+    private function createUserDetails(User $user): void
     {
         $ref_code = $this->generateUniqueReferralCode();
-        UserDetails::create([
-            'user_id' => $user->id,
-            'referral_code' => $ref_code
-        ]);
+        $details = new UserDetails(['referral_code'=> $ref_code ]);
+        $user->details()->save($details);
+    }
+
+    public function createBalance(User $user): void
+    {
+        $balance = new Balance();
+        $user->balance()->save($balance);
     }
 
     /**

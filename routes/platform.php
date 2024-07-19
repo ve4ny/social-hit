@@ -119,6 +119,24 @@ Route::screen('promos/new', PromoEditScreen::class)
         ->push(__('Новый промокод'), route('platform.promo.new'))
     );
 
+// Platform > Orders
+
+Route::screen('orders', \App\Orchid\Screens\Orders\OrdersListScreen::class)
+    ->name('platform.orders')
+    ->breadcrumbs(fn (Trail $trail) => $trail
+        ->parent('platform.index')
+        ->push(__('Список заказов'), route('platform.orders'))
+    );
+
+// Platform > Edit
+
+Route::screen('orders/{order}/edit', \App\Orchid\Screens\Orders\OrderEditScreen::class)
+    ->name('platform.order.edit')
+    ->breadcrumbs(fn (Trail $trail, $order) => $trail
+        ->parent('platform.orders')
+        ->push(__('Редактирование заказа'), route('platform.order.edit', $order))
+    );
+
 // Platform > FAQ
 
 Route::screen('faq', \App\Orchid\Screens\Faq\FaqListScreen::class)

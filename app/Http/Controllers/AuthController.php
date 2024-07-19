@@ -85,6 +85,11 @@ class AuthController extends Controller
             }
 
             if (Auth::attempt($validatedData, $request->remember)) {
+                $user = User::find(auth()->user()->id);
+                if(!$user->balance) {
+                    $userService = new UserService();
+                    $userService->createBalance($user);
+                }
                 return response()->json(['message' => 'Authentication success'], 200);
             } else {
                 return response()->json(['errors'  => ['password' => ['Неверный пароль']]], 404);

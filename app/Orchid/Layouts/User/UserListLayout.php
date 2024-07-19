@@ -45,6 +45,7 @@ class UserListLayout extends Table
                         'user' => $user->id,
                     ])),
 
+
             TD::make('updated_at', __('Last edit'))
                 ->sort()
                 ->render(fn (User $user) => $user->updated_at->toDateTimeString()),

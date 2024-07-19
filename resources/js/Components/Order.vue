@@ -18,8 +18,14 @@ const services = ref([]);
 const similar = ref(props.initialSimilar);
 const selectedService = ref(props.service ? props.service : services.value[0]);
 const discount = ref(1);
-
 const errors = ref({});
+
+const order = ref({
+    service: selectedService.value,
+    link: '',
+    promocode: '',
+    quantity: selectedService.value.min
+})
 
 function selectedCategory(args) {
     chosenCat.value = args.category;
@@ -33,23 +39,6 @@ function selectedCategory(args) {
         })
         .catch((err) => console.log(err))
 }
-
-const order = ref({
-    service: selectedService.value,
-    link: '',
-    promocode: '',
-    quantity: selectedService.value.min
-})
-
-// watch(() => services.value, (newVal) => {
-//     if (Array.isArray(newVal) && newVal.length > 0) {
-//         // selectedService.value = props.service ? props.service :  newVal[0];
-//         order.value.service = newVal[0];
-//         order.value.quantity = newVal[0]['min'] ? newVal[0]['min'] : 1;
-//     } else {
-//         selectedService.value = {};
-//     }
-// }, { immediate: true });
 
 function selectService(service) {
     selectedService.value = service
