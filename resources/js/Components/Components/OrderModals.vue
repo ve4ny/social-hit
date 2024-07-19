@@ -3,6 +3,7 @@
 import NewOrderModal from "./NewOrderModal.vue";
 
 const props = defineProps({
+    discount: Number,
     order: Object
 })
 
@@ -51,7 +52,7 @@ const emit = defineEmits(['error']);
         </div>
     </div>
     </div>
-    <NewOrderModal :order="order" @error="args => emit('error', {error: args})"></NewOrderModal>
+    <NewOrderModal :order="order" :discount="discount" @error="args => emit('error', {error: args})"></NewOrderModal>
 </template>
 
 <style scoped>

@@ -63,10 +63,14 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/referral', [\App\Http\Controllers\ReferralController::class, 'index']);
 
+    // Order
+
+    Route::post('/order/make-order', [\App\Http\Controllers\OrderController::class, 'makeOrder']);
+
     // Orders List
 
     Route::get('/orders', [\App\Http\Controllers\OrderController::class, 'ordersHistory']);
-    Route::post('order/make-order', [\App\Http\Controllers\OrderController::class, 'makeOrder']);
+    Route::post('/orders/check', [\App\Http\Controllers\OrderController::class, 'ordersCheck']);
 
     // Transactions List
 

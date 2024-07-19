@@ -1,6 +1,7 @@
 <script setup>
 
-import {onMounted, ref} from 'vue';
+import {onMounted, onUnmounted, ref} from 'vue';
+
 const props = defineProps(['orders', 'currentPage', 'perPage', 'totalPages', 'totalItems', 'sprite'])
 
 const PENDING = 'Pending';
@@ -37,6 +38,36 @@ function prevPage() {
         fetchOrders(currentPage.value - 1)
     }
 }
+
+async function checkStatus(japIds) {
+    try {
+        const response = await axios.post('/orders/check', {ids: japIds});
+        const responseData = response.data;
+
+        orders.value.forEach(order => {
+            const correspondingData = responseData[order.jap_id];
+            if (correspondingData) {
+                order.status = correspondingData.status;
+            }
+        });
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+onMounted(() => {
+    const japIds = orders.value.map(order => order.jap_id);
+    checkStatus(japIds);
+    const interval = setInterval(() => {
+        checkStatus(japIds);
+    }, 10000);
+})
+
+onUnmounted(() => {
+    clearInterval(interval);
+});
+
 </script>
 
 <template>
@@ -74,21 +105,21 @@ function prevPage() {
                                     <div class="account-table__th">
                                         <div class="account-table__th-inner d-flex">
                                             <div class="account-table__th-txt">ID</div>
-<!--                                            <div class="account-table__th-sort">-->
-<!--                                                <div class="account-table__th-sort-icon icon">-->
-<!--                                                    <svg class="svg-sprite-icon icon-bi_caret-up-fill">-->
-<!--                                                        <use-->
-<!--                                                            :xlink:href="`${sprite}#bi_caret-up-fill`"></use>-->
-<!--                                                    </svg>-->
-<!--                                                </div>-->
-<!--                                                <div class="account-table__th-sort-icon icon">-->
-<!--                                                    <svg-->
-<!--                                                        class="svg-sprite-icon icon-bi_caret-down-fill">-->
-<!--                                                        <use-->
-<!--                                                            :xlink:href="`${sprite}#bi_caret-down-fill`"></use>-->
-<!--                                                    </svg>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
+                                            <!--                                            <div class="account-table__th-sort">-->
+                                            <!--                                                <div class="account-table__th-sort-icon icon">-->
+                                            <!--                                                    <svg class="svg-sprite-icon icon-bi_caret-up-fill">-->
+                                            <!--                                                        <use-->
+                                            <!--                                                            :xlink:href="`${sprite}#bi_caret-up-fill`"></use>-->
+                                            <!--                                                    </svg>-->
+                                            <!--                                                </div>-->
+                                            <!--                                                <div class="account-table__th-sort-icon icon">-->
+                                            <!--                                                    <svg-->
+                                            <!--                                                        class="svg-sprite-icon icon-bi_caret-down-fill">-->
+                                            <!--                                                        <use-->
+                                            <!--                                                            :xlink:href="`${sprite}#bi_caret-down-fill`"></use>-->
+                                            <!--                                                    </svg>-->
+                                            <!--                                                </div>-->
+                                            <!--                                            </div>-->
                                         </div>
                                     </div>
                                 </div>
@@ -171,7 +202,7 @@ function prevPage() {
                                         <div class="account-table__qty">
                                             <div class="account-table__qty-inner">
                                                 <div class="account-table__qty-value">{{ order.quantity }}/</div>
-                                                <div class="account-table__qty-price">{{ order.sum }} $</div>
+                                                <div class="account-table__qty-price">{{ order.sum }} ₽</div>
                                             </div>
                                         </div>
                                     </div>
@@ -200,7 +231,8 @@ function prevPage() {
                                         <div class="account-table__actions d-flex">
                                             <div
                                                 class="account-table__actions-item account-table__actions-item--m-hidden">
-                                                <a class="account-table__actions-btn centered" @click="setCurrent(order)"
+                                                <a class="account-table__actions-btn centered"
+                                                   @click="setCurrent(order)"
                                                    href="#orderModal" data-bs-toggle="modal">
                                                     <svg class="svg-sprite-icon icon-eye-15">
                                                         <use
@@ -209,7 +241,7 @@ function prevPage() {
                                                 </a></div>
                                             <div class="account-table__actions-item"><a
                                                 class="account-table__actions-btn centered"
-                                                :href="`/order?categoryId=${order.service.category_id}`">
+                                                :href="`/order?category=${order.service.category_id}&service=${order.service_id}`">
                                                 <svg class="svg-sprite-icon icon-return-15">
                                                     <use
                                                         :xlink:href="`${sprite}#return-15`"></use>
@@ -227,10 +259,11 @@ function prevPage() {
     </div>
     <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-order modal-dialog-centered">
-            <div class="modal-content modal-content--p2"> <a class="modal-close icon" href="#" data-bs-dismiss="modal">
+            <div class="modal-content modal-content--p2"><a class="modal-close icon" href="#" data-bs-dismiss="modal">
                 <svg class="svg-sprite-icon icon-x-close">
                     <use :xlink:href="`${sprite}#x-close`"></use>
-                </svg></a>
+                </svg>
+            </a>
                 <div class="modal-order">
                     <div class="modal-order__title">Информация о заказе</div>
                     <div class="modal-order__table-wrapper">
@@ -251,11 +284,13 @@ function prevPage() {
                             </tr>
                             <tr>
                                 <td>Услуга</td>
-                                <td v-if="currentOrder.service">{{ currentOrder.service.rus_name ?? currentOrder.service.name  }}</td>
+                                <td v-if="currentOrder.service">
+                                    {{ currentOrder.service.rus_name ?? currentOrder.service.name }}
+                                </td>
                             </tr>
                             <tr>
                                 <td>Количестов и сумма</td>
-                                <td>{{  currentOrder.quantity }} / {{ currentOrder.sum }} $ </td>
+                                <td>{{ currentOrder.quantity }} / {{ currentOrder.sum }} ₽</td>
                             </tr>
                             <tr>
                                 <td>Ссылка</td>
@@ -264,10 +299,12 @@ function prevPage() {
                             <tr>
                                 <td>Статус заказа</td>
                                 <td>
-                                    <div v-if="currentOrder.status === PENDING || currentOrder.status === IN_PROGRESS" class="account-table__status account-table__status--process">
+                                    <div v-if="currentOrder.status === PENDING || currentOrder.status === IN_PROGRESS"
+                                         class="account-table__status account-table__status--process">
                                         В процессе
                                     </div>
-                                    <div v-else-if="currentOrder.status === COMPLETED" class="account-table__status account-table__status--completed">
+                                    <div v-else-if="currentOrder.status === COMPLETED"
+                                         class="account-table__status account-table__status--completed">
                                         Выполнен
                                     </div>
                                     <div v-else class="account-table__status account-table__status--error">
@@ -277,7 +314,10 @@ function prevPage() {
                             </tr>
                             </tbody>
                         </table>
-                    </div><a v-if="currentOrder.service" class="modal-order__btn btn" :href="`/order?categoryId=${currentOrder.service.category_id}`"> <span class="modal-order__btn-icon icon">
+                    </div>
+                    <a v-if="currentOrder.service" class="modal-order__btn btn"
+                       :href="`/order?category=${currentOrder.service.category_id}&service=${currentOrder.service_id}`"> <span
+                        class="modal-order__btn-icon icon">
                 <svg class="svg-sprite-icon icon-return-15">
                   <use :xlink:href="`${sprite}#return-15`"></use>
                 </svg></span><span class="modal-order__btn-txt">Заказать заново</span></a>

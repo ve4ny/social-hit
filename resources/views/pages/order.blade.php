@@ -6,7 +6,7 @@
                 <div class="col-lg-3 order__left">
                     @include('pages.components.order-menu')
                 </div>
-                <order-page :user="{{ $user }}" :menu="{{ $menu }}" :social="{{ $social }}" :category="{{ $category }}" :initial-similar="{{ $similar }}"></order-page>
+                <order-page :user="{{ $user }}" :menu="{{ $menu }}" :social="{{ $social }}" :category="{{ $category }}" :service="{{ $service }}" :initial-similar="{{ $similar }}"></order-page>
             </div>
         </div>
     </div>

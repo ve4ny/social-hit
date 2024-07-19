@@ -1,6 +1,7 @@
 <script setup>
 
 const props = defineProps({
+    discount: Number,
     order: Object
 })
 
@@ -49,7 +50,7 @@ async function makeOrder() {
                             </tr>
                             <tr>
                                 <td>Количестов и сумма</td>
-                                <td>{{ order.quantity }} / {{ roundToTwo(order.quantity * order.service.rate * order.discount ) }} ₽</td>
+                                <td>{{ order.quantity }} / {{ roundToTwo(order.quantity * order.service.rate * props.discount ) }} ₽</td>
                             </tr>
                             <tr>
                                 <td>Ссылка</td>

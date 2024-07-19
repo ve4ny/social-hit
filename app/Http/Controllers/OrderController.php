@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\OrderCreated;
 use App\Http\Requests\OrderRequest;
 use App\Models\Category;
 use App\Models\Order;
@@ -31,10 +32,13 @@ class OrderController extends Controller
             }
         }
         $category = Category::find($request->category);
+        if($request->service) {
+            $service = Service::find($request->service);
+        } else $service = Service::where('category_id', $category->id)->first();
         $social = Social::with('attachment')->where('id', $category->social_id)->first();
         $social->picture = $social->image;
         $similar = $category->similar();
-        return view('pages.order', compact('menu', 'social', 'category', 'similar'));
+        return view('pages.order', compact('menu', 'social', 'category', 'service', 'similar'));
     }
 
     public function makeRedirect(int $categoryId)
@@ -70,13 +74,15 @@ class OrderController extends Controller
     {
         $user = auth()->user();
         $service = $request->service;
+        $promo = Promo::where('code', $request->promocode)->where('expires', '>', Carbon::now())->first();
+        $discount = $promo && $promo->coefficient ? (100 - $promo->coefficient) / 100 : 1;
         $order = new Order();
         $order->fill([
             'jap_id' => 0,
             'user_id' => $user->id,
             'service_id' => $service['id'],
             'quantity' => $request->quantity,
-            'sum' => $service['rate'] * $request->quantity - ($service['rate'] * $request->quantity * $request->discount),
+            'sum' =>$service['rate'] * $request->quantity * $discount,
             'link' => $request->link,
             'start_count' => null,
             'remains' => $request->quantity,
@@ -84,6 +90,7 @@ class OrderController extends Controller
             'pay_status' => 'unpaid'
         ]);
         $order->save();
+        //OrderCreated::dispatch($order);
         return response()->json();
     }
 
@@ -98,15 +105,24 @@ class OrderController extends Controller
             $order->sum = round($order->sum , 2);
             $order->date = $order->created_at->format('d.m.Y');
             $order->time = $order->created_at->format('H:i');
-//            if($order->status !== 'Completed') {
-//                $res = $api->status($order->jap_id);
-//                if(!isset($res->error) || !$res->error) {
-//                    $order->status = $res->status;
-//                    $order->save();
-//                }
-//
-//            }
         }
         return view('pages.orders', compact('orders'));
+    }
+
+    public function ordersCheck(Request $request)
+    {
+        $orders = Order::whereNot('status', 'Completed')->whereIn('jap_id', $request->ids)->get();
+        $api = new JapApi();
+        $res = $api->multiStatus($request->ids);
+        foreach($res as $key => $data) {
+            $order = $orders->firstWhere('jap_id', $key);
+            if($order) {
+                $order->status = $data->status;
+                $order->start_count = $data->start_count;
+                $order->remains = $data->remains;
+                $order->save();
+            }
+        }
+        return response()->json($res);
     }
 }

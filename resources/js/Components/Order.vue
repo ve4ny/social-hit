@@ -8,6 +8,7 @@ const props = defineProps({
     menu: Array,
     social: Object,
     category: Object,
+    service: Object,
     initialSimilar: Array
 })
 
@@ -15,7 +16,8 @@ const chosenSocial = ref({});
 const chosenCat = ref({});
 const services = ref([]);
 const similar = ref(props.initialSimilar);
-const selectedService = ref({});
+const selectedService = ref(props.service ? props.service : services.value[0]);
+const discount = ref(1);
 
 const errors = ref({});
 
@@ -33,22 +35,21 @@ function selectedCategory(args) {
 }
 
 const order = ref({
-    service: {},
+    service: selectedService.value,
     link: '',
     promocode: '',
-    discount: 1,
-    quantity: 1
+    quantity: selectedService.value.min
 })
 
-watch(() => services.value, (newVal) => {
-    if (Array.isArray(newVal) && newVal.length > 0) {
-        selectedService.value = newVal[0];
-        order.value.service = newVal[0];
-        order.value.quantity = newVal[0]['min'] ? newVal[0]['min'] : 1;
-    } else {
-        selectedService.value = {};
-    }
-}, { immediate: true });
+// watch(() => services.value, (newVal) => {
+//     if (Array.isArray(newVal) && newVal.length > 0) {
+//         // selectedService.value = props.service ? props.service :  newVal[0];
+//         order.value.service = newVal[0];
+//         order.value.quantity = newVal[0]['min'] ? newVal[0]['min'] : 1;
+//     } else {
+//         selectedService.value = {};
+//     }
+// }, { immediate: true });
 
 function selectService(service) {
     selectedService.value = service
@@ -84,7 +85,7 @@ const checkMax = () => {
 
 function checkPromo() {
     axios.post('/order/promo/check', {code: order.value.promocode})
-        .then((res) => order.value.discount = res.data.discount)
+        .then((res) => discount.value = res.data.discount)
         .catch((err) => errors.value.promo = err.response.data.promo)
 }
 
@@ -116,7 +117,7 @@ onMounted(() => {
                     <select class="form-select">
                         <option v-for="(service, key) in services"
                                 :key="service.id"
-                                :selected="key === 0"
+                                :selected="service.id === selectedService.id"
                                 @click="()=> {selectService(service)}">
                             {{ service.rus_name ? service.rus_name : service.name }}
                         </option>
@@ -127,13 +128,13 @@ onMounted(() => {
                 <div class="order-form__price d-flex">
                     <div class="order-form__price-txt-left">Цена за 1:</div>
                     <div class="order-form__price-value">
-                        {{ selectedService && selectedService.rate ? selectedService.rate : 0 }} ₽
+                        {{ selectedService && selectedService.rate ? roundToTwo(selectedService.rate) : 0 }} ₽
                     </div>
                     <div v-if="selectedService && selectedService.max > 1"
                          class="order-form__price-txt-right">
-                        (Цена за 1 действие {{ selectedService ? selectedService.rate : 0 }} ₽.
+                        (Цена за 1 действие {{ selectedService ? roundToTwo(selectedService.rate) : 0 }} ₽.
                         ({{ selectedService && selectedService.max ? getExampleCount(selectedService.max) : 1 }} шт.
-                        = {{ selectedService ? selectedService.rate * getExampleCount(selectedService.max) : 0 }}₽ ))
+                        = {{ selectedService ? roundToTwo(selectedService.rate * getExampleCount(selectedService.max)) : 0 }}₽ ))
                     </div>
                 </div>
             </div>
@@ -193,8 +194,8 @@ onMounted(() => {
                         </div>
                     </div>
                     <span class="red" v-if="errors" v-for="err in errors.promo" >{{ err }}</span>
-                    <span v-if="order.discount < 1" class="green">
-                        Ваша скидка: {{roundToTwo((order.quantity * selectedService.rate) - (order.quantity * selectedService.rate * order.discount))}} ₽
+                    <span v-if="discount < 1" class="green">
+                        Ваша скидка: {{roundToTwo((order.quantity * selectedService.rate) - (order.quantity * selectedService.rate * discount))}} ₽
                     </span>
                 </div>
             </div>
@@ -204,7 +205,7 @@ onMounted(() => {
                         <div class="order-form__bottom-left">
                             <div class="order-form__total">Всего: <span>
                                 {{
-                                    selectedService.rate ? roundToTwo(order.quantity * selectedService.rate * order.discount) : 0
+                                    selectedService.rate ? roundToTwo(order.quantity * selectedService.rate * discount) : 0
                                 }} ₽ </span></div>
                         </div>
                         <div class="order-form__bottom-right">
@@ -283,12 +284,12 @@ onMounted(() => {
                             </div>
                         </div>
                         <div class="order-more__item-price">250 шт. = {{ sim.rate ? roundToTwo(sim.rate * 250) : 0 }}₽</div>
-                        <a class="order-more__item-btn btn" :href="'/order?category='+ sim.id">Купить</a>
+                        <a class="order-more__item-btn btn" :href="'/order?category='+ sim.category_id + '&service=' + sim.id">Купить</a>
                     </div>
                 </div>
             </div>
         </div>
-        <OrderModals :order="order" @error="args => errors = args.error.error"></OrderModals>
+        <OrderModals :order="order" :discount="discount" @error="args => errors = args.error.error"></OrderModals>
     </div>
 </template>
 
