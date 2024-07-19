@@ -49,7 +49,7 @@ async function makeOrder() {
                             </tr>
                             <tr>
                                 <td>Количестов и сумма</td>
-                                <td>{{ order.quantity }} / {{ roundToTwo(order.quantity * order.service.rate - order.service.rate * order.discount ) }} $</td>
+                                <td>{{ order.quantity }} / {{ roundToTwo(order.quantity * order.service.rate * order.discount ) }} ₽</td>
                             </tr>
                             <tr>
                                 <td>Ссылка</td>

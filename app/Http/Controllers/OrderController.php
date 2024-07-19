@@ -9,6 +9,7 @@ use App\Models\Promo;
 use App\Models\Service;
 use App\Models\Social;
 use App\Services\JapApi;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -54,7 +55,7 @@ class OrderController extends Controller
 
     public function checkPromo(Request $request)
     {
-        $code = Promo::where('code', $request->code)->first();
+        $code = Promo::where('code', $request->code)->where('expires', '>', Carbon::now())->first();
         if($code) {
             return response()->json(['discount' => (100 - $code->coefficient) / 100 ]);
         }

@@ -1,5 +1,4 @@
 <script setup>
-import OrderSection from "./Components/OrderSection.vue";
 
 import {ref, onMounted, watch} from 'vue';
 import OrderModals from "./Components/OrderModals.vue";
@@ -28,7 +27,7 @@ function selectedCategory(args) {
     axios.get('/order/services/' + args.category.id)
         .then((res) => {
             services.value = res.data.services;
-            similar.value = res.data.similar;
+            similar.value = res.data.services.slice(1, 6);
         })
         .catch((err) => console.log(err))
 }
@@ -50,6 +49,11 @@ watch(() => services.value, (newVal) => {
         selectedService.value = {};
     }
 }, { immediate: true });
+
+function selectService(service) {
+    selectedService.value = service
+    similar.value = services.value.filter((el, key) => el.id !== selectedService.value.id).slice(0, 5);
+}
 
 function getExampleCount(max) {
     if(max < 1000) return max;
@@ -113,7 +117,7 @@ onMounted(() => {
                         <option v-for="(service, key) in services"
                                 :key="service.id"
                                 :selected="key === 0"
-                                @click="()=> selectedService = service">
+                                @click="()=> {selectService(service)}">
                             {{ service.rus_name ? service.rus_name : service.name }}
                         </option>
                     </select>
@@ -189,6 +193,9 @@ onMounted(() => {
                         </div>
                     </div>
                     <span class="red" v-if="errors" v-for="err in errors.promo" >{{ err }}</span>
+                    <span v-if="order.discount < 1" class="green">
+                        Ваша скидка: {{roundToTwo((order.quantity * selectedService.rate) - (order.quantity * selectedService.rate * order.discount))}} ₽
+                    </span>
                 </div>
             </div>
             <div class="order-form__item">
@@ -197,7 +204,7 @@ onMounted(() => {
                         <div class="order-form__bottom-left">
                             <div class="order-form__total">Всего: <span>
                                 {{
-                                    roundToTwo(order.quantity * selectedService.rate * order.discount)
+                                    selectedService.rate ? roundToTwo(order.quantity * selectedService.rate * order.discount) : 0
                                 }} ₽ </span></div>
                         </div>
                         <div class="order-form__bottom-right">
@@ -271,11 +278,11 @@ onMounted(() => {
                                 </svg>
                             </div>
                             <div class="order-more__item-name__txt">{{
-                                    sim.rus_name ? sim.rus_name : sim.jap_name
+                                    sim.rus_name ? sim.rus_name : (sim.name ? sim.name : sim.jap_name)
                                 }}
                             </div>
                         </div>
-                        <div class="order-more__item-price">250 шт. = {{ roundToTwo(sim.price * 250) }}$</div>
+                        <div class="order-more__item-price">250 шт. = {{ sim.rate ? roundToTwo(sim.rate * 250) : 0 }}₽</div>
                         <a class="order-more__item-btn btn" :href="'/order?category='+ sim.id">Купить</a>
                     </div>
                 </div>
@@ -286,8 +293,13 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.red{
+.red {
     font-size: 12px;
     color: #dc3545
+}
+
+.green {
+    font-size: 12px;
+    color: #28a745
 }
 </style>
