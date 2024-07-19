@@ -84,6 +84,7 @@ const checkMax = () => {
 };
 
 function checkPromo() {
+    discount.value = 1;
     axios.post('/order/promo/check', {code: order.value.promocode})
         .then((res) => discount.value = res.data.discount)
         .catch((err) => errors.value.promo = err.response.data.promo)

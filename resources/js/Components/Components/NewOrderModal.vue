@@ -60,11 +60,11 @@ async function makeOrder() {
                         </table>
                     </div>
                     <div class="modal-order__btn btn" style="cursor: pointer" @click="makeOrder()">
-                        <span class="modal-order__btn-icon icon">
-                            <svg class="svg-sprite-icon icon-return-15">
-                                <use xlink:href="@images/svg/symbol/sprite.svg#return-15"></use>
-                            </svg>
-                        </span>
+<!--                        <span class="modal-order__btn-icon icon">-->
+<!--                            <svg class="svg-sprite-icon icon-return-15">-->
+<!--                                <use xlink:href="@images/svg/symbol/sprite.svg#return-15"></use>-->
+<!--                            </svg>-->
+<!--                        </span>-->
                         <span class="modal-order__btn-txt">Заказать</span>
                     </div>
                 </div>
