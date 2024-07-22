@@ -20,7 +20,7 @@ class PricesCheckListScreen extends Screen
     public function query(): iterable
     {
         $services = Service::where('show', 1)
-            ->where('changed', 1)
+            ->whereNot('jap_old', 0)
             ->with('category.social')
             ->orderByDesc('updated_at')
             ->paginate(25);
@@ -67,17 +67,17 @@ class PricesCheckListScreen extends Screen
             Layout::table('services', [
                     TD::make('name', 'Название в JAP')->width('35%'),
                     TD::make('rus_name', 'Русское название')->width('35%'),
-                    TD::make('jap_rate', 'Стоимость в JAP')->render(fn($service) =>
+                    TD::make('jap_old', 'Старая цена JAP')->render(fn($service) =>
+                        $service->jap_old . '$'
+                    ),
+                    TD::make('jap_rate', 'Новая цена JAP')->render(fn($service) =>
                         $service->jap_rate  . '$'
                     ),
-                    TD::make('rate', 'Стоимость')->render(fn($service) =>
+                    TD::make('rate', 'Наша цена')->render(fn($service) =>
                         $service->rate  . '₽'
                     ),
-                    TD::make('show', 'Включение')->render(fn($service) =>
-                    $service->show ? 'Да' : '-'
-                    ),
-                    TD::make('Редактировать')->width('10%')->render(fn($service) =>
-                    Link::make('Редактировать')
+                    TD::make('Ред.')->width('10%')->render(fn($service) =>
+                    Link::make('')
                         ->icon('pencil')
                         ->route('platform.socials.categories.service', [$service->category->social_id, $service->category_id, $service->id]))
                 ]

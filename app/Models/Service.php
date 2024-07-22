@@ -27,6 +27,7 @@ class Service extends Model
       'dripfeed',
       'refill',
       'cancel',
+      'jap_old',
       'category_id',
       'show'
     ];
@@ -59,6 +60,23 @@ class Service extends Model
             $this->attributes['jap_rate'] = $numericValue * 10000;
         } else {
             $this->attributes['jap_rate'] = 0; // Или обработка как-то иначе
+        }
+    }
+
+    public function getJapOldAttribute($value)
+    {
+
+        return $value / 10000;
+    }
+
+    // Установка цены в тысячных долях цента
+    public function setJapOldAttribute($value)
+    {
+        $numericValue = floatval(str_replace(['$'], '', $value));
+        if (is_numeric($numericValue)) {
+            $this->attributes['jap_old'] = $numericValue * 10000;
+        } else {
+            $this->attributes['jap_old'] = null;
         }
     }
 

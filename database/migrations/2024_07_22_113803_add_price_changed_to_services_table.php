@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('services', function (Blueprint $table) {
-            $table->boolean('changed')->after('show')->default(0);
+            $table->bigInteger('jap_old')->after('jap_rate')->default(0);
         });
     }
 
@@ -26,7 +26,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('services', function (Blueprint $table) {
-            $table->dropColumn('changed');
+            $table->dropColumn('jap_old');
         });
     }
 };

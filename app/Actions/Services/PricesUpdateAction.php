@@ -33,10 +33,11 @@ class PricesUpdateAction
                 $newService = $newServicesMap[$service->service_id];
                 if ($service->jap_rate != $newService->rate) {
                     $price = $newService->rate * 10000;
+                    $old_price = $service->jap_rate * 10000;
                     $ids[] = $service->service_id;
-                    $updateCases['rate'][] = "WHEN {$service->service_id} THEN {$price}";
+                    $updateCases['jap_rate'][] = "WHEN {$service->service_id} THEN {$price}";
                     $updateCases['updated_at'][] = "When {$service->service_id} THEN NOW()";
-                    $updateCases['changed'][] = "WHEN {$service->service_id} THEN 1";
+                    $updateCases['jap_old'][] = "WHEN {$service->service_id} THEN {$old_price}";
                 }
             }
         }
@@ -44,13 +45,13 @@ class PricesUpdateAction
         // Выполняем пакетное обновление
         if (!empty($ids)) {
             $ids = implode(',', $ids);
-            $japRateCases = implode(' ', $updateCases['rate']);
+            $japRateCases = implode(' ', $updateCases['jap_rate']);
             $updatedAtCases = implode(' ', $updateCases['updated_at']);
-            $changedCases = implode(' ', $updateCases['changed']);
+            $japRateOldCases = implode(' ', $updateCases['jap_old']);
 
             $query = "UPDATE services SET
                         jap_rate = CASE service_id {$japRateCases} END,
-                        changed = CASE service_id {$changedCases} END,
+                        jap_old = CASE service_id {$japRateOldCases} END,
                         updated_at = CASE service_id {$updatedAtCases} END
                       WHERE service_id IN ({$ids})";
 
