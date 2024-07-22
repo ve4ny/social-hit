@@ -23,7 +23,7 @@ class PricesCheckListScreen extends Screen
             ->where('changed', 1)
             ->with('category.social')
             ->orderByDesc('updated_at')
-            ->get();
+            ->paginate(25);
         return [
             'services' => $services
         ];
