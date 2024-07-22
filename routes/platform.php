@@ -94,7 +94,17 @@ Route::screen('socials/{social}/{category}/{service}', \App\Orchid\Screens\Servi
         ->parent('platform.socials.categories.services', $social, $category)
         ->push(__('Услуга'), route('platform.socials.category', ['social' => $social, 'category' => $category, 'service' => $service])));
 
-//Platform > Promos
+//Platform > Price Check
+
+Route::screen('price-check', \App\Orchid\Screens\PricesCheckListScreen::class)
+    ->name('platform.price-check')
+    ->breadcrumbs(fn (Trail $trail) => $trail
+    ->parent('platform.index')
+        ->push(__('Проверка цен'), route('platform.price-check'))
+    );
+
+
+// Platform > Promos
 
 Route::screen('promos', PromoListScreen::class)
     ->name('platform.promos')

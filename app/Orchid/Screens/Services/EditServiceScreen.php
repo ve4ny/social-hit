@@ -100,6 +100,9 @@ class EditServiceScreen extends Screen
     public function save(Social $social, Category $category, Service $service, Request $request)
     {
         $newPrice = str_replace(['$', '₽'], '', $request->service['rate']);
+        if($service->changed && $service->rate !== $newPrice) {
+            $service->changed = 0;
+        }
         $service->rate = + $newPrice;
         $service->rus_name =$request->service['rus_name'];
         $service->show = $request->service['show'];

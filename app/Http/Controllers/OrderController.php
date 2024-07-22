@@ -109,20 +109,18 @@ class OrderController extends Controller
         return view('pages.orders', compact('orders'));
     }
 
-    public function ordersCheck(Request $request)
+    public function ordersCheck(Request $request): JsonResponse
     {
-        $orders = Order::whereNot('status', 'Completed')->whereIn('jap_id', $request->ids)->get();
-        $api = new JapApi();
-        $res = $api->multiStatus($request->ids);
-        foreach($res as $key => $data) {
-            $order = $orders->firstWhere('jap_id', $key);
-            if($order) {
-                $order->status = $data->status;
-                $order->start_count = $data->start_count;
-                $order->remains = $data->remains;
-                $order->save();
-            }
+        $orders = Order::whereNotIn('status', ['Completed', 'Error'])
+            ->whereIn('jap_id', $request->ids)
+            ->get();
+        $ids = $orders->pluck('jap_id')->toArray();
+        if($orders->count() > 0) {
+            $api = new JapApi();
+            $res = $api->multiStatus($ids);
+            $api->updateStatus($res, $orders->toArray());
+            return response()->json($res);
         }
-        return response()->json($res);
+        return response()->json();
     }
 }

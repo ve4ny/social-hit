@@ -33,6 +33,10 @@ class PlatformProvider extends OrchidServiceProvider
             ->route('platform.socials')
             ->title('Cервисы'),
 
+            Menu::make('Проверка цен')
+            ->icon('money')
+            ->route('platform.price-check'),
+
             Menu::make('Промокоды')
             ->icon('modules')
             ->route('platform.promos'),

@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Models\Order;
+
 class JapApi
 {
     /** API URL */
@@ -159,5 +161,38 @@ class JapApi
         }
         curl_close($ch);
         return $result;
+    }
+
+
+    public function updateStatus($res, array $orders): void
+    {
+        if (!property_exists($res, 'error')) {
+            foreach ($res as $key => $data) {
+                    $order = array_filter($orders, function ($order) use ($key) {
+                        return isset($order['jap_id']) && $order['jap_id'] == $key;
+                    });
+                    $order = reset($order);
+                    if ($order !== false) {
+                        if(!is_array($order)) {
+                            $order = $order->toArray();
+                        }
+                        $this->assignStatus($data, $order);
+                    }
+            }
+        } else {
+            $this->assignStatus($res, $orders[0]);
+        }
+    }
+
+    private function assignStatus($res, $orderArr): void
+    {
+        $order = Order::find($orderArr['id']);
+        if (property_exists($res, 'status')) {
+            $order->status = $res->status;
+        } else {
+            $order->status = 'Error';
+        }
+
+        $order->save();
     }
 }
