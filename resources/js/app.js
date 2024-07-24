@@ -9,6 +9,8 @@ import Profile from "./Components/Profile.vue";
 import Safety from "./Components/Safety.vue";
 import Order from "./Components/Order.vue";
 import OrdersTable from "./Components/Components/Orders/OrdersTable.vue"
+import QrGenerator from "./Components/Components/Referral/QrGenerator.vue";
+import ReferralBalance from "./Components/Components/Referral/ReferralBalance.vue"
 
 
 const app = createApp({
@@ -30,7 +32,9 @@ const app = createApp({
         'Profile': Profile,
         'Safety': Safety,
         'OrderPage': Order,
-        'OrdersTable': OrdersTable
+        'OrdersTable': OrdersTable,
+        'QrGenerator': QrGenerator,
+        'ReferralBalance': ReferralBalance
     },
     created() {
         // Установка isLoading на false после загрузки компонента

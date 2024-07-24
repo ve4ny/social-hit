@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Orchid\Platform\Models\User as Authenticatable;
@@ -72,7 +73,12 @@ class User extends Authenticatable
 
     public function balance(): HasOne
     {
-        return $this->hasOne(Balance::class);
+        return $this->hasOne(Balance::class, 'user_id');
+    }
+
+    public function refBalance(): HasOne
+    {
+        return $this->hasOne(RefBalance::class, 'user_id');
     }
 
     public function email_changes(): HasOne
@@ -83,5 +89,10 @@ class User extends Authenticatable
     public function promo(): MorphMany
     {
         return $this->morphMany(Promo::class, 'promotable');
+    }
+
+    public function refTransactions(): HasMany
+    {
+        return $this->hasMany(RefBalanceTransaction::class, 'user_id');
     }
 }

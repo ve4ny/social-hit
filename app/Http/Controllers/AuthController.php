@@ -10,6 +10,7 @@ use App\Models\EmailConfirmation;
 use App\Models\EmailRemind;
 use App\Models\User;
 use App\Services\UserService;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -20,6 +21,13 @@ use Illuminate\Contracts\View\View;
 
 class AuthController extends Controller
 {
+    private UserService $userService;
+
+    public function __construct()
+    {
+        $this->userService = new UserService();
+    }
+
     /**
      * @param RegistrationRequest $request
      * @param UserService $userService
@@ -34,6 +42,11 @@ class AuthController extends Controller
         } catch (\Exception $e) {
             return response()->json(['message' => $e], 400);
         }
+    }
+
+    public function registerWithReferral(string $code): View
+    {
+        return view('referral-register', compact('code'));
     }
 
     /**
@@ -86,9 +99,13 @@ class AuthController extends Controller
 
             if (Auth::attempt($validatedData, $request->remember)) {
                 $user = User::find(auth()->user()->id);
+                $user->last_login = new Carbon('now');
+                $user->save();
                 if(!$user->balance) {
-                    $userService = new UserService();
-                    $userService->createBalance($user);
+                    $this->userService->createBalance($user);
+                }
+                if(!$user->refBalance) {
+                    $this->userService->createRefBalance($user);
                 }
                 return response()->json(['message' => 'Authentication success'], 200);
             } else {
@@ -139,6 +156,7 @@ class AuthController extends Controller
     public function reset(ResetPasswordRequest $request, UserService $userService)
     {
         if(!$request->email) {
+            dd('Hi');
             return redirect('/');
         }
         $user = $userService->changePassword($request->email, $request->password);

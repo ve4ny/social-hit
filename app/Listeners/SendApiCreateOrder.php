@@ -4,8 +4,6 @@ namespace App\Listeners;
 
 use App\Events\OrderCreated;
 use App\Services\JapApi;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 class SendApiCreateOrder
 {

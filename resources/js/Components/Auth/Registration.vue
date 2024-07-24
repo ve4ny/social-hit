@@ -1,9 +1,14 @@
 <script setup>
 
-import {reactive, ref} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import axios from "axios";
 
+const props = defineProps({
+    referral: String
+})
+
 const form = reactive({
+    'referral_code' : props.referral,
     'email' : '',
     'password': '',
     'password_confirmation': '',
@@ -21,13 +26,17 @@ function submitForm() {
             successMessage.value = res.data.message;
             buttonText.value = 'Регистрация';
     }).catch((error) => {
-        if (error.response && error.response.status === 422) {
+        if (error.response) {
             console.error('Bad Request:', error.response.data.message);
             errorMessages.value = error.response.data.errors;
         }
         buttonText.value = 'Регистрация';
     })
 }
+
+onMounted(()=>{
+    form.referral_code = props.referral;
+})
 
 </script>
 
@@ -47,6 +56,10 @@ function submitForm() {
         </div>
         <div class="modal-content__body">
             <form class="modal-form form" action="/public">
+                <input v-model="form.referral_code" type="hidden">
+                <template v-if="errorMessages.referral_code">
+                    <p v-html="error" v-for="error in errorMessages.referral_code" class="error"></p>
+                </template>
                 <div class="modal-form__fields">
                     <div class="modal-form__item">
                         <div class="form-item">

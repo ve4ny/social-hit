@@ -26,6 +26,7 @@ Route::get('/', [MainController::class, 'index'])->name('index');
 // Registration, Login, Password Reminder
 
 Route::post('/register', [AuthController::class, 'register']);
+Route::get('/register-with-referral/{code}', [AuthController::class, 'registerWithReferral']);
 Route::get('/verify-email/{token}', [AuthController::class, 'verifyEmail']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/logout', [AuthController::class, 'logout']);
@@ -62,6 +63,7 @@ Route::middleware('auth')->group(function () {
     // Referral
 
     Route::get('/referral', [\App\Http\Controllers\ReferralController::class, 'index']);
+    Route::post('/transfer-ref-balance', [\App\Http\Controllers\ReferralController::class, 'transferBalance']);
 
     // Order
 
@@ -74,7 +76,8 @@ Route::middleware('auth')->group(function () {
 
     // Refill
 
-    Route::get('/refill', [\App\Http\Controllers\FinancialController::class, 'showRefill']);
+//    Route::get('/refill', [\App\Http\Controllers\FinancialController::class, 'showRefill']);
+    Route::get('/refill', [\App\Http\Controllers\BalanceController::class, 'topUp']);
 
     // Transactions List
 

@@ -17,6 +17,8 @@
     "dependencies": {
         "bootstrap": "^5.3.3",
         "laravel-vite-plugin": "^1.0.4",
-        "vue": "^3.4.31"
+        "qrcode.vue": "^3.4.1",
+        "vue": "^3.4.31",
+        "vue-social-sharing": "^4.0.0-alpha4"
     }
 }

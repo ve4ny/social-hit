@@ -2,17 +2,18 @@
 
 namespace App\Services;
 
-use App\Jobs\SendEmailConfirmationJob;
+use App\Events\UserCreated;
 use App\Jobs\SendEmailPasswordRemindJob;
 use App\Models\Balance;
+use App\Models\RefBalance;
 use App\Models\User;
 use App\Models\UserDetails;
 use Exception;
 use Illuminate\Support\Str;
+use function PHPUnit\Framework\throwException;
 
 class UserService
 {
-
     /**
      * @param array $userData
      * @return User
@@ -26,10 +27,12 @@ class UserService
             'password' => bcrypt(trim($userData['password'])),
         ]);
 
+        $ref_code = $userData['referral_code'] ?: NULL;
         if($user) {
-            $this->createUserDetails($user);
+            $this->createUserDetails($user, $ref_code);
             $this->createBalance($user);
-            SendEmailConfirmationJob::dispatch($user);
+            $this->createRefBalance($user);
+            UserCreated::dispatch($user);
             return $user;
         } else {
             throw new Exception('Не удалось завершить регистрацию. Попробуйте позже.');
@@ -38,19 +41,33 @@ class UserService
 
     /**
      * @param User $user
+     * @param string|null $referral
      * @return void
      */
-    private function createUserDetails(User $user): void
+    private function createUserDetails(User $user, string $referral = NULL): void
     {
         $ref_code = $this->generateUniqueReferralCode();
-        $details = new UserDetails(['referral_code'=> $ref_code ]);
-        $user->details()->save($details);
+        $details = ['referral_code'=> $ref_code ];
+        if($referral) {
+            $refUser = User::whereHas('details', function ($query) use ($referral) {
+                $query->where('referral_code', $referral);
+            })->with('details')->first();
+            $details['referrer'] = $refUser->id;
+        }
+        $userDetails = new UserDetails($details);
+        $user->details()->save($userDetails);
     }
 
     public function createBalance(User $user): void
     {
         $balance = new Balance();
         $user->balance()->save($balance);
+    }
+
+    public function createRefBalance(User $user): void
+    {
+        $ref_balance = new RefBalance();
+        $user->refBalance()->save($ref_balance);
     }
 
     /**

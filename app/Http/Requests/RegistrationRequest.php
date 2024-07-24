@@ -27,6 +27,7 @@ class RegistrationRequest extends FormRequest
             'email' => 'required|email|max:128|unique:users',
             'password' => 'required|string|min:8|max:16',
             'password_confirmation' => 'required|string|max:128|same:password',
+            'referral_code' => 'nullable|string|exists:user_details,referral_code',
             'remember_me' => 'boolean'
         ];
     }
@@ -46,6 +47,7 @@ class RegistrationRequest extends FormRequest
             'password_confirmation.string' => 'Подтверждение пароля должно передаваться в виде строки',
             'password_confirmation.max' => 'Слишком длинное подтверждение пароля',
             'password_confirmation.same' => 'Пароли не совпадают',
+            'referral_code.exists' => 'Пользователя с таким реферальным кодом не существует. <br> Попробуйте отсканировать QR код ещё раз'
         ];
     }
 }
