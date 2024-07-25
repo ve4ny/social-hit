@@ -45,6 +45,7 @@ class RemindPasswordEmail extends Mailable
         return new Content(
             view: 'mail.remind-password',
             with: [
+                'url' => config('app.url'),
                 'remindToken' => $this->remindToken
             ]
         );

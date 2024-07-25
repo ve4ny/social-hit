@@ -24,7 +24,7 @@
                            style="border-spacing:0;">
                         <tr>
                             <td style="border-radius: 10px;" bgcolor="#5c1ea9">
-                                <a href="https://hulafoplos.beget.app/safety/verify-email-change/{{$token}}" target="_blank"
+                                <a href="{{ $url }}/safety/verify-email-change/{{$token}}" target="_blank"
                                    style="font-size: 16px; font-weight: bold;text-decoration:none;color:#ffffff;background-color: #5c1ea9;border:1px solid #5c1ea9;border-radius: 5px;padding: 10px 25px;display: inline-block;">
                                     Подтвердите
                                     новый email</a>

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('social_id')->constrained()->cascadeOnDelete();
             $table->string('jap_name');
             $table->string('rus_name');
-            $table->boolean('show')->default(true);
+            $table->boolean('show')->default(false);
             $table->boolean('main_show')->default(false);
             $table->timestamps();
         });

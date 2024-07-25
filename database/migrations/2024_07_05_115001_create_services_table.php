@@ -26,7 +26,7 @@ return new class extends Migration
             $table->boolean('refill');
             $table->boolean('cancel');
             $table->foreignId('category_id');
-            $table->boolean('show')->default(true);
+            $table->boolean('show')->default(false);
             $table->timestamps();
         });
     }

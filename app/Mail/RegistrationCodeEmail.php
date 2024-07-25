@@ -46,6 +46,7 @@ class RegistrationCodeEmail extends Mailable
         return new Content(
             view: 'mail.confirmation',
             with: [
+                'url' => config('app.url'),
                 'registrationCode' => $this->registrationCode
             ]
         );

@@ -47,6 +47,7 @@ class EmailChangeEmail extends Mailable
         return new Content(
             view: 'mail.change-email',
             with: [
+                'url' => config('app.url'),
                 'token' => $this->token
             ]
         );
