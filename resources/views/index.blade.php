@@ -6,7 +6,7 @@
                 <div class="intro-content">
                     <div class="intro-content__img">
                         <div class="intro-img">
-                            <div class="intro-img__desctop"><img src="{{ asset($blocks['hero']->image['pc']) }}"
+                            <div class="intro-img__desctop"><img src="{{ isset($blocks['hero']->image['pc']) ? asset($blocks['hero']->image['pc']) : ''  }}"
                                                                  width="undefined"
                                                                  height="undefined" alt="img"/>
                             </div>
