@@ -25,6 +25,7 @@ class MainController extends Controller
         $blocks = [];
         foreach($blocksUnsort as $block) {
             $blocks[$block->ident] = $block;
+            $blocks[$block->ident]['image'] = $block->image;
         }
         return view('index', compact('faqs', 'brands', 'blocks'));
     }

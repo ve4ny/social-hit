@@ -1,4 +1,4 @@
-@include('header.header');
+@include('header.header')
 <div class="content">
     <div class="account">
         <div class="container">
