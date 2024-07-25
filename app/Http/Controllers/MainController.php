@@ -27,6 +27,7 @@ class MainController extends Controller
             $blocks[$block->ident] = $block;
             $blocks[$block->ident]['image'] = $block->image;
         }
+        dd($blocks);
         return view('index', compact('faqs', 'brands', 'blocks'));
     }
 
