@@ -10,7 +10,7 @@
                                                                  width="undefined"
                                                                  height="undefined" alt="img"/>
                             </div>
-                            <div class="intro-img__mobile"><img src="{{ asset($blocks['hero']->image['mobile']) }}"
+                            <div class="intro-img__mobile"><img src="{{ isset($blocks['hero']->image['mobile']) ? asset($blocks['hero']->image['mobile']) : '' }}"
                                                                 width="undefined"
                                                                 height="undefined" alt="img"/>
                             </div>
