@@ -1,6 +1,7 @@
 <script setup>
 import QrcodeVue from 'qrcode.vue'
 import {ref} from 'vue';
+import { useToast } from 'vue-toast-notification'
 
 const props = defineProps({
     refCode: String,
@@ -10,9 +11,18 @@ const props = defineProps({
 const qrValue = ref(props.siteUrl + '/register-with-referral/' + props.refCode);
 const size = ref(200);
 const type = ref('canvas');
+const toast = useToast();
 
 function getClass(qrSize) {
     return qrSize === size.value ? 'referal-qr__link selected' : 'referal-qr__link';
+}
+
+function copyToClipboard() {
+    navigator.clipboard.writeText(qrValue.value).then(() => {
+        toast.success('Текст скопирован в буфер обмена')
+    }).catch(err => {
+        console.error('Не удалось скопировать текст: ', err)
+    })
 }
 
 </script>
@@ -24,7 +34,7 @@ function getClass(qrSize) {
             <div class="referal-share__group-left">
                 <div class="referal-share__link d-flex">
                     <div class="referal-share__link-txt">{{ siteUrl }}/register-with-referral/{{ refCode }}</div>
-                    <a class="referal-share__link-copy icon" href="#">
+                    <a class="referal-share__link-copy icon" @click.prevent="copyToClipboard" href="javascript.void(0)">
                         <svg class="svg-sprite-icon icon-copy-2">
                             <use :xlink:href="siteUrl + '/images/svg/symbol/sprite.svg#copy-2'"></use>
                         </svg>

@@ -1,5 +1,7 @@
 import './bootstrap';
 import { createApp } from 'vue';
+import Toast from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
 import Authentication from "./Components/Auth/Authentication.vue";
 import AuthenticationMin from "./Components/Auth/AuthenticationMin.vue";
 import Registration from "./Components/Auth/Registration.vue";
@@ -22,6 +24,9 @@ const app = createApp({
             isRetina: window.devicePixelRatio > 1,
             isChromeOrFirefox: /Firefox|Chrome|Chromium|Opera/.test(navigator.userAgent)
         };
+    },
+    use: {
+      Toast
     },
     components: {
         'Authentication': Authentication,

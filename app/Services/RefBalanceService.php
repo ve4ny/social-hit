@@ -29,6 +29,10 @@ class RefBalanceService
     public function topUp(int $amount): void
     {
         $referrer = $this->user->details->whoReferred;
+        if (!$referrer->refBalance) {
+            $referrer->refBalance()->create(['amount' => 0]);
+            $referrer->load('refBalance');
+        }
         $referrer->refBalance->amount += $amount * RefBalance::PERCENT;
         $referrer->refBalance->save();
         $this->writeTransaction($amount);

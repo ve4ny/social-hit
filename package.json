@@ -19,6 +19,7 @@
         "laravel-vite-plugin": "^1.0.4",
         "qrcode.vue": "^3.4.1",
         "vue": "^3.4.31",
-        "vue-social-sharing": "^4.0.0-alpha4"
+        "vue-social-sharing": "^4.0.0-alpha4",
+        "vue-toast-notification": "^3.1.2"
     }
 }
