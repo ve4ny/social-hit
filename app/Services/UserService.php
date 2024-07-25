@@ -21,13 +21,15 @@ class UserService
      */
     public function create(array $userData): User
     {
+
         $user = User::create([
             'email' => trim($userData['email']),
             'remember_me' => $userData['remember_me'],
             'password' => bcrypt(trim($userData['password'])),
         ]);
 
-        $ref_code = $userData['referral_code'] ?: NULL;
+        $ref_code = $userData['referral_code'] ?? NULL;
+
         if($user) {
             $this->createUserDetails($user, $ref_code);
             $this->createBalance($user);
@@ -42,12 +44,13 @@ class UserService
     /**
      * @param User $user
      * @param string|null $referral
-     * @return void
+     * @return UserDetails
      */
-    private function createUserDetails(User $user, string $referral = NULL): void
+    private function createUserDetails(User $user, string $referral = NULL): UserDetails
     {
         $ref_code = $this->generateUniqueReferralCode();
         $details = ['referral_code'=> $ref_code ];
+
         if($referral) {
             $refUser = User::whereHas('details', function ($query) use ($referral) {
                 $query->where('referral_code', $referral);
@@ -56,6 +59,8 @@ class UserService
         }
         $userDetails = new UserDetails($details);
         $user->details()->save($userDetails);
+        return $user->details;
+
     }
 
     public function createBalance(User $user): void

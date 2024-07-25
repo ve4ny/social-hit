@@ -8,7 +8,7 @@ const props = defineProps({
 })
 
 const form = reactive({
-    'referral_code' : props.referral,
+    'referral_code' : props.referral ? props.referral : '',
     'email' : '',
     'password': '',
     'password_confirmation': '',
@@ -18,6 +18,7 @@ const form = reactive({
 const buttonText = ref('Регистрация')
 const successMessage = ref('');
 const errorMessages = ref({});
+
 
 function submitForm() {
     buttonText.value = 'Отправка...';
