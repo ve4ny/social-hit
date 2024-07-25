@@ -86,7 +86,7 @@
                 <div class="referral-content">
                     <div class="referral-content__inner row">
                         <div class="col-lg-7">
-                            <div class="referral-img"><img src="{{ isset($blocks['hero']->image['pc']) ? asset($blocks['hero']->image['pc']) : '' }}"
+                            <div class="referral-img"><img src="{{ isset($blocks['referral']->image['pc']) ? asset($blocks['referral']->image['pc']) : '' }}"
                                                            width="659" height="338"
                                                            alt="img"/>
                             </div>
@@ -121,8 +121,8 @@
                         <div class="col-lg-6">
                             <div class="about__img">
                                 <picture>
-                                    <source srcset="{{ isset($blocks['hero']->image['pc']) ? asset($blocks['hero']->image['pc']) : '' }}" type="image/webp"/>
-                                    <img src="{{ isset($blocks['hero']->image['pc']) ? asset($blocks['hero']->image['pc']) : '' }}" width="527" height="524"
+                                    <source srcset="{{ isset($blocks['about-us']->image['pc']) ? asset($blocks['about-us']->image['pc']) : '' }}" type="image/webp"/>
+                                    <img src="{{ isset($blocks['about-us']->image['pc']) ? asset($blocks['about-us']->image['pc']) : '' }}" width="527" height="524"
                                          alt="img"/>
                                 </picture>
                             </div>
