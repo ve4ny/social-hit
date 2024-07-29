@@ -41,7 +41,8 @@ function selectedCategory(args) {
 }
 
 function selectService(service) {
-    selectedService.value = service
+    selectedService.value = service;
+    order.value.quantity = service.min;
     similar.value = services.value.filter((el, key) => el.id !== selectedService.value.id).slice(0, 5);
 }
 
