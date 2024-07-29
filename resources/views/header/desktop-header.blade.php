@@ -134,18 +134,23 @@
             </div>
         </div>
         <div class="header__profile">
-            <div class="header-profile"><a class="header-profile__btn d-flex" href="#" data-bs-toggle="dropdown"><span
-                        class="header-profile__btn-img">
+            <div class="header-profile">
+                <a class="header-profile__btn d-flex" href="#" data-bs-toggle="dropdown">
+                    <span class="header-profile__btn-img">
                       <picture>
                           @if($user->details->image)
                               <img src="{{ asset($user->details->image) }}" style="object-fit: cover" width="40" height="40" alt="img"/>
                               @else
                               <img src="{{asset('/images/general/avatar.jpg')}}" width="40" height="40" alt="img"/>
                               @endif
-                      </picture></span><span class="header-profile__btn-icon icon">
+                      </picture>
+                    </span>
+                    <span class="header-profile__btn-icon icon">
                       <svg class="svg-sprite-icon icon-down-2">
                         <use xlink:href="/images/svg/symbol/sprite.svg#down-2"></use>
-                      </svg></span></a>
+                      </svg>
+                    </span>
+                </a>
                 <div class="header-profile__dropdown dropdown-menu dropdown-menu-end">
                     <div class="header-profile__menu">
                         <div class="header-profile__menu-item"><a class="header-profile__link d-flex" href="/profile"> <span
@@ -167,9 +172,15 @@
     @guest()
         <div class="header__user">
             <ul class="user-menu flex">
-                <li class="user-menu__item"><a class="user-menu__link" href="#loginModal"
-                                               data-bs-toggle="modal">Вход</a></li>
-                <li class="user-menu__item"><a class="user-menu__btn btn" href="#regModal" data-bs-toggle="modal">Регистрация</a>
+                <li class="user-menu__item">
+                    <a class="user-menu__link" href="#loginModal" data-bs-toggle="modal">
+                        Вход
+                    </a>
+                </li>
+                <li class="user-menu__item">
+                    <a class="user-menu__btn btn" href="#regModal" data-bs-toggle="modal">
+                        Регистрация
+                    </a>
                 </li>
             </ul>
         </div>

@@ -1,7 +1,6 @@
 console.log('JavaScript file loaded successfully.');
 document.addEventListener('DOMContentLoaded', function () {
     function dropdownMenu() {
-
         const link = document.querySelector('.has-child')
         const content = document.querySelector('.menu__dropdown')
         const back = document.querySelector('.menu__dropdown-back')
