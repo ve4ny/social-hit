@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace App\Orchid\Screens\User;
 
+use App\Models\Balance;
+use App\Models\RefBalance;
+use App\Models\UserDetails;
 use App\Orchid\Layouts\Role\RolePermissionLayout;
 use App\Orchid\Layouts\User\UserEditLayout;
 use App\Orchid\Layouts\User\UserPasswordLayout;
 use App\Orchid\Layouts\User\UserRoleLayout;
+use App\Services\UserService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -185,6 +189,20 @@ class UserEditScreen extends Screen
             ->save();
 
         $user->replaceRoles($request->input('user.roles'));
+
+        $ref = UserService::generateUniqueReferralCode();
+        UserDetails::create([
+            'user_id' => $user->id,
+            'referral_code' => $ref,
+        ]);
+        Balance::create([
+            'user_id' => $user->id,
+            'amount' => 0.00
+        ]);
+        RefBalance::create([
+            'user_id' => $user->id,
+            'amount' => 0.00
+        ]);
 
         Toast::info(__('User was saved.'));
 

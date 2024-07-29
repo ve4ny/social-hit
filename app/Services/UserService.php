@@ -108,7 +108,7 @@ class UserService
     /**
      * @return string
      */
-    public function generateUniqueReferralCode(): string
+    public static function generateUniqueReferralCode(): string
     {
         do {
             $referralCode = Str::random(32);
