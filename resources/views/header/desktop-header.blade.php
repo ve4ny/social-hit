@@ -122,7 +122,7 @@
             </ul>
         </nav>
     </div>
-    <div class="header__phone"><a class="header-phone" href="tel:+380661900018">+38 (066) 19-000-18</a></div>
+    <div class="header__phone"><a class="header-phone" href="tel:+79779761889">+7 (977) 976-18-89</a></div>
     @auth
         <div class="header__balance">
             <div class="header-balance-wrapper">

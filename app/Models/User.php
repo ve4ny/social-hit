@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\Billable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -9,6 +10,7 @@ use Orchid\Platform\Models\User as Authenticatable;
 
 class User extends Authenticatable
 {
+    use Billable;
     /**
      * The attributes that are mass assignable.
      *

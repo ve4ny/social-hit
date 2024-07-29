@@ -31,4 +31,10 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'ukassa' => [
+        'url' => env('UKASSA_API_URL'),
+        'id' => env('UKASSA_SHOP_ID'),
+        'secret_key' => env('UKASSA_SECRET_KEY'),
+    ]
+
 ];

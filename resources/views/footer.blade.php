@@ -16,8 +16,8 @@
             @endif
             <div class="footer__contacts">
                 <ul class="footer-contacts d-flex">
-                    <li class="footer-contacts__item"> <a class="footer-contacts__link" href="tel:+380661900018">+ 38 (066) 19-000-18</a></li>
-                    <li class="footer-contacts__item"> <a class="footer-contacts__link" href="mailto:support@socialhit.com">support@socialhit.com </a></li>
+                    <li class="footer-contacts__item"> <a class="footer-contacts__link" href="tel:+79779761889">+7 (977) 976-18-89</a></li>
+                    <li class="footer-contacts__item"> <a class="footer-contacts__link" href="mailto:support@social-hit.com">support@social-hit.com</a></li>
                 </ul>
             </div>
         </div>
