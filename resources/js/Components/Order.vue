@@ -143,14 +143,14 @@ onMounted(() => {
                             </div>
                             <div class="form-item__field">
                                 <div class="form-qty d-flex border">
-                                    <button class="form-qty__btn form-qty__minus icon" type="button">
+                                    <button class="form-qty__btn form-qty__minus icon" @click="()=>{order.quantity -= 1}" type="button">
                                         <svg class="svg-sprite-icon icon-minus-circle-2">
                                             <use xlink:href="@images/svg/symbol/sprite.svg#minus-circle-2"></use>
                                         </svg>
                                     </button>
                                     <input v-model.number="order.quantity" class="form-qty__input"
                                            @input="validateInput" @focusout="checkMax">
-                                    <button class="form-qty__btn form-qty__plus icon" type="button">
+                                    <button class="form-qty__btn form-qty__plus icon" @click="()=>{order.quantity += 1}" type="button">
                                         <svg class="svg-sprite-icon icon-plus-circle-2">
                                             <use xlink:href="@images/svg/symbol/sprite.svg#plus-circle-2"></use>
                                         </svg>

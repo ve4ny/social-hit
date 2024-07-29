@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    orderQty()
+    // orderQty()
 
     document.getElementById('perPageSelect').addEventListener('change', function () {
         const selectedValue = this.value;

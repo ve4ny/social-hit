@@ -9,9 +9,13 @@ trait Billable
 {
     public function charge(float $amount, string $currency = 'RUB', array $paymentData = [])
     {
+        $id = config('services.ukassa.id');
+        $key = config('services.ukassa.secret_key');
+        $url = config('services.ukassa.url');
+
         try {
-            $response = Http::withBasicAuth(config('services.ukassa.id'), config('services.ukassa.secret_key'))
-                ->post(config('services.ukassa.url'), [
+            $response = Http::withBasicAuth($id, $key)
+                ->post($url, [
                     'amount' => [
                         'value' => number_format($amount, 2, '.', ''),
                         'currency' => $currency,
@@ -35,7 +39,7 @@ trait Billable
 
             return [
                 'status' => 'failed',
-                'message' => 'Unable to process the payment at the moment.',
+                'message' => 'Ошибка проведения операции. Попробуйте ещё раз позже',
             ];
         }
     }
