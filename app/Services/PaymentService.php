@@ -40,7 +40,7 @@ class PaymentService
      * @throws ApiConnectionException
      * @throws UnauthorizedException
      */
-    public function createPayment(float $amount, string $description, array $options = [])
+    public function createPayment(float $amount, string $description, array $options = []): string
     {
         $client = $this->getClient();
         $payment = $client->createPayment([
@@ -50,7 +50,7 @@ class PaymentService
             ],
             'confirmation' => [
               'type' => 'redirect',
-                'return_url' => route('refill.callback')
+                'return_url' => route('index')
             ],
             'capture' => false,
             'metadata' => [

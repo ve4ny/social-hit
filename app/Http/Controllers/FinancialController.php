@@ -8,6 +8,17 @@ use App\Models\User;
 use App\Services\PaymentService;
 use Illuminate\Http\Request;
 use YooKassa\Client;
+use YooKassa\Common\Exceptions\ApiConnectionException;
+use YooKassa\Common\Exceptions\ApiException;
+use YooKassa\Common\Exceptions\AuthorizeException;
+use YooKassa\Common\Exceptions\BadApiRequestException;
+use YooKassa\Common\Exceptions\ExtensionNotFoundException;
+use YooKassa\Common\Exceptions\ForbiddenException;
+use YooKassa\Common\Exceptions\InternalServerError;
+use YooKassa\Common\Exceptions\NotFoundException;
+use YooKassa\Common\Exceptions\ResponseProcessingException;
+use YooKassa\Common\Exceptions\TooManyRequestsException;
+use YooKassa\Common\Exceptions\UnauthorizedException;
 use YooKassa\Model\Notification\NotificationEventType;
 use YooKassa\Model\Notification\NotificationSucceeded;
 use YooKassa\Model\Notification\NotificationWaitingForCapture;
@@ -19,6 +30,19 @@ class FinancialController extends Controller
         return view('pages.refill');
     }
 
+    /**
+     * @throws NotFoundException
+     * @throws ResponseProcessingException
+     * @throws ApiException
+     * @throws ExtensionNotFoundException
+     * @throws BadApiRequestException
+     * @throws AuthorizeException
+     * @throws InternalServerError
+     * @throws ForbiddenException
+     * @throws TooManyRequestsException
+     * @throws UnauthorizedException
+     * @throws ApiConnectionException
+     */
     public function create(Request $request, PaymentService $service)
     {
         $amount = (float)$request->input('amount');
@@ -36,9 +60,15 @@ class FinancialController extends Controller
             ]);
 
             if($link) {
+                $parsedUrl = parse_url($link);
+                $query = $parsedUrl['query'];
+                parse_str($query, $queryParams);
+                $transaction->transaction_id = $queryParams['orderId'];
                 $transaction->status = PaymentStatusEnum::WAITING_FOR_CAPTURE;
+                $transaction->save();
             } else {
                 $transaction->status = PaymentStatusEnum::FAILED;
+                $transaction->save();
                 return redirect()->back();
             }
 
@@ -51,6 +81,8 @@ class FinancialController extends Controller
         $user = User::with('balance')->where('id', auth()->user()->id)->get();
         $source = file_get_contents('php://input');
         $requestBody = json_decode($source, true);
+
+        dd($request, $requestBody);
 
         $notification = ($requestBody['event'] === NotificationEventType::PAYMENT_SUCCEEDED)
             ? new NotificationSucceeded($requestBody)
