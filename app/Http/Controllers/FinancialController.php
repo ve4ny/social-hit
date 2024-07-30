@@ -79,6 +79,7 @@ class FinancialController extends Controller
 
     public function callback(Request $request, PaymentService $service)
     {
+
         $user = User::with('balance')->where('id', auth()->user()->id)->get();
         $source = file_get_contents('php://input');
         $requestBody = json_decode($source, true);
