@@ -12,7 +12,8 @@ import Safety from "./Components/Safety.vue";
 import Order from "./Components/Order.vue";
 import OrdersTable from "./Components/Components/Orders/OrdersTable.vue"
 import QrGenerator from "./Components/Components/Referral/QrGenerator.vue";
-import ReferralBalance from "./Components/Components/Referral/ReferralBalance.vue"
+import ReferralBalance from "./Components/Components/Referral/ReferralBalance.vue";
+import RefillForm from "./Components/Components/Refill/RefillForm.vue";
 
 
 const app = createApp({
@@ -39,7 +40,8 @@ const app = createApp({
         'OrderPage': Order,
         'OrdersTable': OrdersTable,
         'QrGenerator': QrGenerator,
-        'ReferralBalance': ReferralBalance
+        'ReferralBalance': ReferralBalance,
+        'RefillForm': RefillForm
     },
     created() {
         // Установка isLoading на false после загрузки компонента

@@ -5,13 +5,12 @@ namespace App\Http\Controllers;
 use App\Events\TopUp;
 use App\Models\User;
 use Illuminate\Http\Request;
+use YooKassa\Client;
 
 class BalanceController extends Controller
 {
     public function topUp()
     {
-        $user = User::find(auth()->user()->id);
-        $amount = 100;
 
 //        $paymentData = [
 //            'return_url' => 'https://yourapp.com/payment-success',
@@ -19,7 +18,7 @@ class BalanceController extends Controller
 //        ];
 //        $response = $user->charge($amount, 'RUB', $paymentData);
 
-        TopUp::dispatch($user, $amount);
-        return redirect('/');
+//        TopUp::dispatch($user, $amount);
+        return view('pages.refill');
     }
 }

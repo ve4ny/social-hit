@@ -2,7 +2,7 @@
 <html lang="ru-RU">
 <head>
     <meta charset="utf-8">
-    <title>Главная страница</title>
+    <title>SocialHit - продвижение в соцсетях</title>
     <meta meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     @vite('resources/css/styles.scss')
     @vite('resources/js/files/main.js')

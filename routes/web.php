@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\FinancialController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SafetyController;
@@ -76,8 +77,14 @@ Route::middleware('auth')->group(function () {
 
     // Refill
 
-//    Route::get('/refill', [\App\Http\Controllers\FinancialController::class, 'showRefill']);
-    Route::get('/refill', [\App\Http\Controllers\BalanceController::class, 'topUp']);
+    Route::get('/refill', [FinancialController::class, 'index'])
+        ->name('refill.index');
+    Route::post('refill/create', [FinancialController::class, 'create'])
+        ->name('refill.create');
+    Route::match(['POST', 'GET'], '/refill/callback', [FinancialController::class, 'callback'])
+        ->name('refill.callback');
+
+
 
     // Transactions List
 

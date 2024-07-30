@@ -32,9 +32,9 @@ return [
     ],
 
     'ukassa' => [
-        'url' => env('UKASSA_API_URL'),
-        'id' => env('UKASSA_SHOP_ID'),
-        'secret_key' => env('UKASSA_SECRET_KEY'),
+        'url' => env('UKASSA_API_URL', null),
+        'id' => env('UKASSA_SHOP_ID', null),
+        'secret_key' => env('UKASSA_SECRET_KEY', null),
     ]
 
 ];
