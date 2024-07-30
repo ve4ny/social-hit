@@ -7,6 +7,7 @@ use App\Models\Transaction;
 use App\Models\User;
 use App\Services\PaymentService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use YooKassa\Client;
 use YooKassa\Common\Exceptions\ApiConnectionException;
 use YooKassa\Common\Exceptions\ApiException;
@@ -82,13 +83,13 @@ class FinancialController extends Controller
         $source = file_get_contents('php://input');
         $requestBody = json_decode($source, true);
 
-        dd($request, $requestBody);
-
         $notification = ($requestBody['event'] === NotificationEventType::PAYMENT_SUCCEEDED)
             ? new NotificationSucceeded($requestBody)
             : new NotificationWaitingForCapture($requestBody);
 
         $payment = $notification->getObject();
+
+        Log::info(json_encode($payment));
         if(isset($payment->status) && $payment->status === 'succeeded') {
             if((bool)$payment->paid === true) {
                 $metadata = (object)$payment->metadata;
