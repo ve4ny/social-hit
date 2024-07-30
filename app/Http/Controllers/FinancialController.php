@@ -80,6 +80,7 @@ class FinancialController extends Controller
     public function callback(Request $request, PaymentService $service)
     {
         $source = file_get_contents('php://input');
+        Log::info($source);
         $requestBody = json_decode($source, true);
 
         $notification = ($requestBody['event'] === NotificationEventType::PAYMENT_SUCCEEDED)
@@ -88,7 +89,6 @@ class FinancialController extends Controller
 
         $payment = $notification->getObject();
 
-        Log::info(json_encode($payment));
         if(isset($payment->status) && $payment->status === 'succeeded') {
             if((bool)$payment->paid === true) {
                 $metadata = (object)$payment->metadata;
