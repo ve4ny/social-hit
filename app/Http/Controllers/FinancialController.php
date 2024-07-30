@@ -104,10 +104,12 @@ class FinancialController extends Controller
                 'amount' => $payment->amount,
             ], $payment->id, uniqid('', true));
             $metadata = (object)$payment->metadata;
-            if(isset($metadata->transaction_id)) {
+            $payment_method = (object)$payment->payment_method;
+            if(isset($metadata->transaction_id) && isset($payment_method->title)) {
                 $transactionId = (int)$metadata->transaction_id;
                 $transaction = Transaction::find($transactionId);
-                $transaction->status = PaymentStatusEnum::SUCCEEDED;
+                $transaction->status = PaymentStatusEnum::WAITING_FOR_CAPTURE;
+                $transaction->payment_method = $payment_method->title;
                 $transaction->save();
             }
         }
