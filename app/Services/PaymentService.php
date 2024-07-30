@@ -17,7 +17,7 @@ use YooKassa\Common\Exceptions\UnauthorizedException;
 
 class PaymentService
 {
-    private function getClient(): Client
+    public function getClient(): Client
     {
         $client = new Client();
         $client->setAuth(
