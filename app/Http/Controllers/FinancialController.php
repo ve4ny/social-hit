@@ -79,8 +79,6 @@ class FinancialController extends Controller
 
     public function callback(Request $request, PaymentService $service)
     {
-
-        $user = User::with('balance')->where('id', auth()->user()->id)->get();
         $source = file_get_contents('php://input');
         $requestBody = json_decode($source, true);
 
@@ -100,6 +98,7 @@ class FinancialController extends Controller
                     $transaction->status = PaymentStatusEnum::SUCCEEDED;
                     $transaction->save();
 
+                    $user = User::with('balance')->where('id', $transaction->user_id)->first();
                     $user->balance->amount = (float)$user->balance->amount + (float)$payment->amount->value;
                     $user->balance->save();
                 }

@@ -81,8 +81,6 @@ Route::middleware('auth')->group(function () {
         ->name('refill.index');
     Route::post('refill/create', [FinancialController::class, 'create'])
         ->name('refill.create');
-    Route::match(['POST', 'GET'], '/refill/callback', [FinancialController::class, 'callback'])
-        ->name('refill.callback');
 
 
 
