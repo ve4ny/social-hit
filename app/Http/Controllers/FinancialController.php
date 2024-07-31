@@ -118,6 +118,7 @@ class FinancialController extends Controller
             $metadata = (object)$payment->metadata;
             $payment_method = (object)$payment->payment_method;
             if(isset($metadata->transaction_id) && isset($payment_method->title)) {
+                Log::info($payment->status);
                 $transactionId = (int)$metadata->transaction_id;
                 $transaction = Transaction::find($transactionId);
                 $transaction->status = PaymentStatusEnum::WAITING_FOR_CAPTURE;
