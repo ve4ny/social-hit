@@ -8,6 +8,7 @@ use App\Models\Transaction;
 use App\Models\User;
 use App\Services\PaymentService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use YooKassa\Client;
@@ -129,10 +130,9 @@ class FinancialController extends Controller
                 $metadata = (object)$payment->metadata;
                 if(isset($metadata->transaction_id)) {
                     $transactionId = (int)$metadata->transaction_id;
-                    $transaction = Transaction::find($transactionId);
-                    Log::info($payment->status);
-                    $transaction->status = $payment->status;
-                    $transaction->save();
+                    DB::table('transactions')
+                        ->where('id', $transactionId)
+                        ->update(['status' => $payment->status]);
 
                     $user = User::with('balance')->where('id', $transaction->user_id)->first();
                     $user->balance->amount = (float)$user->balance->amount + (float)$payment->amount->value;
