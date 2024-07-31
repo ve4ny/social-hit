@@ -85,8 +85,8 @@
                                                         <div class="account-table__date">
                                                             <div class="account-table__name account-table__date-name">Дата:</div>
                                                             <div class="account-table__date-inner">
-                                                                <div class="account-table__date-date">{{ $transaction->created_at['date'] }}</div>
-                                                                <div class="account-table__date-time">{{ $transaction->created_at['time'] }}</div>
+                                                                <div class="account-table__date-date">{{ $transaction->date }}</div>
+                                                                <div class="account-table__date-time">{{ $transaction->time }}</div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -106,7 +106,7 @@
                                                 <div class="account-table__right-inner d-flex">
                                                     <div class="account-table__method-col account-table__col">
                                                         <div class="account-table__name">Метод:</div>
-                                                        <div class="account-table__txt account-table__nowrap">{{ $transaction->payment_method }}</div>
+                                                        <div class="account-table__txt account-table__nowrap">{{ $transaction->method }}</div>
                                                     </div>
                                                     <div class="account-table__quantity-col account-table__col">
                                                         <div class="account-table__name">Количество:</div>
