@@ -59,12 +59,12 @@ class FinancialController extends Controller
             'description' => $description
         ]);
 
-        if($transaction) {
+        if ($transaction) {
             $link = $service->createPayment($amount, $description, [
                 'transaction_id' => $transaction->id
             ]);
 
-            if($link) {
+            if ($link) {
                 $parsedUrl = parse_url($link);
                 $query = $parsedUrl['query'];
                 parse_str($query, $queryParams);
@@ -135,17 +135,21 @@ class FinancialController extends Controller
         if (isset($payment->status) && $payment->status === 'succeeded') {
             if ((bool)$payment->paid === true) {
                 $metadata = (object)$payment->metadata;
+                $payment_method = (object)$payment->payment_method;
                 if (isset($metadata->transaction_id)) {
                     $transactionId = (int)$metadata->transaction_id;
 
                     DB::table('transactions')
                         ->where('id', $transactionId)
-                        ->update(['status' => $payment->status]);
-                    Log::info($payment->status);
-//                $transaction = Transaction::find($transactionId);
-//                $user = User::with('balance')->where('id', $transaction->user_id)->first();
-//                $user->balance->amount = (float)$user->balance->amount + (float)$payment->amount->value;
-//                $user->balance->save();
+                        ->update([
+                            'status' => $payment->status,
+                            'payment_method' => $payment_method->type
+                        ]);
+
+                    $transaction = Transaction::find($transactionId);
+                    $user = User::with('balance')->where('id', $transaction->user_id)->first();
+                    $user->balance->amount = (float)$user->balance->amount + (float)$payment->amount->value;
+                    $user->balance->save();
                 }
             }
         }
