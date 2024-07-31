@@ -46,10 +46,10 @@ class Transaction extends Model
         );
     }
 
-    protected function status(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => $this->status[$value],
-        );
-    }
+//    protected function status(): Attribute
+//    {
+//        return Attribute::make(
+//            get: fn ($value) => $this->status[$value],
+//        );
+//    }
 }
