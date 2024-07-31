@@ -121,7 +121,7 @@
                                                                 class="account-table__status account-table__status--process"
                                                             @elseif($transaction->status === 'canceled' || $transaction->status === 'created')
                                                                 class="account-table__status account-table__status--cancel"
-                                                            @elseif($transaction->status === 'fail')
+                                                            @elseif($transaction->status === 'failed')
                                                                 class="account-table__status account-table__status--error"
                                                             @endif>{{ $transaction->status_rus }}</div>
                                                     </div>
