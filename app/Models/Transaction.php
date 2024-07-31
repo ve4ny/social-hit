@@ -20,14 +20,14 @@ class Transaction extends Model
         'payment_method',
     ];
 
-    protected array $status = [
-            'created' => 'Создана',
-            'pending' => 'В процессе',
-            'waiting_for_capture' => 'В процессе',
-            'succeeded'  => 'Выполнена',
-            'canceled' => 'Отменена',
-            'failed' => 'Ошибка'
-        ];
+//    protected array $status = [
+//            'created' => 'Создана',
+//            'pending' => 'В процессе',
+//            'waiting_for_capture' => 'В процессе',
+//            'succeeded'  => 'Выполнена',
+//            'canceled' => 'Отменена',
+//            'failed' => 'Ошибка'
+//        ];
 
     protected function createdAt(): Attribute
     {
