@@ -100,7 +100,6 @@ class FinancialController extends Controller
     public function callback(Request $request, PaymentService $service)
     {
         $source = file_get_contents('php://input');
-        Log::info($source);
         $requestBody = json_decode($source, true);
 
         $notification = ($requestBody['event'] === NotificationEventType::PAYMENT_SUCCEEDED)
