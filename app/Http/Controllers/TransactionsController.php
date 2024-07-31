@@ -7,9 +7,10 @@ use Illuminate\Http\Request;
 
 class TransactionsController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $transactions = Transaction::where('user_id', auth()->user()->id)->orderByDesc('created_at')->get();
+        $perPage = isset($request->perPage) ? $request->perPage : 10;
+        $transactions = Transaction::where('user_id', auth()->user()->id)->orderByDesc('created_at')->paginate($perPage);
         return view('pages.transactions', compact('transactions'));
     }
 }

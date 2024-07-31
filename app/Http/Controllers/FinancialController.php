@@ -109,7 +109,7 @@ class FinancialController extends Controller
                 $transactionId = (int)$metadata->transaction_id;
                 $transaction = Transaction::find($transactionId);
                 $transaction->status = PaymentStatusEnum::WAITING_FOR_CAPTURE;
-                $transaction->payment_method = $payment_method->title;
+                $transaction->payment_method = $payment_method->type;
                 $transaction->save();
             }
         }
