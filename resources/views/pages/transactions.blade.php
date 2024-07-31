@@ -119,7 +119,7 @@
                                                                 class="account-table__status account-table__status--success"
                                                             @elseif($transaction->status === 'В процессе')
                                                                 class="account-table__status account-table__status--process"
-                                                            @elseif($transaction->status === 'Отменена')
+                                                            @elseif($transaction->status === 'Отменена' || $transaction->status === 'Создана')
                                                                 class="account-table__status account-table__status--cancel"
                                                             @elseif($transaction->status === 'Ошибка')
                                                                 class="account-table__status account-table__status--error"
