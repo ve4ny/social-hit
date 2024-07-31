@@ -130,9 +130,8 @@ class FinancialController extends Controller
                 $metadata = (object)$payment->metadata;
                 if(isset($metadata->transaction_id)) {
                     $transactionId = (int)$metadata->transaction_id;
-                    DB::table('transactions')
-                        ->where('id', $transactionId)
-                        ->update(['status' => $payment->status]);
+                    $transaction = Transaction::find($transactionId);
+                    $transaction->update(['status' => $payment->status]);
 
                     $user = User::with('balance')->where('id', $transaction->user_id)->first();
                     $user->balance->amount = (float)$user->balance->amount + (float)$payment->amount->value;
