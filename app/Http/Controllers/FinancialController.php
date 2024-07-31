@@ -101,6 +101,7 @@ class FinancialController extends Controller
      */
     public function callback(Request $request, PaymentService $service)
     {
+        Log::info('Callback!');
         $source = file_get_contents('php://input');
         $requestBody = json_decode($source, true);
 
