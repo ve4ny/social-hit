@@ -134,11 +134,11 @@ class FinancialController extends Controller
                     DB::table('transactions')
                         ->where('id', $transactionId)
                         ->update(['status' => $payment->status]);
-
-                    $transaction = Transaction::find($transactionId);
-                    $user = User::with('balance')->where('id', $transaction->user_id)->first();
-                    $user->balance->amount = (float)$user->balance->amount + (float)$payment->amount->value;
-                    $user->balance->save();
+                    Log::info($payment->status);
+//                    $transaction = Transaction::find($transactionId);
+//                    $user = User::with('balance')->where('id', $transaction->user_id)->first();
+//                    $user->balance->amount = (float)$user->balance->amount + (float)$payment->amount->value;
+//                    $user->balance->save();
                 }
             }
         }
