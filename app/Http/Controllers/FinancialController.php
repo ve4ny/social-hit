@@ -49,7 +49,7 @@ class FinancialController extends Controller
     public function create(RefillRequest $request, PaymentService $service)
     {
         $validated = $request->validated();
-        $amount = (float)$validated->amount;
+        $amount = (float)$validated['amount'];
         $description = 'Пополнение баланса в сервисе SocialHit';
 
         $transaction = Transaction::create([
