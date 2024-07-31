@@ -126,14 +126,11 @@ class FinancialController extends Controller
         if(isset($payment->status) && $payment->status === 'succeeded') {
             if((bool)$payment->paid === true) {
                 $metadata = (object)$payment->metadata;
-
                 if(isset($metadata->transaction_id)) {
                     $transactionId = (int)$metadata->transaction_id;
                     $transaction = Transaction::find($transactionId);
-                    Log::info($payment->getStatus());
                     $transaction->status = $payment->status;
                     $transaction->save();
-                    Log::info($payment->getStatus());
 
                     $user = User::with('balance')->where('id', $transaction->user_id)->first();
                     $user->balance->amount = (float)$user->balance->amount + (float)$payment->amount->value;
