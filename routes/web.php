@@ -79,7 +79,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/refill', [FinancialController::class, 'index'])
         ->name('refill.index');
-    Route::post('refill/create', [FinancialController::class, 'create'])
+    Route::get('/refill/redirect', [FinancialController::class, 'redirect']);
+    Route::get('refill/create', [FinancialController::class, 'create'])
         ->name('refill.create');
 
 
@@ -87,11 +88,6 @@ Route::middleware('auth')->group(function () {
     // Transactions List
 
     Route::get('/transactions', [\App\Http\Controllers\TransactionsController::class, 'index']);
-});
-
-Route::get('/proxy', function () {
-    $url = request('url');
-    return redirect()->away($url);
 });
 
 // 404

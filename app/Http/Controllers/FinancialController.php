@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Services\PaymentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 use YooKassa\Client;
 use YooKassa\Common\Exceptions\ApiConnectionException;
 use YooKassa\Common\Exceptions\ApiException;
@@ -71,9 +72,18 @@ class FinancialController extends Controller
                 $transaction->save();
                 return redirect()->back();
             }
-
-            return redirect()->away(url('/proxy?url=' . urlencode($link)));
+            return response()->json([
+                'link' => "/refill/redirect?url=$link"
+            ]);
+//            return redirect('/refill/redirect?url=' . urlencode($link));
+//            return redirect()->away(urlencode($link));
         }
+    }
+
+    public function redirect(Request $request): View
+    {
+        $redirectUrl = $request->url;
+        return view('redirect', compact('redirectUrl'));
     }
 
     /**

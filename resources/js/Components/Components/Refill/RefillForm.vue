@@ -6,10 +6,17 @@ const form = reactive({
 })
 
 const refill = () => {
-    axios.post('/refill/create', form)
-        .then((res) => console.log(res.data))
-        .catch((err) => console.log(err))
-}
+    axios.get('/refill/create', { params: form })
+        .then((res) => {
+            console.log(res.data);
+            if (res.data.link) {
+                window.location.href = res.data.link;
+            } else {
+                console.log('No redirect URL found in response');
+            }
+        })
+        .catch((err) => console.log(err));
+};
 </script>
 
 <template>
