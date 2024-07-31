@@ -115,15 +115,15 @@
                                                     <div class="account-table__status-2-col account-table__col">
                                                         <div class="account-table__name">Статус:</div>
                                                         <div
-                                                            @if($transaction->status === 'Выполнена')
+                                                            @if($transaction->status === 'succeeded')
                                                                 class="account-table__status account-table__status--success"
-                                                            @elseif($transaction->status === 'В процессе')
+                                                            @elseif($transaction->status === 'waiting_for_capture')
                                                                 class="account-table__status account-table__status--process"
-                                                            @elseif($transaction->status === 'Отменена' || $transaction->status === 'Создана')
+                                                            @elseif($transaction->status === 'canceled' || $transaction->status === 'created')
                                                                 class="account-table__status account-table__status--cancel"
-                                                            @elseif($transaction->status === 'Ошибка')
+                                                            @elseif($transaction->status === 'fail')
                                                                 class="account-table__status account-table__status--error"
-                                                            @endif>{{ $transaction->status }}</div>
+                                                            @endif>{{ $transaction->status_rus }}</div>
                                                     </div>
                                                 </div>
                                             </div>
