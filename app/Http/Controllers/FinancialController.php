@@ -111,43 +111,48 @@ class FinancialController extends Controller
 
         $payment = $notification->getObject();
 
-        if(isset($payment->status) && $payment->status === 'waiting_for_capture') {
+        if (isset($payment->status) && $payment->status === 'waiting_for_capture') {
             $service->getClient()->capturePayment([
                 'amount' => $payment->amount,
             ], $payment->id, uniqid('', true));
             $metadata = (object)$payment->metadata;
             $payment_method = (object)$payment->payment_method;
-            if(isset($metadata->transaction_id) && isset($payment_method->title)) {
+            if (isset($metadata->transaction_id) && isset($payment_method->title)) {
                 Log::info($payment->status);
                 $transactionId = (int)$metadata->transaction_id;
                 $transaction = Transaction::find($transactionId);
-                $transaction->status = PaymentStatusEnum::WAITING_FOR_CAPTURE;
-                $transaction->payment_method = $payment_method->type;
-                $transaction->save();
+
+                if ($transaction->status !== PaymentStatusEnum::SUCCEEDED) {
+                    $transaction->status = PaymentStatusEnum::WAITING_FOR_CAPTURE;
+                    $transaction->payment_method = $payment_method->type;
+                    $transaction->save();
+                } else {
+                    Log::info("Skipping update to waiting_for_capture because status is already succeeded.");
+                }
             }
         }
 
-        if(isset($payment->status) && $payment->status === 'succeeded') {
-            if((bool)$payment->paid === true) {
+        if (isset($payment->status) && $payment->status === 'succeeded') {
+            if ((bool)$payment->paid === true) {
                 $metadata = (object)$payment->metadata;
-                if(isset($metadata->transaction_id)) {
+                if (isset($metadata->transaction_id)) {
                     $transactionId = (int)$metadata->transaction_id;
 
                     DB::table('transactions')
                         ->where('id', $transactionId)
                         ->update(['status' => $payment->status]);
                     Log::info($payment->status);
-//                    $transaction = Transaction::find($transactionId);
-//                    $user = User::with('balance')->where('id', $transaction->user_id)->first();
-//                    $user->balance->amount = (float)$user->balance->amount + (float)$payment->amount->value;
-//                    $user->balance->save();
+//                $transaction = Transaction::find($transactionId);
+//                $user = User::with('balance')->where('id', $transaction->user_id)->first();
+//                $user->balance->amount = (float)$user->balance->amount + (float)$payment->amount->value;
+//                $user->balance->save();
                 }
             }
         }
 
-        if(isset($payment->status) && $payment->status === 'canceled') {
+        if (isset($payment->status) && $payment->status === 'canceled') {
             $metadata = (object)$payment->metadata;
-            if(isset($metadata->transaction_id)) {
+            if (isset($metadata->transaction_id)) {
                 $transactionId = (int)$metadata->transaction_id;
                 $transaction = Transaction::find($transactionId);
                 $transaction->status = PaymentStatusEnum::CANCELED;
