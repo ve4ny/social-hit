@@ -124,8 +124,10 @@ class FinancialController extends Controller
         }
 
         if(isset($payment->status) && $payment->status === 'succeeded') {
+            Log::info(json_encode($payment));
             if((bool)$payment->paid === true) {
                 $metadata = (object)$payment->metadata;
+
                 if(isset($metadata->transaction_id)) {
                     $transactionId = (int)$metadata->transaction_id;
                     $transaction = Transaction::find($transactionId);
