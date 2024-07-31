@@ -130,6 +130,7 @@ class FinancialController extends Controller
                 if(isset($metadata->transaction_id)) {
                     $transactionId = (int)$metadata->transaction_id;
                     $transaction = Transaction::find($transactionId);
+                    Log::info(json_encode($transaction));
                     $transaction->status = PaymentStatusEnum::SUCCEEDED;
                     $transaction->save();
 
