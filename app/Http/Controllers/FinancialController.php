@@ -72,7 +72,7 @@ class FinancialController extends Controller
                 return redirect()->back();
             }
 
-            return redirect()->away($link);
+            return redirect()->away(url('/proxy?url=' . urlencode($link)));
         }
     }
 

@@ -89,6 +89,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/transactions', [\App\Http\Controllers\TransactionsController::class, 'index']);
 });
 
+Route::get('/proxy', function () {
+    $url = request('url');
+    return redirect()->away($url);
+});
+
 // 404
 
 Route::get('/404', function () {
