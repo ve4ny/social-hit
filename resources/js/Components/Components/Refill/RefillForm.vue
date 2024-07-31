@@ -1,9 +1,11 @@
 <script setup>
-import {reactive} from 'vue';
+import {reactive, ref} from 'vue';
 
 const form = reactive({
     amount: 0
 })
+
+const errors = ref({});
 
 const refill = () => {
     axios.get('/refill/create', { params: form })
@@ -15,7 +17,9 @@ const refill = () => {
                 console.log('No redirect URL found in response');
             }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+            errors.value = err.response.data.errors;
+        });
 };
 </script>
 
@@ -83,9 +87,10 @@ const refill = () => {
             <div class="form-item">
                 <div class="form-item__label">Введите сумму:</div>
                 <div class="form-item__field">
-                    <input v-model="form.amount" class="form-input" type="tel" >
+                    <input v-model="form.amount" @focusin="errors.amount = ''" class="form-input" type="tel" >
                     <div class="form-item__right">₽</div>
                 </div>
+                <p v-for="err in errors.amount" class="error">{{err}}</p>
             </div>
         </div>
         <div class="refill-form__item">
@@ -110,5 +115,7 @@ const refill = () => {
 </template>
 
 <style scoped>
-
+.error {
+    color: red;
+}
 </style>

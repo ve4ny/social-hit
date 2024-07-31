@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\PaymentStatusEnum;
+use App\Http\Requests\RefillRequest;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Services\PaymentService;
@@ -45,10 +46,11 @@ class FinancialController extends Controller
      * @throws UnauthorizedException
      * @throws ApiConnectionException
      */
-    public function create(Request $request, PaymentService $service)
+    public function create(RefillRequest $request, PaymentService $service)
     {
-        $amount = (float)$request->input('amount');
-        $description = 'Пополнение баланса';
+        $validated = $request->validated();
+        $amount = (float)$validated->amount;
+        $description = 'Пополнение баланса в сервисе SocialHit';
 
         $transaction = Transaction::create([
             'user_id' => auth()->user()->id,
@@ -75,8 +77,7 @@ class FinancialController extends Controller
             return response()->json([
                 'link' => "/refill/redirect?url=$link"
             ]);
-//            return redirect('/refill/redirect?url=' . urlencode($link));
-//            return redirect()->away(urlencode($link));
+
         }
     }
 
