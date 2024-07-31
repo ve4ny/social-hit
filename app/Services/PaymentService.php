@@ -50,7 +50,7 @@ class PaymentService
             ],
             'confirmation' => [
               'type' => 'redirect',
-                'return_url' => route('index')
+                'return_url' => route('transactions')
             ],
             'capture' => false,
             'metadata' => [

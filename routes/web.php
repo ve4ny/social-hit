@@ -87,7 +87,8 @@ Route::middleware('auth')->group(function () {
 
     // Transactions List
 
-    Route::get('/transactions', [\App\Http\Controllers\TransactionsController::class, 'index']);
+    Route::get('/transactions', [\App\Http\Controllers\TransactionsController::class, 'index'])
+        ->name('transactions');
 });
 
 // 404
