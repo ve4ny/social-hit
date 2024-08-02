@@ -42,19 +42,6 @@ onMounted(()=>{
 </script>
 
 <template>
-    <div class="modal-content"><a class="modal-close icon" href="#" data-bs-dismiss="modal">
-        <svg class="svg-sprite-icon icon-x-close">
-            <use xlink:href="@images/svg/symbol/sprite.svg#x-close"></use>
-        </svg></a>
-        <div class="modal-content__head">
-            <div class="modal-head">
-                <div class="modal-head__logo"> <img src="../../../../public/images/general/logo.svg" width="104" height="48" alt="img"/>
-                </div>
-                <div class="modal-head__info">
-                    <div class="modal-head__title title">Регистрация</div>
-                </div>
-            </div>
-        </div>
         <div class="modal-content__body">
             <form class="modal-form form" action="/public">
                 <input v-model="form.referral_code" type="hidden">
@@ -125,7 +112,6 @@ onMounted(()=>{
                 </div>
             </form>
         </div>
-    </div>
 </template>
 
 <style scoped>
