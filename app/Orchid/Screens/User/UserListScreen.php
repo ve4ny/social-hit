@@ -43,8 +43,9 @@ class UserListScreen extends Screen
         if (request()->has('sort') && request()->query('sort') == 'is_admin') {
             $direction = request()->query('order', 'desc');
             $query->orderBy('is_admin', $direction);
-        } else {
-            $query->defaultSort('id', 'desc');
+        } else if (request()->has('sort') && request()->query('sort') == '-is_admin'){
+            $direction = request()->query('order', 'asc');
+            $query->orderBy('is_admin', $direction);
         }
 
         return [
