@@ -16,8 +16,8 @@
             @endif
             <div class="footer__contacts">
                 <ul class="footer-contacts d-flex">
-                    <li class="footer-contacts__item"> <a class="footer-contacts__link" href="tel:+79779761889">+7 (977) 976-18-89</a></li>
-                    <li class="footer-contacts__item"> <a class="footer-contacts__link" href="mailto:support@social-hit.com">support@social-hit.com</a></li>
+                    <li class="footer-contacts__item"> <a class="footer-contacts__link" href="tel:{{ str_replace(' ', '', optional($contacts)->phone ?? '') }}">{{ optional($contacts)->phone }}</a></li>
+                    <li class="footer-contacts__item"> <a class="footer-contacts__link" href="mailto:{{ optional($contacts)->email }}">{{ optional($contacts)->email }}</a></li>
                 </ul>
             </div>
         </div>

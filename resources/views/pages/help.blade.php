@@ -1,5 +1,8 @@
-@include('header.header')
-<div class="content">
+@extends('layouts.app')
+
+@section('title', '')
+
+@section('content')
     <div class="helpCenter">
         <div class="container">
             <div class="row">
@@ -69,5 +72,4 @@
             </div>
         </div>
     </div>
-</div>
-@include('footer')
+@endsection

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Contact;
 use Closure;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -19,11 +20,12 @@ class ShareUserWithViews
      */
     public function handle(Request $request, Closure $next): mixed
     {
+        $contacts = Contact::first();
         if(auth()->check()){
             $user = Auth::user()->load(['details', 'balance']);
-            view()->share('user', $user);
+            view()->share(['user' => $user, 'contacts' => $contacts]);
         } else {
-            view()->share('user', null);
+            view()->share(['user' => null, 'contacts' => $contacts]);
         }
         return $next($request);
     }
