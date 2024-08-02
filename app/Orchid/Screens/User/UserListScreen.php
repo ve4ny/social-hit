@@ -5,18 +5,25 @@ declare(strict_types=1);
 namespace App\Orchid\Screens\User;
 
 use App\Models\Balance;
+use App\Models\Order;
 use App\Models\RefBalance;
 use App\Models\UserDetails;
 use App\Orchid\Layouts\User\UserEditLayout;
 use App\Orchid\Layouts\User\UserFiltersLayout;
 use App\Orchid\Layouts\User\UserListLayout;
 use App\Services\UserService;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Models\User;
+use Orchid\Platform\Models\Role;
+use Orchid\Screen\Actions\DropDown;
 use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Actions\ModalToggle;
+use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Screen;
 use Orchid\Screen\TD;
+use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
 
@@ -29,11 +36,19 @@ class UserListScreen extends Screen
      */
     public function query(): iterable
     {
+        $query = User::with(['details', 'balance', 'roles'])
+            ->select('*')
+            ->selectRaw('(SELECT COUNT(*) FROM role_users ru JOIN roles r ON ru.role_id = r.id WHERE ru.user_id = users.id AND r.name = "admin") as is_admin');
+
+        if (request()->has('sort') && request()->query('sort') == 'is_admin') {
+            $direction = request()->query('order', 'desc');
+            $query->orderBy('is_admin', $direction);
+        } else {
+            $query->defaultSort('id', 'desc');
+        }
+
         return [
-            'users' => User::with(['details', 'balance'])
-                ->filters(UserFiltersLayout::class)
-                ->defaultSort('id', 'desc')
-                ->paginate(),
+            'users' => $query->filters(UserFiltersLayout::class)->paginate(),
         ];
     }
 
@@ -90,68 +105,48 @@ class UserListScreen extends Screen
     {
         return [
             Layout::table('users', [
-                TD::make('id', __('ID')),
-                TD::make('name', __('Имя')),
-                TD::make('email', __('Email')),
-                TD::make('balance.amount', __('Баланс'))->render(fn($user) =>
+                TD::make('id', __('ID'))->sort(),
+                TD::make('is_admin', __('Админ'))
+                    ->sort()
+                    ->render(function (User $user) {
+                        return $user->is_admin ? 'Да' : '-';
+                    }),
+//                TD::make(__('Админ'))->render(fn($user) =>
+//                $user->roles->isNotEmpty() ? ($user->roles->first()->name === 'admin' ? 'Да' : '-')  : '-'
+//                )->sort(),
+                TD::make('name', __('Имя'))->sort()->filter(Input::make()),
+                TD::make('email', __('Email'))->sort()->filter(Input::make()),
+                TD::make('user.balance.amount', __('Баланс'))->render(fn($user) =>
                     $user->balance->amount . ' ₽'
-                )
-            ])
+                ),
+                TD::make('Действия')->render(fn(User $user) => DropDown::make()
+                    ->icon('options-vertical')
+                    ->list([
+                        Link::make('Редактировать')
+                            ->route('platform.systems.users.edit', $user->id)
+                            ->icon('pencil'),
+                        ModalToggle::make('Удалить')
+                            ->modal('deleteModal')
+                            ->method('delete', [$user->id])
+                            ->icon('trash'),
+                    ])
+                ),
+            ]),
+            Layout::modal('deleteModal', [
+                Layout::view('admin.promo')
+            ])->title('Удалить пользователя?')
+                ->applyButton('Удалить')
+                ->closeButton('Закрыть')
         ];
     }
 
     /**
      * @param User $user
-     *
-     * @return array
+     * @throws Exception
      */
-    public function asyncGetUser(User $user): iterable
+    public function delete(User $user): void
     {
-        return [
-            'user' => $user,
-        ];
-    }
-
-    /**
-     * @param Request $request
-     * @param User    $user
-     */
-    public function saveUser(Request $request, User $user): void
-    {
-        $request->validate([
-            'user.email' => [
-                'required',
-                Rule::unique(User::class, 'email')->ignore($user),
-            ],
-            'user.password' => [
-                'required'
-            ]
-        ]);
-
-        $user->fill($request->input('user'))->save();
-        $ref = UserService::generateUniqueReferralCode();
-        UserDetails::create([
-            'user_id' => $user->id,
-            'referral_code' => $ref,
-        ]);
-        Balance::create([
-            'user_id' => $user->id,
-            'amount' => 0.00
-        ]);
-        RefBalance::create([
-            'user_id' => $user->id,
-            'amount' => 0.00
-        ]);
-        Toast::info(__('User was saved.'));
-    }
-
-    /**
-     * @param Request $request
-     */
-    public function remove(Request $request): void
-    {
-        User::findOrFail($request->get('id'))->delete();
-
-        Toast::info(__('User was removed'));
+        $user->delete();
+        Alert::info('Пользователь успешно удалён.');
     }
 }

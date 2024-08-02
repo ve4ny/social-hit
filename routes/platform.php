@@ -15,6 +15,7 @@ use App\Orchid\Screens\Promo\PromoListScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
 use App\Orchid\Screens\Socials\SocialsListScreen;
+use App\Orchid\Screens\User\UserCreateScreen;
 use App\Orchid\Screens\User\UserEditScreen;
 use App\Orchid\Screens\User\UserListScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
@@ -287,7 +288,7 @@ Route::screen('users/{user}/edit', UserEditScreen::class)
         ->push($user->name, route('platform.systems.users.edit', $user)));
 
 // Platform > System > Users > Create
-Route::screen('users/create', UserEditScreen::class)
+Route::screen('users/create', UserCreateScreen::class)
     ->name('platform.systems.users.create')
     ->breadcrumbs(fn (Trail $trail) => $trail
         ->parent('platform.systems.users')

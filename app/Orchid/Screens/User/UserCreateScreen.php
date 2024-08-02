@@ -1,14 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Orchid\Screens\User;
 
 use App\Models\Balance;
-use App\Models\BalanceChange;
 use App\Models\RefBalance;
-use App\Models\UserDetails;
 use App\Models\User;
+use App\Models\UserDetails;
 use App\Orchid\Layouts\Role\RolePermissionLayout;
 use App\Orchid\Layouts\User\UserBalanceEditLayout;
 use App\Orchid\Layouts\User\UserEditLayout;
@@ -16,10 +13,13 @@ use App\Orchid\Layouts\User\UserPasswordLayout;
 use App\Orchid\Layouts\User\UserRoleLayout;
 use App\Services\UserService;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Orchid\Access\Impersonation;
+use Orchid\Platform\Models\Role;
 use Orchid\Screen\Action;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
@@ -27,7 +27,7 @@ use Orchid\Support\Color;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
 
-class UserEditScreen extends Screen
+class UserCreateScreen extends Screen
 {
     /**
      * @var User
@@ -58,7 +58,7 @@ class UserEditScreen extends Screen
      */
     public function name(): ?string
     {
-        return $this->user->exists ? 'Edit User' : 'Create User';
+        return 'Создание нового пользователя';
     }
 
     /**
@@ -89,18 +89,6 @@ class UserEditScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            Button::make(__('Impersonate user'))
-                ->icon('login')
-                ->confirm(__('You can revert to your original state by logging out.'))
-                ->method('loginAs')
-                ->canSee($this->user->exists && \request()->user()->id !== $this->user->id),
-
-            Button::make(__('Remove'))
-                ->icon('trash')
-                ->confirm(__('Once the account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.'))
-                ->method('remove')
-                ->canSee($this->user->exists),
-
             Button::make(__('Save'))
                 ->icon('check')
                 ->method('save'),
@@ -113,7 +101,6 @@ class UserEditScreen extends Screen
     public function layout(): iterable
     {
         return [
-
             Layout::block(UserEditLayout::class)
                 ->title(__('Profile Information'))
                 ->description(__('Update your account\'s profile information and email address.'))
@@ -138,14 +125,14 @@ class UserEditScreen extends Screen
 
             Layout::block(UserBalanceEditLayout::class)
                 ->title(__('Баланс'))
-            ->description(__('Пополнить баланс'))
-            ->commands(
-                Button::make(__('Save'))
-                    ->type(Color::DEFAULT())
-                    ->icon('check')
-                    ->canSee($this->user->exists)
-                    ->method('save')
-            ),
+                ->description(__('Пополнить баланс'))
+                ->commands(
+                    Button::make(__('Save'))
+                        ->type(Color::DEFAULT())
+                        ->icon('check')
+                        ->canSee($this->user->exists)
+                        ->method('save')
+                ),
 
             Layout::block(UserRoleLayout::class)
                 ->title(__('Roles'))
@@ -157,82 +144,60 @@ class UserEditScreen extends Screen
                         ->canSee($this->user->exists)
                         ->method('save')
                 ),
+
         ];
     }
 
     /**
-     * @param User    $user
      * @param Request $request
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function save(User $user, Request $request)
+    public function save(Request $request): RedirectResponse
     {
         $request->validate([
+            'user.name' => [
+                'required'
+            ],
             'user.email' => [
                 'required',
-                Rule::unique(User::class, 'email')->ignore($user),
+                Rule::unique(User::class, 'email'),
             ],
+            'user.password' => [
+                'required', 'min:8'
+            ]
         ]);
 
-
-        $user->when($request->filled('user.password'), function (Builder $builder) use ($request) {
-            $builder->getModel()->password = Hash::make($request->input('user.password'));
-        });
-
-        $user->name = $request->input('user.name');
-        $user->email = $request->input('user.email');
+        $user = new User();
+        $user->name = $request->user['name'];
+        $user->email = $request->user['email'];
+        $user->password = Hash::make($request->input('user.password'));
         $user->save();
 
 
+        $role = Role::where('id', $request->user['roles'][0])->first();
+        $user->roles()->attach($role);
 
-        $user->roles()->sync($request->input('user.roles'));
+        $ref = UserService::generateUniqueReferralCode();
+        UserDetails::create([
+            'user_id' => $user->id,
+            'referral_code' => $ref,
+        ]);
 
-        $oldBalance = $user->balance->amount;
+        Balance::create([
+            'user_id' => $user->id,
+            'amount' => 0.00
+        ]);
 
-        Balance::where('user_id', $user->id)->when($request->filled('user.balance.amount') && $request->user['balance']['amount'] !== $oldBalance,
-            function(Builder $builder) use ($request, $user, $oldBalance) {
-            $builder->update(['amount' => $request->user['balance']['amount']]);
-            BalanceChange::create([
-                'user_id' => $user->id,
-                'initiator' => 'admin',
-                'prev_amount' => $oldBalance,
-                'mod_amount' => $request->user['balance']['amount']
-            ]);
-    });
+        RefBalance::create([
+            'user_id' => $user->id,
+            'amount' => 0.00
+        ]);
 
-        Toast::info(__('User was saved.'));
-
-        return redirect()->route('platform.systems.users');
-    }
-
-    /**
-     * @param User $user
-     *
-     * @throws \Exception
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function remove(User $user)
-    {
-        $user->delete();
-
-        Toast::info(__('User was removed'));
+        Toast::info(__('Пользователь успешно создан.'));
 
         return redirect()->route('platform.systems.users');
     }
 
-    /**
-     * @param User $user
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function loginAs(User $user)
-    {
-        Impersonation::loginAs($user);
 
-        Toast::info(__('You are now impersonating this user'));
-
-        return redirect()->route(config('platform.index'));
-    }
 }
