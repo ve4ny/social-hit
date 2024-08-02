@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AdditionalPage;
 use App\Models\Block;
 use App\Models\Brand;
+use App\Models\Contact;
 use App\Models\Faq;
 use App\Models\Page;
 use App\Models\Social;
@@ -42,7 +43,8 @@ class MainController extends Controller
 
     public function contacts(): View
     {
-        return view('pages.contacts');
+        $contacts = Contact::first();
+        return view('pages.contacts', compact('contacts'));
     }
 
     /**

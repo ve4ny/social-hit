@@ -1,5 +1,8 @@
-@include('header.header')
-<div class="content">
+@extends('layouts.app')
+
+@section('title', 'SocialHit - продвижение в соцсетях')
+
+@section('content')
     @if(in_array('hero', array_keys($blocks)))
         <div class="intro">
             <div class="container">
@@ -80,7 +83,7 @@
     @guest()
         <authentication-min></authentication-min>
     @endguest
-        @if(in_array('referral', array_keys($blocks)))
+    @if(in_array('referral', array_keys($blocks)))
         <div class="referral">
             <div class="container">
                 <div class="referral-content">
@@ -105,7 +108,7 @@
             </div>
         </div>
     @endif
-        @if(in_array('about-us', array_keys($blocks)))
+    @if(in_array('about-us', array_keys($blocks)))
         <div class="about">
             <div class="container">
                 <div class="about-content">
@@ -133,5 +136,4 @@
         </div>
     @endif
     @include('components.index.faqs')
-</div>
-@include('footer')
+@endsection

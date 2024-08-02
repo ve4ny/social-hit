@@ -273,6 +273,15 @@ Route::screen('pages/{page}', \App\Orchid\Screens\OtherPages\PagesEditScreen::cl
         ->push(__('редактирование страницы'), route('platform.pages.create', $page))
     );
 
+// Platform > Contacts
+
+Route::screen('contacts', \App\Orchid\Screens\EditContactsScreen::class)
+    ->name('platform.contacts')
+    ->breadcrumbs(fn (Trail $trail) => $trail
+        ->parent('platform.index')
+        ->push(__('Контакты'), route('platform.contacts'))
+    );
+
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
     ->name('platform.profile')

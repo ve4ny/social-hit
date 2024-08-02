@@ -58,12 +58,15 @@ class PlatformProvider extends OrchidServiceProvider
             Menu::make('FAQ')
             ->icon('question')
             ->route('platform.faq')
-            ->title('FAQ'),
+            ->title('Другое'),
 
-            Menu::make('Список страниц')
+            Menu::make('Другие страницы')
             ->icon('layers')
-            ->route('platform.pages')
-            ->title('Другие страницы'),
+            ->route('platform.pages'),
+
+            Menu::make('Контактные данные')
+            ->icon('phone')
+            ->route('platform.contacts'),
 
 //            Menu::make('Example screen')
 //                ->icon('monitor')
