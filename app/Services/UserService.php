@@ -10,7 +10,7 @@ use App\Models\User;
 use App\Models\UserDetails;
 use Exception;
 use Illuminate\Support\Str;
-use function PHPUnit\Framework\throwException;
+use Orchid\Platform\Models\Role;
 
 class UserService
 {
@@ -31,6 +31,7 @@ class UserService
         $ref_code = $userData['referral_code'] ?? NULL;
 
         if($user) {
+            $this->attachRole($user);
             $this->createUserDetails($user, $ref_code);
             $this->createBalance($user);
             $this->createRefBalance($user);
@@ -39,6 +40,16 @@ class UserService
         } else {
             throw new Exception('Не удалось завершить регистрацию. Попробуйте позже.');
         }
+    }
+
+    /**
+     * @param User $user
+     * @return void
+     */
+    private function attachRole(User $user): void
+    {
+        $role = Role::where('name', 'user')->first();
+        $user->roles()->attach($role);
     }
 
     /**
