@@ -90,7 +90,7 @@ class OrderController extends Controller
             'pay_status' => 'unpaid'
         ]);
         $order->save();
-        //OrderCreated::dispatch($order);
+        OrderCreated::dispatch($order);
         return response()->json();
     }
 
