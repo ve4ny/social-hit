@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>@yield('title')</title>
     <meta meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    @if(isset($meta)) {!! $meta  !!} @endif
+    @yield('meta')
     @vite('resources/css/styles.scss')
     @vite('resources/js/files/main.js')
     <link rel="stylesheet" type="text/css" href="/css/styles.min.css">

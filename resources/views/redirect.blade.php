@@ -1,7 +1,13 @@
-@include('header.header', [
-    'meta' => "<meta http-equiv=\"refresh\" content=\"0;url={$redirectUrl}\">"
-])
-<div class="content">
+@extends('layouts.app')
+
+@section('meta')
+    <meta http-equiv="refresh" content="0;url={{ $redirectUrl }}">
+@endsection
+
+@section('title', '')
+
+@section('content')
+
     <div class="account">
         <div class="container">
             <div class="row">
@@ -20,5 +26,4 @@
                 </div>
             </div>
         </div>
-    </div>
-@include('footer')
+@endsection
